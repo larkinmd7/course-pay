@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
@@ -8,6 +9,8 @@ const cssPath = fileURLToPath(new URL('../assets/styles.css', import.meta.url));
 const jsPath = fileURLToPath(new URL('../assets/main.js', import.meta.url));
 const dockerfilePath = fileURLToPath(new URL('../Dockerfile', import.meta.url));
 const nginxPath = fileURLToPath(new URL('../nginx.conf', import.meta.url));
+const offerPagePath = fileURLToPath(new URL('../offer/index.html', import.meta.url));
+const offerPdfPath = fileURLToPath(new URL('../offer/public-offer.pdf', import.meta.url));
 
 test('главная страница существует', () => {
   assert.equal(existsSync(pagePath), true, 'site/index.html должен существовать');
@@ -17,17 +20,29 @@ test('главная показывает утверждённый продук�
   const html = readFileSync(pagePath, 'utf8');
   const required = [
     'ИИ для экспертов: личная операционная система и AI-инструменты под свою нишу',
-    '1 октября 2026',
-    'База',
+    '30 августа 2026',
+    'Самостоятельный',
     '29 900 ₽',
-    'Средний',
+    'С внедрением',
     '49 900 ₽',
-    'Профи',
+    'Персональный',
     '89 900 ₽',
-    'Проверка домашних работ не входит',
+    'Персональный технический аудит итогового проекта',
   ];
 
   for (const value of required) assert.match(html, new RegExp(value));
+  assert.doesNotMatch(html, /1 октября 2026/);
+  assert.doesNotMatch(html, /домашн/i);
+});
+
+test('платёжные описания используют актуальные названия тарифов', () => {
+  const html = readFileSync(pagePath, 'utf8');
+
+  for (const tariff of ['Самостоятельный', 'С внедрением', 'Персональный']) {
+    assert.match(html, new RegExp(`тариф «${tariff}»`));
+  }
+
+  assert.doesNotMatch(html, /тариф «(?:База|Средний|Профи)»/);
 });
 
 test('главная содержит юридические ссылки и три платёжных контейнера', () => {
@@ -64,6 +79,18 @@ for (const path of ['offer/index.html', 'privacy/index.html', 'personal-data-con
     assert.match(page, /href="\/"/);
   });
 }
+
+test('страница оферты публикует полную редакцию от 17 августа 2026', () => {
+  assert.equal(existsSync(offerPdfPath), true, 'offer/public-offer.pdf должен существовать');
+
+  const page = readFileSync(offerPagePath, 'utf8');
+  const pdf = readFileSync(offerPdfPath);
+  const digest = createHash('sha256').update(pdf).digest('hex');
+
+  assert.match(page, /Редакция от 17 августа 2026 года/);
+  assert.match(page, /data="\/offer\/public-offer\.pdf"/);
+  assert.equal(digest, 'ab8d803bbbe8ed7104fde987ec8ad3094a0f9acb3eeceea41c5466973d16af0a');
+});
 
 for (const path of ['success/index.html', 'error/index.html']) {
   test(`${path} содержит возврат на страницу программы`, () => {

@@ -3,9 +3,9 @@ const slot = document.querySelector('#payment-slot');
 const title = document.querySelector('#payment-title');
 
 const tariffNames = {
-  base: 'Тариф «База»',
-  middle: 'Тариф «Средний»',
-  pro: 'Тариф «Профи»',
+  base: 'Тариф «Самостоятельный»',
+  middle: 'Тариф «С внедрением»',
+  pro: 'Тариф «Персональный»',
 };
 
 document.querySelectorAll('[data-open-payment]').forEach((button) => {
