@@ -360,3 +360,10 @@ test('статический контейнер имеет healthcheck и не �
   assert.match(nginx, /location = \/health/);
   assert.match(nginx, /try_files \$uri \$uri\/ =404/);
 });
+
+test('nginx отдаёт ES-модули .mjs с JavaScript MIME при включённом nosniff', () => {
+  const nginx = readFileSync(nginxPath, 'utf8');
+
+  assert.match(nginx, /types\s*\{[^}]*application\/javascript\s+mjs;[^}]*\}/s);
+  assert.match(nginx, /X-Content-Type-Options\s+nosniff/);
+});
