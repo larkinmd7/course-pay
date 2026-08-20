@@ -1,0 +1,26 @@
+@page {
+  size: A4;
+  margin: 18mm 17mm 20mm;
+  @bottom-center {
+    content: "Страница " counter(page) " из " counter(pages);
+    color: #687083;
+    font-size: 8pt;
+  }
+}
+
+html {
+  color: #111827;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 9.5pt;
+  line-height: 1.45;
+}
+
+body { margin: 0; }
+h1 { margin: 0 0 4mm; font-size: 20pt; line-height: 1.05; }
+h2 { margin: 0 0 8mm; font-size: 12pt; font-weight: 600; }
+h3 { margin: 8mm 0 3mm; font-size: 12.5pt; line-height: 1.2; break-after: avoid; }
+p { margin: 0 0 2.5mm; }
+ul, ol { margin: 0 0 3mm 5mm; padding-left: 5mm; }
+li { margin-bottom: 1.5mm; }
+a { color: #174df5; text-decoration: none; }
+strong { font-weight: 700; }
