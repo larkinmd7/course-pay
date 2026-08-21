@@ -70,6 +70,16 @@ test('главная показывает утверждённый продук�
   assert.doesNotMatch(html, /Персональный технический аудит итогового проекта/);
 });
 
+test('оплата от компании или ИП ведёт в Telegram @starsevast', () => {
+  const html = readFileSync(pagePath, 'utf8');
+  const questionStart = html.indexOf('<summary>Можно оплатить от компании или ИП?</summary>');
+  const questionEnd = html.indexOf('</details>', questionStart);
+  const answer = html.slice(questionStart, questionEnd);
+
+  assert.match(answer, /<a href="https:\/\/t\.me\/starsevast"[^>]*>@starsevast<\/a>/);
+  assert.doesNotMatch(answer, /mailto:/);
+});
+
 test('интерактивная орбита ограничивает смещение относительно указателя', async () => {
   assert.equal(existsSync(orbitPath), true, 'должен существовать модуль интерактивной орбиты');
   const { calculatePointerParallax } = await import(orbitUrl.href);
