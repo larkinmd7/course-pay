@@ -19,9 +19,50 @@ const orbitUrl = new URL('../assets/hero-orbit.mjs', import.meta.url);
 const orbitPath = fileURLToPath(orbitUrl);
 const testimonialCarouselUrl = new URL('../assets/testimonial-carousel.mjs', import.meta.url);
 const testimonialCarouselPath = fileURLToPath(testimonialCarouselUrl);
+const telegramSalesUrl = new URL('../assets/telegram-sales.mjs', import.meta.url);
+const telegramSalesPath = fileURLToPath(telegramSalesUrl);
 
 test('главная страница существует', () => {
   assert.equal(existsSync(pagePath), true, 'site/index.html должен существовать');
+});
+
+test('Telegram-версия включается только на маршруте /tg', async () => {
+  assert.equal(existsSync(telegramSalesPath), true, 'должен существовать модуль Telegram-версии');
+  const { isTelegramSalesPath } = await import(telegramSalesUrl.href);
+
+  assert.equal(isTelegramSalesPath('/tg'), true);
+  assert.equal(isTelegramSalesPath('/tg/'), true);
+  assert.equal(isTelegramSalesPath('/tg/program'), true);
+  assert.equal(isTelegramSalesPath('/'), false);
+  assert.equal(isTelegramSalesPath('/tg-offer'), false);
+});
+
+test('Telegram-ссылка открывает @starsevast с готовым сообщением', async () => {
+  assert.equal(existsSync(telegramSalesPath), true, 'должен существовать модуль Telegram-версии');
+  const { buildTelegramContactUrl, getTariffQuestion } = await import(telegramSalesUrl.href);
+  const messages = {
+    base: 'У меня вопрос по тарифу «Старт» в курсе «ИИ для экспертов»: ',
+    middle: 'У меня вопрос по тарифу «Средний» в курсе «ИИ для экспертов»: ',
+    pro: 'У меня вопрос по тарифу «Продвинутый» в курсе «ИИ для экспертов»: ',
+  };
+
+  for (const [tariff, expectedMessage] of Object.entries(messages)) {
+    const url = new URL(buildTelegramContactUrl(getTariffQuestion(tariff)));
+    assert.equal(url.origin, 'https://t.me');
+    assert.equal(url.pathname, '/starsevast');
+    assert.equal(url.searchParams.get('text'), expectedMessage);
+  }
+
+  const generalUrl = new URL(buildTelegramContactUrl(getTariffQuestion()));
+  assert.equal(generalUrl.searchParams.get('text'), 'У меня вопрос по курсу «ИИ для экспертов»: ');
+});
+
+test('Nginx отдаёт дубль на /tg и /tg/ с теми же ассетами', () => {
+  const nginx = readFileSync(nginxPath, 'utf8');
+  assert.match(nginx, /location = \/tg\s*{\s*try_files \/index\.html =404;/);
+  assert.match(nginx, /location = \/tg\/\s*{\s*try_files \/index\.html =404;/);
+  assert.match(nginx, /location \^~ \/tg\/assets\/\s*{/);
+  assert.match(nginx, /application\/javascript js mjs;/);
 });
 
 test('локальный file-preview загружает собственные стили, скрипт и фото', () => {

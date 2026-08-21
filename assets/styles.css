@@ -308,6 +308,15 @@ h2 { margin-bottom: 28px; font-size: clamp(40px, 5vw, 72px); line-height: 1; let
 .price-card-featured .bonus-item { border-color: var(--acid); }
 .bonus-item span { display: block; margin-bottom: 5px; color: var(--royal); font-family: "IBM Plex Mono", monospace; font-size: 10px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
 .price-card-featured .bonus-item span { color: var(--acid); }
+.telegram-contact-button, .telegram-general-button { min-height: 66px; flex-direction: column; gap: 1px; line-height: 1.15; }
+.telegram-contact-button small, .telegram-general-button small { font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 600; letter-spacing: .05em; opacity: .75; }
+.telegram-questions { margin-top: 44px; padding: 34px; border: 1px solid var(--ink); border-left: 10px solid var(--acid); background: var(--navy); color: white; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 42px; align-items: center; }
+.telegram-questions[hidden] { display: none; }
+.telegram-questions .eyebrow { margin-bottom: 12px; color: var(--acid); }
+.telegram-questions h3 { max-width: 720px; margin-bottom: 12px; font-size: clamp(30px, 3.4vw, 46px); line-height: 1; letter-spacing: -.04em; }
+.telegram-questions p:last-child { max-width: 720px; margin-bottom: 0; color: #c7d0e5; }
+.telegram-general-button { min-width: 245px; }
+.telegram-sales-mode .legal-note { display: none; }
 .legal-note { max-width: 760px; margin: 45px auto 0; color: var(--muted); font-size: 13px; text-align: center; }
 .limits { position: relative; width: 100%; max-width: none; padding-inline: max(24px, calc((100% - var(--max)) / 2)); display: grid; grid-template-columns: 1fr 1fr; gap: 90px; background: repeating-linear-gradient(-45deg, #0e1a35, #0e1a35 18px, #101d3b 18px, #101d3b 36px); color: white; }
 .limits::before { position: absolute; top: -16px; left: 7%; width: 150px; height: 32px; background: var(--acid); content: ""; transform: rotate(-2deg); }
@@ -363,6 +372,8 @@ footer > div:first-child { display: grid; gap: 5px; }
   .pricing-grid { grid-template-columns: 1fr; gap: 22px; }
   .price-card { min-height: 0; }
   .price-card-featured { margin-top: 0; }
+  .telegram-questions { grid-template-columns: 1fr; }
+  .telegram-general-button { width: 100%; }
   .faq-title { position: static; }
 }
 
@@ -428,6 +439,8 @@ footer > div:first-child { display: grid; gap: 5px; }
   .price-card { padding: 25px; }
   .price-card h3 { font-size: 30px; overflow-wrap: normal; }
   .price-card-featured { padding-top: 52px; box-shadow: 7px 7px 0 var(--acid); }
+  .telegram-questions { margin-top: 34px; padding: 25px; gap: 26px; }
+  .telegram-questions h3 { font-size: 32px; }
   footer { flex-direction: column; }
   .footer-links { justify-content: flex-start; }
   .payment-dialog { width: calc(100% - 20px); max-height: calc(100dvh - 20px); padding: 25px 20px 22px; box-shadow: 7px 7px 0 rgba(16, 29, 59, .28); }

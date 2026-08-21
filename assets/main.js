@@ -1,10 +1,13 @@
 import { improveVisibleTypography } from './typography.mjs';
 import { initHeroOrbit } from './hero-orbit.mjs';
 import { initTestimonialCarousel } from './testimonial-carousel.mjs';
+import { initTelegramSalesMode } from './telegram-sales.mjs';
 
 improveVisibleTypography();
 initHeroOrbit(document.querySelector('[data-hero-orbit]'));
 initTestimonialCarousel(document.querySelector('[data-testimonial-carousel]'));
+
+const telegramSalesMode = initTelegramSalesMode(document, globalThis.location.pathname);
 
 const dialog = document.querySelector('#payment-dialog');
 const slot = document.querySelector('#payment-slot');
@@ -16,20 +19,22 @@ const tariffNames = {
   pro: 'Продвинутый',
 };
 
-document.querySelectorAll('[data-open-payment]').forEach((button) => {
-  button.addEventListener('click', () => {
-    const tariff = button.dataset.openPayment;
-    const source = document.querySelector(`[data-payment-form="${tariff}"]`);
+if (!telegramSalesMode) {
+  document.querySelectorAll('[data-open-payment]').forEach((button) => {
+    button.addEventListener('click', () => {
+      const tariff = button.dataset.openPayment;
+      const source = document.querySelector(`[data-payment-form="${tariff}"]`);
 
-    titleName.textContent = tariffNames[tariff] ?? 'Участие в программе';
-    slot.replaceChildren(source.content.cloneNode(true));
-    dialog.showModal();
-    globalThis.kassaConstructForm?.main?.updateHandlers();
+      titleName.textContent = tariffNames[tariff] ?? 'Участие в программе';
+      slot.replaceChildren(source.content.cloneNode(true));
+      dialog.showModal();
+      globalThis.kassaConstructForm?.main?.updateHandlers();
+    });
   });
-});
 
-document.querySelector('[data-close-payment]').addEventListener('click', () => dialog.close());
+  document.querySelector('[data-close-payment]').addEventListener('click', () => dialog.close());
 
-dialog.addEventListener('click', (event) => {
-  if (event.target === dialog) dialog.close();
-});
+  dialog.addEventListener('click', (event) => {
+    if (event.target === dialog) dialog.close();
+  });
+}
