@@ -291,6 +291,16 @@ test('блок компаний показывает двенадцать лок
   }
 });
 
+test('все логотипы компаний стоят на едином тёмном фоне и используют чёткие векторные версии', () => {
+  const html = readFileSync(pagePath, 'utf8');
+  const css = readFileSync(cssPath, 'utf8');
+
+  assert.match(html, /assets\/company-logos\/avito-white\.svg/);
+  assert.match(html, /assets\/company-logos\/magnit-white\.svg/);
+  assert.doesNotMatch(css, /company-logo-(?:avito|magnit)[^{]*\{[^}]*background\s*:\s*white/s);
+  assert.match(css, /\.company-proof \.company-logo\s*\{[^}]*background:\s*#[0-9a-f]{6}/is);
+});
+
 test('благодарности показывают три настоящих документа с основного сайта', () => {
   const html = readFileSync(pagePath, 'utf8');
   const blockStart = html.indexOf('<section class="author-testimonials"');
