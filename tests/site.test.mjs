@@ -21,6 +21,8 @@ const testimonialCarouselUrl = new URL('../assets/testimonial-carousel.mjs', imp
 const testimonialCarouselPath = fileURLToPath(testimonialCarouselUrl);
 const telegramSalesUrl = new URL('../assets/telegram-sales.mjs', import.meta.url);
 const telegramSalesPath = fileURLToPath(telegramSalesUrl);
+const metrikaUrl = new URL('../assets/metrika.mjs', import.meta.url);
+const metrikaPath = fileURLToPath(metrikaUrl);
 
 test('главная страница существует', () => {
   assert.equal(existsSync(pagePath), true, 'site/index.html должен существовать');
@@ -55,6 +57,47 @@ test('Telegram-ссылка открывает @starsevast с готовым с�
 
   const generalUrl = new URL(buildTelegramContactUrl(getTariffQuestion()));
   assert.equal(generalUrl.searchParams.get('text'), 'У меня вопрос по курсу «ИИ для экспертов»: ');
+});
+
+test('существующий счётчик Метрики включается на /tg и success-страницах', async () => {
+  assert.equal(existsSync(metrikaPath), true, 'должен существовать модуль Метрики');
+  const { METRIKA_COUNTER_ID, shouldInitMetrika } = await import(metrikaUrl.href);
+
+  assert.equal(METRIKA_COUNTER_ID, 101476340);
+  assert.equal(shouldInitMetrika('/tg'), true);
+  assert.equal(shouldInitMetrika('/tg/'), true);
+  assert.equal(shouldInitMetrika('/success/start/'), true);
+  assert.equal(shouldInitMetrika('/success/middle/'), true);
+  assert.equal(shouldInitMetrika('/success/advanced/'), true);
+  assert.equal(shouldInitMetrika('/'), false);
+  assert.equal(shouldInitMetrika('/offer/'), false);
+});
+
+test('клики по трём тарифам отправляют отдельные цели Метрики', async () => {
+  const { METRIKA_GOALS, getMetrikaGoalForTariff } = await import(metrikaUrl.href);
+
+  assert.deepEqual(METRIKA_GOALS, {
+    base: 'tg_tariff_start_click',
+    middle: 'tg_tariff_middle_click',
+    pro: 'tg_tariff_advanced_click',
+  });
+  assert.equal(getMetrikaGoalForTariff('base'), 'tg_tariff_start_click');
+  assert.equal(getMetrikaGoalForTariff('middle'), 'tg_tariff_middle_click');
+  assert.equal(getMetrikaGoalForTariff('pro'), 'tg_tariff_advanced_click');
+  assert.equal(getMetrikaGoalForTariff('unknown'), null);
+});
+
+test('главный скрипт подключает Метрику, а success-страницы загружают тот же модуль', () => {
+  const main = readFileSync(jsPath, 'utf8');
+
+  assert.match(main, /from ['"]\.\/metrika\.mjs['"]/);
+  assert.match(main, /initMetrikaForPage\(/);
+  for (const path of Object.keys(successPages)) {
+    const resultPath = fileURLToPath(new URL(`../${path}`, import.meta.url));
+    const page = readFileSync(resultPath, 'utf8');
+    assert.match(page, /\/assets\/metrika\.mjs\?v=[a-z0-9.-]+/i);
+    assert.match(page, /initMetrikaForPage\(/);
+  }
 });
 
 test('Nginx отдаёт дубль на /tg и /tg/ с теми же ассетами', () => {
