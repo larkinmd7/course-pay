@@ -353,6 +353,18 @@ test('преподавательский опыт показывает лого�
   }
 });
 
+test('номер образовательной лицензии открывает локальную выписку из реестра', () => {
+  const html = readFileSync(pagePath, 'utf8');
+  const match = html.match(/<a[^>]+href="([^"]+\.pdf)"[^>]*>№ Л035-01297-33\/03832611<\/a>/);
+
+  assert.ok(match, 'номер лицензии должен быть ссылкой на PDF-выписку');
+  assert.equal(
+    existsSync(fileURLToPath(new URL(`../${match[1]}`, import.meta.url))),
+    true,
+    'PDF-выписка должна храниться вместе с сайтом',
+  );
+});
+
 test('тарифы равной ширины и каждый содержит общий бонус', () => {
   const html = readFileSync(pagePath, 'utf8');
   const css = readFileSync(cssPath, 'utf8');
