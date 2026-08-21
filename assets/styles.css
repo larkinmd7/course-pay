@@ -234,10 +234,14 @@ h2 { margin-bottom: 28px; font-size: clamp(40px, 5vw, 72px); line-height: 1; let
 .author-numbers span { color: var(--muted); font-size: 13px; }
 .author-education { margin: 48px 0 16px; padding: 30px; background: var(--paper); }
 .author-education-heading { margin-bottom: 28px; }
-.author-education-heading span, .author-proof-heading > span, .company-proof > p, .product-type, .testimonial-card > span { color: var(--royal); font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+.author-education-heading span, .author-proof-heading > span, .company-proof > p, .product-type, .testimonial-copy > span { color: var(--royal); font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
 .author-education-heading h3, .author-proof-heading h3 { margin: 10px 0 0; font-size: 28px; line-height: 1.12; letter-spacing: -.03em; }
-.author-education p { margin: 0; }
-.author-education p + p { margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--line); }
+.education-grid { display: grid; gap: 10px; }
+.education-card { min-width: 0; min-height: 172px; padding: 22px; border: 1px solid var(--line); background: var(--surface); display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 24px; align-items: center; }
+.education-logo { height: 96px; padding: 13px; border-right: 1px solid var(--line); display: flex; align-items: center; justify-content: center; }
+.education-logo img { display: block; width: min(100%, 156px); height: auto; max-height: 72px; object-fit: contain; }
+.education-logo-hse img { width: 76px; max-height: 76px; }
+.education-card p { margin: 0; color: var(--muted); font-size: 14px; }
 .product-proof { display: grid; gap: 10px; }
 .product-proof article { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(210px, .8fr); border: 1px solid var(--line); background: var(--surface); }
 .product-summary { min-width: 0; padding: 24px; }
@@ -251,41 +255,36 @@ h2 { margin-bottom: 28px; font-size: clamp(40px, 5vw, 72px); line-height: 1; let
 .author-method { margin: 32px 0 0; padding-left: 22px; border-left: 4px solid var(--royal); font-size: 19px; font-weight: 600; }
 .company-proof { margin-top: 44px; padding: 28px; background: var(--navy); color: white; }
 .company-proof > p { margin-bottom: 22px; color: var(--acid); }
-.company-logo-wall { margin: 0; padding: 1px; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 1px; background: #53617f; list-style: none; }
-.company-proof .company-logo { min-width: 0; min-height: 100px; padding: 16px; border: 0; background: white; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-.company-logo img { display: block; width: min(100%, var(--logo-width, 150px)); max-width: 100%; height: auto; max-height: var(--logo-height, 48px); object-fit: contain; }
-.company-logo-sber img { --logo-width: 176px; --logo-height: 38px; }
-.company-logo-sberuniversity img { --logo-width: 190px; --logo-height: 72px; }
-.company-logo-colvir img { --logo-width: 138px; --logo-height: 34px; }
-.company-logo-avito img { --logo-width: 128px; --logo-height: 36px; }
-.company-logo-magnit img { --logo-width: 132px; --logo-height: 40px; }
-.company-logo-vtb img { --logo-width: 148px; --logo-height: 52px; }
-.company-logo-s7 img { --logo-width: 148px; --logo-height: 48px; }
-.company-logo-rostelecom img { --logo-width: 156px; --logo-height: 54px; }
-.company-logo-gazprom img { --logo-width: 152px; --logo-height: 58px; }
-.company-logo-uds img { --logo-width: 120px; --logo-height: 46px; }
+.company-logo-wall { margin: 0; padding: 1px; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 1px; background: #3b4965; list-style: none; }
+.company-proof .company-logo { min-width: 0; min-height: 112px; padding: 22px; border: 0; background: linear-gradient(145deg, #182746, #111e38); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.company-proof .company-logo:nth-child(3n + 2) { background: #15233f; }
+.company-logo img { display: block; width: min(100%, var(--logo-width, 158px)); max-width: 100%; height: auto; max-height: var(--logo-height, 54px); object-fit: contain; }
+.company-logo-sber img { --logo-width: 138px; --logo-height: 40px; }
+.company-logo-sberuniversity img { --logo-width: 175px; --logo-height: 44px; }
+.company-logo-gazprom img { --logo-width: 142px; --logo-height: 62px; }
+.company-logo-vtb img { --logo-width: 150px; --logo-height: 48px; }
+.company-logo-s7 img { --logo-width: 124px; --logo-height: 42px; }
+.company-logo-rostelecom img { --logo-width: 164px; --logo-height: 46px; }
+.company-logo-ozon img { --logo-width: 144px; --logo-height: 42px; }
+.company-logo-sibur img { --logo-width: 140px; --logo-height: 38px; }
+.company-logo-goodwood img { --logo-width: 162px; --logo-height: 34px; }
+.company-logo-dasreda img { --logo-width: 158px; --logo-height: 48px; }
 .author-testimonials { margin-top: 48px; }
 .author-proof-heading { max-width: 580px; margin-bottom: 24px; }
 .testimonial-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
-.testimonial-card { min-width: 0; min-height: 350px; padding: 24px; border: 1px solid var(--line); background: var(--paper); display: flex; flex-direction: column; }
-.testimonial-logo { min-height: 72px; margin-bottom: 22px; display: flex; align-items: center; color: var(--ink); font-size: 28px; font-weight: 800; line-height: .8; letter-spacing: -.05em; }
-.logo-goodwood { width: 88px; padding: 12px; background: #1cab61; color: white; font-size: 17px; letter-spacing: -.02em; }
-.logo-vtb-large { gap: 12px; color: #0b4da2; font-size: 32px; }
-.logo-vtb-large > span { width: 32px; height: 6px; background: #16a0e8; box-shadow: 0 8px #16a0e8, 0 16px #16a0e8; transform: skewX(-28deg); }
-.logo-fesco { color: #0055a6; font-size: 34px; font-style: italic; letter-spacing: -.06em; }
-.testimonial-story { background: var(--royal); color: white; }
-.testimonial-brand { display: flex; flex-direction: column; gap: 3px; }
-.testimonial-brand strong { font-size: 16px; }
-.testimonial-brand span { color: #cbd6ff; font-size: 12px; }
-.testimonial-story blockquote { margin: auto 0 20px; padding: 34px 0 0; font-size: 16px; line-height: 1.48; }
-.testimonial-story > p { margin: 0; color: #cbd6ff; font-size: 12px; }
-.testimonial-metric > strong { margin: auto 0 8px; font-size: 46px; line-height: .9; letter-spacing: -.05em; }
-.testimonial-metric > strong small { font-size: 20px; letter-spacing: 0; }
-.testimonial-metric > p { margin: 0; color: var(--muted); font-size: 14px; }
-.testimonial-accent { border-color: var(--acid); background: var(--acid); }
-.testimonial-accent > span { color: var(--ink); }
-.testimonial-accent > p { color: #313a21; }
-.testimonial-quote > strong { margin: auto 0 12px; font-size: 25px; line-height: 1.08; }
+.testimonial-card { min-width: 0; min-height: 510px; border: 1px solid #34415c; background: var(--navy); color: white; display: grid; grid-template-rows: auto minmax(240px, 1fr); overflow: hidden; }
+.testimonial-copy { min-width: 0; padding: 24px 24px 22px; }
+.testimonial-logo { min-height: 46px; margin-bottom: 18px; display: flex; align-items: center; color: white; font-size: 27px; font-weight: 800; line-height: 1; letter-spacing: -.05em; }
+.testimonial-logo img { display: block; width: auto; max-width: 138px; height: auto; max-height: 38px; object-fit: contain; }
+.testimonial-logo-wordmark { font-family: "IBM Plex Mono", monospace; letter-spacing: -.04em; }
+.testimonial-copy h4 { margin: 11px 0 10px; font-size: 21px; line-height: 1.08; letter-spacing: -.03em; }
+.testimonial-copy p { margin: 0; color: #bac5dc; font-size: 13px; line-height: 1.5; }
+.testimonial-copy > span { color: var(--acid); }
+.testimonial-document { position: relative; min-height: 240px; border-top: 1px solid #34415c; background: #e8ebf1; color: var(--ink); display: block; overflow: hidden; }
+.testimonial-document img { display: block; width: 100%; height: 100%; min-height: 240px; object-fit: cover; object-position: center top; filter: saturate(.72) contrast(.96); transition: transform .35s ease, filter .35s ease; }
+.testimonial-document::after { position: absolute; inset: 0; background: linear-gradient(180deg, transparent 52%, rgba(6, 15, 34, .82)); content: ""; }
+.testimonial-document > span { position: absolute; z-index: 1; right: 16px; bottom: 15px; padding: 8px 10px; background: var(--acid); color: var(--ink); font-family: "IBM Plex Mono", monospace; font-size: 10px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+.testimonial-document:hover img { transform: scale(1.025); filter: saturate(1) contrast(1); }
 .pricing { padding-bottom: 150px; }
 .pricing-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; align-items: stretch; }
 .price-card { min-height: 620px; padding: 30px; border: 1px solid var(--ink); background: var(--surface); display: flex; flex-direction: column; }
@@ -405,7 +404,12 @@ footer > div:first-child { display: grid; gap: 5px; }
   .product-proof article, .testimonial-grid { grid-template-columns: 1fr; }
   .product-metric { border-top: 1px solid var(--line); border-left: 0; }
   .company-logo-wall { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .testimonial-card { min-height: 320px; }
+  .company-proof { padding: 20px; }
+  .company-proof .company-logo { min-height: 92px; padding: 17px; }
+  .testimonial-card { min-height: 0; grid-template-rows: auto 280px; }
+  .education-card { min-height: 0; padding: 20px; grid-template-columns: 1fr; gap: 18px; }
+  .education-logo { height: 82px; padding: 8px 8px 18px; border-right: 0; border-bottom: 1px solid var(--line); justify-content: flex-start; }
+  .education-logo-hse img { width: 66px; max-height: 66px; }
   .price-card { padding: 25px; }
   .price-card h3 { font-size: 30px; overflow-wrap: normal; }
   .price-card-featured { padding-top: 52px; box-shadow: 7px 7px 0 var(--acid); }

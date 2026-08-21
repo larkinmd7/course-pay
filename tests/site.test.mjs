@@ -244,18 +244,16 @@ test('блок автора содержит фото и подтверждён�
   assert.match(html, /SynergyGPT/);
   assert.match(html, /1–2 дня[\s\S]{0,100}вместо 2–3 недель/);
 
-  for (const company of ['Сбер', 'СберУниверситет', 'Colvir', 'Авито', 'Магнит', 'ВТБ', 'S7', 'Ростелеком', 'Газпромнефть', 'UDS Group']) {
+  for (const company of ['Сбер', 'СберУниверситет', 'Газпром нефть', 'ВТБ', 'S7', 'Ростелеком', 'Ozon', 'СИБУР', 'GOOD WOOD', 'Деловая среда']) {
     assert.match(html, new RegExp(company));
   }
 
   assert.match(html, /Речевая аналитика для контроля качества продаж/);
   assert.match(html, /AI-консультант на сайте для повышения конверсии/);
   assert.match(html, /Внутренняя low-code платформа/);
-  assert.match(html, /Good Wood/);
-  assert.match(html, /CSI 9,7 из 10/);
-  assert.match(html, /NPS 100/);
-  assert.match(html, /FESCO/);
-  assert.match(html, /Классно получилось/);
+  assert.match(html, /Благодарность от Сбера/);
+  assert.match(html, /Подтверждение от S7 Group/);
+  assert.match(html, /Благодарность от СКБ Контур/);
   assert.doesNotMatch(html, /Альфа-Банк/);
   assert.ok((html.match(/class="company-logo/g) ?? []).length >= 10, 'компании должны показываться визуальными логотипами');
   assert.equal((html.match(/class="testimonial-logo/g) ?? []).length, 3, 'каждый отзыв должен начинаться с логотипа компании');
@@ -277,15 +275,47 @@ test('блок компаний показывает десять локальн
   assert.deepEqual(logos.map(([, , alt]) => alt), [
     'Сбер',
     'СберУниверситет',
-    'Colvir',
-    'Авито',
-    'Магнит',
+    'Газпром нефть',
     'ВТБ',
     'S7 Airlines',
     'Ростелеком',
-    'Газпром нефть',
-    'UDS Group',
+    'Ozon',
+    'СИБУР',
+    'GOOD WOOD',
+    'Деловая среда',
   ]);
+  for (const [, source] of logos) {
+    assert.equal(existsSync(fileURLToPath(new URL(`../${source}`, import.meta.url))), true, `логотип ${source} должен храниться вместе с сайтом`);
+  }
+});
+
+test('благодарности показывают три настоящих документа с основного сайта', () => {
+  const html = readFileSync(pagePath, 'utf8');
+  const blockStart = html.indexOf('<section class="author-testimonials"');
+  const blockEnd = html.indexOf('</section>', blockStart);
+  const block = html.slice(blockStart, blockEnd);
+  const documents = [...block.matchAll(/<a class="testimonial-document" href="([^"]+)"[\s\S]*?<img src="([^"]+)" alt="([^"]+)"/g)];
+
+  assert.equal(documents.length, 3);
+  assert.deepEqual(documents.map(([, , , alt]) => alt), [
+    'Благодарственное письмо Сбера Михаилу Ларькину',
+    'Подтверждение проведения занятий для S7 Group',
+    'Благодарственное письмо СКБ Контур Михаилу Ларькину',
+  ]);
+  for (const [, href, source] of documents) {
+    assert.equal(href, source, 'превью должно открывать полный локальный документ');
+    assert.equal(existsSync(fileURLToPath(new URL(`../${source}`, import.meta.url))), true, `документ ${source} должен храниться вместе с сайтом`);
+  }
+});
+
+test('преподавательский опыт показывает логотипы РАНХиГС и ВШЭ', () => {
+  const html = readFileSync(pagePath, 'utf8');
+  const blockStart = html.indexOf('<div class="author-education">');
+  const blockEnd = html.indexOf('<div class="license">', blockStart);
+  const block = html.slice(blockStart, blockEnd);
+  const logos = [...block.matchAll(/<img src="([^"]+)" alt="([^"]+)"/g)];
+
+  assert.deepEqual(logos.map(([, , alt]) => alt), ['РАНХиГС', 'ВШЭ — Высшая школа экономики']);
   for (const [, source] of logos) {
     assert.equal(existsSync(fileURLToPath(new URL(`../${source}`, import.meta.url))), true, `логотип ${source} должен храниться вместе с сайтом`);
   }
