@@ -8,12 +8,12 @@ initTestimonialCarousel(document.querySelector('[data-testimonial-carousel]'));
 
 const dialog = document.querySelector('#payment-dialog');
 const slot = document.querySelector('#payment-slot');
-const title = document.querySelector('#payment-title');
+const titleName = document.querySelector('[data-payment-title-name]');
 
 const tariffNames = {
-  base: 'Тариф «Самостоятельный»',
-  middle: 'Тариф «С внедрением»',
-  pro: 'Тариф «Персональный»',
+  base: 'Самостоятельный',
+  middle: 'С внедрением',
+  pro: 'Персональный',
 };
 
 document.querySelectorAll('[data-open-payment]').forEach((button) => {
@@ -21,7 +21,7 @@ document.querySelectorAll('[data-open-payment]').forEach((button) => {
     const tariff = button.dataset.openPayment;
     const source = document.querySelector(`[data-payment-form="${tariff}"]`);
 
-    title.textContent = tariffNames[tariff] ?? 'Оплата участия';
+    titleName.textContent = tariffNames[tariff] ?? 'Участие в программе';
     slot.replaceChildren(source.content.cloneNode(true));
     dialog.showModal();
     globalThis.kassaConstructForm?.main?.updateHandlers();

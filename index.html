@@ -7,9 +7,9 @@
   <title>ИИ для экспертов — онлайн-программа Михаила Ларькина</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><rect width=%2264%22 height=%2264%22 rx=%2212%22 fill=%22%232653ff%22/><text x=%2232%22 y=%2242%22 text-anchor=%22middle%22 font-size=%2230%22 fill=%22white%22>AI</text></svg>">
   <link rel="stylesheet" href="https://yookassa.ru/integration/simplepay/css/yookassa_construct_form.css?v=1.34.0">
-  <link rel="stylesheet" href="assets/styles.css?v=20260821-10">
+  <link rel="stylesheet" href="assets/styles.css?v=20260821-11">
   <script src="https://yookassa.ru/integration/simplepay/js/yookassa_construct_form.js?v=1.34.0" defer></script>
-  <script src="assets/main.js?v=20260821-3" type="module"></script>
+  <script src="assets/main.js?v=20260821-4" type="module"></script>
 </head>
 <body>
   <a class="skip-link" href="#content">К содержанию</a>
@@ -668,8 +668,8 @@
 
   <dialog class="payment-dialog" id="payment-dialog" aria-labelledby="payment-title">
     <button class="dialog-close" type="button" data-close-payment aria-label="Закрыть">×</button>
-    <p class="eyebrow">Безопасная оплата через ЮKassa</p>
-    <h2 id="payment-title">Оплата участия</h2>
+    <p class="eyebrow payment-eyebrow">Безопасная оплата через ЮKassa</p>
+    <h2 class="payment-title" id="payment-title"><span>Тариф</span><strong data-payment-title-name>Самостоятельный</strong></h2>
     <div id="payment-slot" aria-live="polite"></div>
     <p class="dialog-legal">Оплачивая участие, вы принимаете <a href="/offer/">оферту</a>. Согласие на обработку данных подтверждается отдельной галочкой в форме.</p>
   </dialog>
