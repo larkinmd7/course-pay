@@ -49,10 +49,13 @@ test('Telegram-ссылка открывает @starsevast с готовым с�
   };
 
   for (const [tariff, expectedMessage] of Object.entries(messages)) {
-    const url = new URL(buildTelegramContactUrl(getTariffQuestion(tariff)));
+    const contactUrl = buildTelegramContactUrl(getTariffQuestion(tariff));
+    const url = new URL(contactUrl);
     assert.equal(url.origin, 'https://t.me');
     assert.equal(url.pathname, '/starsevast');
     assert.equal(url.searchParams.get('text'), expectedMessage);
+    assert.equal(contactUrl.includes('+'), false, 'пробелы в сырой Telegram-ссылке не должны превращаться в плюсы');
+    assert.match(contactUrl, /text=%D0%A3%20%D0%BC%D0%B5%D0%BD%D1%8F%20/);
   }
 
   const generalUrl = new URL(buildTelegramContactUrl(getTariffQuestion()));

@@ -18,8 +18,7 @@ export function getTariffQuestion(tariff) {
 
 export function buildTelegramContactUrl(message, username = TELEGRAM_USERNAME) {
   const url = new URL(`https://t.me/${username}`);
-  url.searchParams.set('text', message);
-  return url.href;
+  return `${url.href}?text=${encodeURIComponent(message)}`;
 }
 
 function createContactLink(button, tariff, root) {
