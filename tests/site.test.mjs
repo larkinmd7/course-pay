@@ -142,6 +142,29 @@ test('отдельный блок объясняет формат занятий
   assert.match(format, /до того, как столкнётесь с ними сами/i);
 });
 
+test('календарь показывает день 0 и шесть занятий по понедельникам и четвергам', () => {
+  const html = readFileSync(pagePath, 'utf8');
+  const scheduleStart = html.indexOf('<section class="schedule-calendar"');
+  const scheduleEnd = html.indexOf('</section>', scheduleStart);
+  const schedule = html.slice(scheduleStart, scheduleEnd);
+  const datetimes = [...schedule.matchAll(/<time datetime="([^"]+)"/g)].map((match) => match[1]);
+
+  assert.deepEqual(datetimes, [
+    '2026-08-30',
+    '2026-08-31T18:00:00+03:00',
+    '2026-09-03T18:00:00+03:00',
+    '2026-09-07T18:00:00+03:00',
+    '2026-09-10T18:00:00+03:00',
+    '2026-09-14T18:00:00+03:00',
+    '2026-09-17T18:00:00+03:00',
+  ]);
+  assert.match(schedule, /День 0/);
+  assert.equal((schedule.match(/class="schedule-event(?:\s[^"]*)?"/g) ?? []).length, 6);
+  assert.equal((schedule.match(/<span>18:00 МСК<\/span>/g) ?? []).length, 6);
+  assert.match(schedule, /Понедельник/);
+  assert.match(schedule, /Четверг/);
+});
+
 test('результаты объясняют переход от чат-ботов к созданию продуктов через локальный визуал', () => {
   const html = readFileSync(pagePath, 'utf8');
 

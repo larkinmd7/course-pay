@@ -173,6 +173,41 @@ h2 { margin-bottom: 28px; font-size: clamp(40px, 5vw, 72px); line-height: 1; let
 .format-card-personal .format-label { color: var(--royal); }
 .format-flow { margin-top: 26px; padding: 21px 24px; display: flex; align-items: center; justify-content: space-between; gap: 18px; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); font-size: 14px; font-weight: 700; }
 .format-flow i { color: var(--royal); font-style: normal; }
+.schedule-calendar { margin-top: 54px; border: 1px solid var(--ink); background: var(--surface); box-shadow: 14px 14px 0 var(--acid); }
+.schedule-heading { min-height: 176px; padding: 30px 34px; display: flex; align-items: flex-end; justify-content: space-between; gap: 32px; background: var(--navy); color: white; }
+.schedule-heading > div { min-width: 0; }
+.schedule-heading h3 { max-width: 760px; margin: 10px 0 0; font-size: clamp(38px, 5vw, 68px); line-height: .93; letter-spacing: -.055em; }
+.schedule-heading > p { flex: 0 0 auto; margin: 0; color: #c9d1e4; font-size: 14px; line-height: 1.55; text-align: right; }
+.schedule-heading > p strong { color: var(--acid); font-family: "IBM Plex Mono", monospace; letter-spacing: .04em; }
+.schedule-kicker { margin: 0; color: var(--acid); font-family: "IBM Plex Mono", monospace; font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+.schedule-prep { min-height: 150px; padding: 25px 30px; display: grid; grid-template-columns: 42px minmax(0, 1fr) auto; gap: 22px; align-items: center; background: var(--acid); border-bottom: 1px solid var(--ink); }
+.schedule-prep p, .schedule-prep h4, .schedule-prep time { margin: 0; }
+.schedule-prep p { margin-bottom: 8px; color: var(--royal); font-family: "IBM Plex Mono", monospace; font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+.schedule-prep h4 { max-width: 760px; font-size: clamp(24px, 3vw, 34px); line-height: 1.05; letter-spacing: -.035em; }
+.schedule-prep time { min-width: 122px; display: flex; align-items: flex-end; flex-direction: column; text-transform: uppercase; }
+.schedule-prep time strong { font-size: 50px; line-height: .8; letter-spacing: -.06em; }
+.schedule-prep time span { margin-top: 10px; font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 600; letter-spacing: .05em; }
+.schedule-index { width: 38px; height: 38px; display: grid; place-items: center; border: 1px solid currentColor; color: var(--royal); font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 600; }
+.schedule-days { min-height: 48px; display: grid; grid-template-columns: 110px 1fr 1fr; border-bottom: 1px solid var(--ink); color: var(--muted); font-family: "IBM Plex Mono", monospace; font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+.schedule-days span { padding: 16px 20px; }
+.schedule-days span + span { border-left: 1px solid var(--line); }
+.schedule-weeks { margin: 0; padding: 0; list-style: none; }
+.schedule-week { display: grid; grid-template-columns: 110px 1fr 1fr; }
+.schedule-week + .schedule-week { border-top: 1px solid var(--ink); }
+.schedule-week > p { margin: 0; padding: 22px 18px; display: flex; align-items: center; flex-direction: column; justify-content: space-between; background: var(--paper); color: var(--muted); font-family: "IBM Plex Mono", monospace; font-size: 10px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; writing-mode: vertical-rl; transform: rotate(180deg); }
+.schedule-week > p span { color: var(--royal); font-size: 24px; letter-spacing: -.04em; }
+.schedule-event { position: relative; min-width: 0; min-height: 220px; padding: 24px 26px; display: flex; flex-direction: column; }
+.schedule-event + .schedule-event { border-left: 1px solid var(--ink); }
+.schedule-event .schedule-index { position: absolute; top: 22px; right: 22px; }
+.schedule-event time { display: flex; align-items: flex-start; flex-direction: column; gap: 5px; }
+.schedule-event time strong { padding-right: 48px; font-size: 18px; line-height: 1.1; }
+.schedule-event time span { color: var(--royal); font-family: "IBM Plex Mono", monospace; font-size: 10px; font-weight: 600; letter-spacing: .08em; }
+.schedule-event h4 { max-width: 18ch; margin: auto 0 0; font-size: clamp(22px, 2.5vw, 32px); line-height: 1.03; letter-spacing: -.035em; }
+.schedule-event-dark { background: var(--navy); color: white; }
+.schedule-event-dark .schedule-index, .schedule-event-dark time span { color: var(--acid); }
+.schedule-event-blue { background: var(--royal); color: white; }
+.schedule-event-blue .schedule-index, .schedule-event-blue time span { color: var(--acid); }
+.schedule-event-acid { background: var(--acid); }
 .examples { padding-top: 88px; padding-bottom: 130px; }
 .examples-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
 .example-card { min-height: 300px; padding: 28px; border: 1px solid var(--ink); background: var(--surface); display: flex; flex-direction: column; }
@@ -355,6 +390,21 @@ footer > div:first-child { display: grid; gap: 5px; }
   .format-card:nth-child(n) { grid-column: 1 / -1; min-height: 280px; padding: 26px; }
   .format-flow { align-items: flex-start; flex-direction: column; }
   .format-flow i { transform: rotate(90deg); }
+  .schedule-calendar { margin-top: 40px; box-shadow: 7px 7px 0 var(--acid); }
+  .schedule-heading { min-height: 0; padding: 26px; align-items: flex-start; flex-direction: column; }
+  .schedule-heading h3 { font-size: clamp(36px, 12vw, 52px); }
+  .schedule-heading > p { text-align: left; }
+  .schedule-prep { padding: 24px; grid-template-columns: 38px 1fr; }
+  .schedule-prep time { grid-column: 2; align-items: center; flex-direction: row; gap: 10px; }
+  .schedule-prep time strong { font-size: 36px; }
+  .schedule-prep time span { margin-top: 0; }
+  .schedule-days { display: none; }
+  .schedule-week { grid-template-columns: 1fr; }
+  .schedule-week > p { min-height: 50px; padding: 13px 18px; align-items: center; flex-direction: row; background: var(--paper); writing-mode: initial; transform: none; }
+  .schedule-week > p span { font-size: 19px; }
+  .schedule-event { min-height: 190px; padding: 23px; }
+  .schedule-event + .schedule-event { border-top: 1px solid var(--ink); border-left: 0; }
+  .schedule-event h4 { font-size: 26px; }
   .author-numbers div + div { border-top: 1px solid var(--ink); border-left: 0; }
   .product-proof article, .testimonial-grid { grid-template-columns: 1fr; }
   .product-metric { border-top: 1px solid var(--line); border-left: 0; }
