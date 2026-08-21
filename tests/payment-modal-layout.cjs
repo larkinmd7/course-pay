@@ -6,7 +6,7 @@ const viewports = [
   { name: 'desktop', width: 1440, height: 900 },
   { name: 'mobile', width: 390, height: 844 },
 ];
-const tariffs = ['base', 'middle', 'pro'];
+const tariffs = ['base', 'middle', 'pro', 'test'];
 
 (async () => {
   const browser = await chromium.launch({ headless: true });

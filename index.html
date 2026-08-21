@@ -7,9 +7,9 @@
   <title>ИИ для экспертов — онлайн-программа Михаила Ларькина</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><rect width=%2264%22 height=%2264%22 rx=%2212%22 fill=%22%232653ff%22/><text x=%2232%22 y=%2242%22 text-anchor=%22middle%22 font-size=%2230%22 fill=%22white%22>AI</text></svg>">
   <link rel="stylesheet" href="https://yookassa.ru/integration/simplepay/css/yookassa_construct_form.css?v=1.34.0">
-  <link rel="stylesheet" href="assets/styles.css?v=20260821-11">
+  <link rel="stylesheet" href="assets/styles.css?v=20260821-12">
   <script src="https://yookassa.ru/integration/simplepay/js/yookassa_construct_form.js?v=1.34.0" defer></script>
-  <script src="assets/main.js?v=20260821-5" type="module"></script>
+  <script src="assets/main.js?v=20260821-6" type="module"></script>
 </head>
 <body>
   <a class="skip-link" href="#content">К содержанию</a>
@@ -502,7 +502,7 @@
                 <input name="cps_phone" class="ym-input" placeholder="Телефон (необязательно)" autocomplete="tel" type="tel">
               </div>
               <div class="ym-hidden-inputs">
-                <input name="shopSuccessURL" type="hidden" value="https://pay.larkinmd7.ru/success/">
+                <input name="shopSuccessURL" type="hidden" value="https://pay.larkinmd7.ru/success/start/">
                 <input name="shopFailURL" type="hidden" value="https://pay.larkinmd7.ru/error/">
               </div>
               <input name="customerNumber" type="hidden" value="ИИ для экспертов — тариф Старт">
@@ -548,7 +548,7 @@
                 <input name="cps_phone" class="ym-input" placeholder="Телефон (необязательно)" autocomplete="tel" type="tel">
               </div>
               <div class="ym-hidden-inputs">
-                <input name="shopSuccessURL" type="hidden" value="https://pay.larkinmd7.ru/success/">
+                <input name="shopSuccessURL" type="hidden" value="https://pay.larkinmd7.ru/success/middle/">
                 <input name="shopFailURL" type="hidden" value="https://pay.larkinmd7.ru/error/">
               </div>
               <input name="customerNumber" type="hidden" value="ИИ для экспертов — тариф Средний">
@@ -593,7 +593,7 @@
                 <input name="cps_phone" class="ym-input" placeholder="Телефон (необязательно)" autocomplete="tel" type="tel">
               </div>
               <div class="ym-hidden-inputs">
-                <input name="shopSuccessURL" type="hidden" value="https://pay.larkinmd7.ru/success/">
+                <input name="shopSuccessURL" type="hidden" value="https://pay.larkinmd7.ru/success/advanced/">
                 <input name="shopFailURL" type="hidden" value="https://pay.larkinmd7.ru/error/">
               </div>
               <input name="customerNumber" type="hidden" value="ИИ для экспертов — тариф Продвинутый">
@@ -604,6 +604,46 @@
             </form>
           </template>
         </article>
+      </div>
+
+      <div class="test-payment">
+        <div>
+          <p class="eyebrow">Временная ссылка</p>
+          <h3>Проверить оплату и переход</h3>
+          <p>Служебный платёж на 10 ₽ для проверки ЮKassa и страницы после оплаты. Это не покупка тарифа.</p>
+        </div>
+        <button class="button test-payment-button" type="button" data-open-payment="test">Тестовая оплата · 10 ₽</button>
+        <template data-payment-form="test">
+          <form target="_blank" class="yoomoney-payment-form" action="https://yookassa.ru/integration/simplepay/payment" method="post" accept-charset="utf-8">
+            <div class="ym-products ym-display-none">
+              <div class="ym-product">
+                <div class="ym-product-line"><span class="ym-product-description"><span class="ym-product-count">1×</span> Проверка платёжного маршрута</span><span class="ym-product-price" data-price="10" data-id="104" data-count="1">10 ₽</span></div>
+                <input disabled type="hidden" name="text" value="Проверка платёжного маршрута — тестовая оплата 10 ₽">
+                <input disabled type="hidden" name="price" value="10">
+                <input disabled type="hidden" name="quantity" value="1">
+                <input disabled type="hidden" name="paymentSubjectType" value="service">
+                <input disabled type="hidden" name="paymentMethodType" value="full_prepayment">
+                <input disabled type="hidden" name="tax" value="1">
+              </div>
+            </div>
+            <input value="" type="hidden" name="ym_merchant_receipt">
+            <div class="ym-customer-info">
+              <div class="ym-block-title">Данные покупателя</div>
+              <input name="custName" required class="ym-input" placeholder="ФИО" autocomplete="name" type="text">
+              <input name="cps_email" required class="ym-input" placeholder="Email для чека" autocomplete="email" type="email">
+              <input name="cps_phone" class="ym-input" placeholder="Телефон (необязательно)" autocomplete="tel" type="tel">
+            </div>
+            <div class="ym-hidden-inputs">
+              <input name="shopSuccessURL" type="hidden" value="https://pay.larkinmd7.ru/success/test/">
+              <input name="shopFailURL" type="hidden" value="https://pay.larkinmd7.ru/error/">
+            </div>
+            <input name="customerNumber" type="hidden" value="ИИ для экспертов — тестовая оплата">
+            <div class="ym-input-icon-rub ym-display-none"><input name="sum" value="10" class="ym-input ym-sum-input ym-required-input" type="number" step="any"></div>
+            <label class="payment-consent"><input type="checkbox" name="personalDataConsent" required value="yes"><span>Я даю отдельное <a href="/personal-data-consent/" target="_blank" rel="noopener">согласие на обработку персональных данных</a> и ознакомился с <a href="/privacy/" target="_blank" rel="noopener">Политикой</a>.</span></label>
+            <div class="ym-payment-btn-block ym-before-line"><button data-text="Оплатить" class="ym-btn-pay ym-result-price" type="submit"><span class="ym-text-crop">Оплатить</span> <span class="ym-price-output">10 ₽</span></button><img src="https://yookassa.ru/integration/simplepay/img/iokassa-gray.svg?v=1.34.0" class="ym-logo" width="114" height="27" alt="ЮKassa"></div>
+            <input name="shopId" value="1436088" type="hidden">
+          </form>
+        </template>
       </div>
 
       <p class="legal-note">Оплачивая участие, вы принимаете <a href="/offer/">публичную оферту</a>. Согласие на обработку персональных данных даётся отдельной обязательной галочкой в платёжной форме.</p>
@@ -669,7 +709,7 @@
   <dialog class="payment-dialog" id="payment-dialog" aria-labelledby="payment-title">
     <button class="dialog-close" type="button" data-close-payment aria-label="Закрыть">×</button>
     <p class="eyebrow payment-eyebrow">Безопасная оплата через ЮKassa</p>
-    <h2 class="payment-title" id="payment-title"><span>Тариф</span><strong data-payment-title-name>Старт</strong></h2>
+    <h2 class="payment-title" id="payment-title"><span data-payment-title-label>Тариф</span><strong data-payment-title-name>Старт</strong></h2>
     <div id="payment-slot" aria-live="polite"></div>
     <p class="dialog-legal">Оплачивая участие, вы принимаете <a href="/offer/">оферту</a>. Согласие на обработку данных подтверждается отдельной галочкой в форме.</p>
   </dialog>

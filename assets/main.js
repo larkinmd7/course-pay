@@ -8,9 +8,11 @@ initTestimonialCarousel(document.querySelector('[data-testimonial-carousel]'));
 
 const dialog = document.querySelector('#payment-dialog');
 const slot = document.querySelector('#payment-slot');
+const titleLabel = document.querySelector('[data-payment-title-label]');
 const titleName = document.querySelector('[data-payment-title-name]');
 
 const tariffNames = {
+  test: 'Тестовая оплата',
   base: 'Старт',
   middle: 'Средний',
   pro: 'Продвинутый',
@@ -21,6 +23,7 @@ document.querySelectorAll('[data-open-payment]').forEach((button) => {
     const tariff = button.dataset.openPayment;
     const source = document.querySelector(`[data-payment-form="${tariff}"]`);
 
+    titleLabel.textContent = tariff === 'test' ? 'Проверка' : 'Тариф';
     titleName.textContent = tariffNames[tariff] ?? 'Участие в программе';
     slot.replaceChildren(source.content.cloneNode(true));
     dialog.showModal();

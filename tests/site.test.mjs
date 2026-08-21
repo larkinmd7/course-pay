@@ -468,35 +468,53 @@ test('сайт и платёжные поля используют единые 
   assert.doesNotMatch(js, /['"](?:Самостоятельный|С внедрением|Персональный)['"]/);
 });
 
-test('главная содержит юридические ссылки и три платёжных контейнера', () => {
+test('главная содержит юридические ссылки, три тарифа и временную тестовую оплату', () => {
   const html = readFileSync(pagePath, 'utf8');
 
   assert.match(html, /href="\/offer\/"/);
   assert.match(html, /href="\/privacy\/"/);
   assert.match(html, /href="\/personal-data-consent\/"/);
-  assert.equal((html.match(/data-payment-form=/g) ?? []).length, 3);
+  assert.equal((html.match(/data-payment-form=/g) ?? []).length, 4);
+  assert.match(html, /data-open-payment="test"[^>]*>Тестовая оплата · 10 ₽</);
 });
 
-test('три тарифа подключены к официальной форме ЮKassa', () => {
+test('три тарифа и тестовый платёж подключены к официальной форме ЮKassa', () => {
   const html = readFileSync(pagePath, 'utf8');
   const js = readFileSync(jsPath, 'utf8');
 
-  assert.equal((html.match(/action="https:\/\/yookassa\.ru\/integration\/simplepay\/payment"/g) ?? []).length, 3);
-  assert.equal((html.match(/name="shopId" value="1436088"/g) ?? []).length, 3);
+  assert.equal((html.match(/action="https:\/\/yookassa\.ru\/integration\/simplepay\/payment"/g) ?? []).length, 4);
+  assert.equal((html.match(/name="shopId" value="1436088"/g) ?? []).length, 4);
+  assert.match(html, /name="sum"[^>]*value="10"/);
   assert.match(html, /name="sum"[^>]*value="29900"/);
   assert.match(html, /name="sum"[^>]*value="49900"/);
   assert.match(html, /name="sum"[^>]*value="89900"/);
-  assert.equal((html.match(/name="cps_email"[^>]*required/g) ?? []).length, 3);
-  assert.equal((html.match(/name="custName"[^>]*required/g) ?? []).length, 3);
+  assert.equal((html.match(/name="cps_email"[^>]*required/g) ?? []).length, 4);
+  assert.equal((html.match(/name="custName"[^>]*required/g) ?? []).length, 4);
   assert.match(js, /kassaConstructForm\?\.main\?\.updateHandlers/);
+  assert.match(js, /tariff === 'test' \? 'Проверка' : 'Тариф'/);
   assert.doesNotMatch(html, /PLACEHOLDER_VALUE|example\.com|javascript:/i);
+});
+
+test('каждая оплата возвращает на страницу своего тарифа', () => {
+  const html = readFileSync(pagePath, 'utf8');
+  const successUrls = {
+    test: 'https://pay.larkinmd7.ru/success/test/',
+    base: 'https://pay.larkinmd7.ru/success/start/',
+    middle: 'https://pay.larkinmd7.ru/success/middle/',
+    pro: 'https://pay.larkinmd7.ru/success/advanced/',
+  };
+
+  for (const [tariff, url] of Object.entries(successUrls)) {
+    const template = html.match(new RegExp(`<template data-payment-form="${tariff}">([\\s\\S]*?)<\\/template>`))?.[1] ?? '';
+    assert.ok(template.includes(`name="shopSuccessURL" type="hidden" value="${url}"`));
+  }
 });
 
 test('каждая платёжная форма требует отдельного согласия на обработку персональных данных', () => {
   const html = readFileSync(pagePath, 'utf8');
   const forms = [...html.matchAll(/<form target="_blank" class="yoomoney-payment-form"[\s\S]*?<\/form>/g)].map((match) => match[0]);
 
-  assert.equal(forms.length, 3);
+  assert.equal(forms.length, 4);
   for (const form of forms) {
     assert.match(form, /type="checkbox" name="personalDataConsent" required/);
     assert.match(form, /href="\/personal-data-consent\/"/);
@@ -531,6 +549,26 @@ test('опубликованная оферта совпадает с актуа
   assert.match(advancedTariff, /два персональных онлайн-созвона/i);
   assert.doesNotMatch(advancedTariff, /проверка практических работ|персональный канал связи|персональный технический аудит/i);
 });
+
+const successPages = {
+  'success/test/index.html': ['Тестовая оплата', 'https://t.me/+-D4Y1PQm7CExZmE6'],
+  'success/start/index.html': ['Старт', 'https://t.me/+M58vxwOgYKBkZWQ6'],
+  'success/middle/index.html': ['Средний', 'https://t.me/+WfXhSCnq9t5kODJi'],
+  'success/advanced/index.html': ['Продвинутый', 'https://t.me/+2MA6iCe5y2w4ZDAy'],
+};
+
+for (const [path, [tariff, telegramUrl]] of Object.entries(successPages)) {
+  test(`${path} ведёт в чат нужного тарифа и к первому заданию`, () => {
+    const resultPath = fileURLToPath(new URL(`../${path}`, import.meta.url));
+    assert.equal(existsSync(resultPath), true, `${path} должен существовать`);
+    const page = readFileSync(resultPath, 'utf8');
+    assert.match(page, new RegExp(tariff));
+    assert.match(page, new RegExp(`href="${telegramUrl.replace('+', '\\+')}`));
+    assert.match(page, /первое задание/i);
+    assert.match(page, /закреп/i);
+    assert.match(page, /расписани/i);
+  });
+}
 
 for (const path of ['success/index.html', 'error/index.html']) {
   test(`${path} содержит возврат на страницу программы`, () => {
