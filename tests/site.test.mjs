@@ -55,11 +55,11 @@ test('главная показывает утверждённый продук�
   const required = [
     'ИИ для экспертов: личная операционная система и AI-инструменты под свою нишу',
     '30 августа 2026',
-    'Самостоятельный',
+    'Старт',
     '29 900 ₽',
-    'С внедрением',
+    'Средний',
     '49 900 ₽',
-    'Персональный',
+    'Продвинутый',
     '89 900 ₽',
   ];
 
@@ -455,14 +455,17 @@ test('типограф связывает короткие слова и не р
   );
 });
 
-test('платёжные описания используют актуальные названия тарифов', () => {
+test('сайт и платёжные поля используют единые названия тарифов', () => {
   const html = readFileSync(pagePath, 'utf8');
+  const js = readFileSync(jsPath, 'utf8');
 
-  for (const tariff of ['Самостоятельный', 'С внедрением', 'Персональный']) {
+  for (const tariff of ['Старт', 'Средний', 'Продвинутый']) {
     assert.match(html, new RegExp(`тариф «${tariff}»`));
+    assert.match(js, new RegExp(`['"]${tariff}['"]`));
   }
 
-  assert.doesNotMatch(html, /тариф «(?:База|Средний|Профи)»/);
+  assert.doesNotMatch(html, /тариф «(?:Самостоятельный|С внедрением|Персональный)»/);
+  assert.doesNotMatch(js, /['"](?:Самостоятельный|С внедрением|Персональный)['"]/);
 });
 
 test('главная содержит юридические ссылки и три платёжных контейнера', () => {
@@ -518,14 +521,15 @@ test('опубликованная оферта совпадает с актуа
   const page = readFileSync(offerPagePath, 'utf8');
   const pdfText = execFileSync('pdftotext', [offerPdfPath, '-'], { encoding: 'utf8' });
 
-  assert.match(page, /Редакция от 20 августа 2026 года/);
+  assert.match(page, /Редакция от 21 августа 2026 года/);
   assert.match(page, /href="\/offer\/public-offer\.pdf"/);
-  for (const tariff of ['Самостоятельный', 'С внедрением', 'Персональный']) {
+  for (const tariff of ['Старт', 'Средний', 'Продвинутый']) {
     assert.match(pdfText, new RegExp(`Тариф «${tariff}»`));
   }
-  const personalTariff = pdfText.match(/5\.3\. Тариф «Персональный»[\s\S]*?5\.4\./)?.[0] ?? '';
-  assert.match(personalTariff, /два персональных онлайн-созвона/i);
-  assert.doesNotMatch(personalTariff, /проверка практических работ|персональный канал связи|персональный технический аудит/i);
+  assert.doesNotMatch(pdfText, /Тариф «(?:Самостоятельный|С внедрением|Персональный)»/);
+  const advancedTariff = pdfText.match(/5\.3\. Тариф «Продвинутый»[\s\S]*?5\.4\./)?.[0] ?? '';
+  assert.match(advancedTariff, /два персональных онлайн-созвона/i);
+  assert.doesNotMatch(advancedTariff, /проверка практических работ|персональный канал связи|персональный технический аудит/i);
 });
 
 for (const path of ['success/index.html', 'error/index.html']) {
