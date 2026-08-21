@@ -335,6 +335,33 @@ test('все логотипы компаний стоят на едином тё
   assert.match(css, /\.company-proof \.company-logo\s*\{[^}]*background:\s*#[0-9a-f]{6}/is);
 });
 
+test('Сбер и ВТБ в витрине, а первые благодарности используют чёткие локальные логотипы', () => {
+  const html = readFileSync(pagePath, 'utf8');
+  const requiredLogos = [
+    'assets/company-logos/sber-white.svg',
+    'assets/company-logos/vtb-white.svg',
+    'assets/company-logos/s7-white.svg',
+    'assets/company-logos/kontur-white.png',
+  ];
+
+  for (const source of requiredLogos) {
+    assert.match(html, new RegExp(source.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+    assert.equal(existsSync(fileURLToPath(new URL(`../${source}`, import.meta.url))), true, `логотип ${source} должен храниться вместе с сайтом`);
+  }
+
+  assert.doesNotMatch(html, /company-logo-sber"><img src="assets\/company-logos-ai\/sber\.png/);
+  assert.doesNotMatch(html, /company-logo-vtb"><img src="assets\/company-logos-ai\/vtb\.png/);
+});
+
+test('три благодарности помещаются в ряд, а документы видны целиком без обрезки', () => {
+  const css = readFileSync(cssPath, 'utf8');
+
+  assert.match(css, /\.testimonial-track\s*\{[^}]*grid-auto-columns:\s*calc\(\(100% - 28px\) \/ 3\)/s);
+  assert.match(css, /\.testimonial-card\s*\{[^}]*grid-template-rows:\s*72px\s+auto/s);
+  assert.match(css, /\.testimonial-document\s*\{[^}]*aspect-ratio:\s*210\s*\/\s*297/s);
+  assert.match(css, /\.testimonial-document img\s*\{[^}]*object-fit:\s*contain/s);
+});
+
 test('благодарности показывают горизонтальную ленту настоящих документов без рекламных описаний', () => {
   const html = readFileSync(pagePath, 'utf8');
   const blockStart = html.indexOf('<section class="author-testimonials"');
