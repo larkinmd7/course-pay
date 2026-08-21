@@ -255,7 +255,7 @@ h2 { margin-bottom: 28px; font-size: clamp(40px, 5vw, 72px); line-height: 1; let
 .author-method { margin: 32px 0 0; padding-left: 22px; border-left: 4px solid var(--royal); font-size: 19px; font-weight: 600; }
 .company-proof { margin-top: 44px; padding: 28px; background: var(--navy); color: white; }
 .company-proof > p { margin-bottom: 22px; color: var(--acid); }
-.company-logo-wall { margin: 0; padding: 1px; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 1px; background: #3b4965; list-style: none; }
+.company-logo-wall { margin: 0; padding: 1px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; background: #3b4965; list-style: none; }
 .company-proof .company-logo { min-width: 0; min-height: 112px; padding: 22px; border: 0; background: linear-gradient(145deg, #182746, #111e38); display: flex; align-items: center; justify-content: center; overflow: hidden; }
 .company-proof .company-logo:nth-child(3n + 2) { background: #15233f; }
 .company-logo img { display: block; width: min(100%, var(--logo-width, 158px)); max-width: 100%; height: auto; max-height: var(--logo-height, 54px); object-fit: contain; }
@@ -264,6 +264,9 @@ h2 { margin-bottom: 28px; font-size: clamp(40px, 5vw, 72px); line-height: 1; let
 .company-logo-gazprom img { --logo-width: 142px; --logo-height: 62px; }
 .company-logo-vtb img { --logo-width: 150px; --logo-height: 48px; }
 .company-logo-s7 img { --logo-width: 124px; --logo-height: 42px; }
+.company-proof .company-logo-avito, .company-proof .company-logo-magnit { background: white; }
+.company-logo-avito img { --logo-width: 128px; --logo-height: 36px; }
+.company-logo-magnit img { --logo-width: 132px; --logo-height: 40px; }
 .company-logo-rostelecom img { --logo-width: 164px; --logo-height: 46px; }
 .company-logo-ozon img { --logo-width: 144px; --logo-height: 42px; }
 .company-logo-sibur img { --logo-width: 140px; --logo-height: 38px; }

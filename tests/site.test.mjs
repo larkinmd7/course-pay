@@ -244,7 +244,7 @@ test('блок автора содержит фото и подтверждён�
   assert.match(html, /SynergyGPT/);
   assert.match(html, /1–2 дня[\s\S]{0,100}вместо 2–3 недель/);
 
-  for (const company of ['Сбер', 'СберУниверситет', 'Газпром нефть', 'ВТБ', 'S7', 'Ростелеком', 'Ozon', 'СИБУР', 'GOOD WOOD', 'Деловая среда']) {
+  for (const company of ['Сбер', 'СберУниверситет', 'Газпром нефть', 'ВТБ', 'S7', 'Авито', 'Магнит', 'Ростелеком', 'Ozon', 'СИБУР', 'GOOD WOOD', 'Деловая среда']) {
     assert.match(html, new RegExp(company));
   }
 
@@ -264,20 +264,22 @@ test('блок автора содержит фото и подтверждён�
   assert.ok(productsPosition > -1 && educationPosition > productsPosition, 'практические кейсы должны идти раньше преподавательского опыта');
 });
 
-test('блок компаний показывает десять локальных логотипов без сломанных ассетов', () => {
+test('блок компаний показывает двенадцать локальных логотипов без сломанных ассетов', () => {
   const html = readFileSync(pagePath, 'utf8');
   const blockStart = html.indexOf('<section class="company-proof"');
   const blockEnd = html.indexOf('</section>', blockStart);
   const block = html.slice(blockStart, blockEnd);
   const logos = [...block.matchAll(/<img src="([^"]+)" alt="([^"]+)"/g)];
 
-  assert.equal(logos.length, 10);
+  assert.equal(logos.length, 12);
   assert.deepEqual(logos.map(([, , alt]) => alt), [
     'Сбер',
     'СберУниверситет',
     'Газпром нефть',
     'ВТБ',
     'S7 Airlines',
+    'Авито',
+    'Магнит',
     'Ростелеком',
     'Ozon',
     'СИБУР',
