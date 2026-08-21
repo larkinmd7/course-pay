@@ -26,8 +26,8 @@ test('локальный file-preview загружает собственные 
   const html = readFileSync(pagePath, 'utf8');
   const pageUrl = pathToFileURL(pagePath);
   const assetReferences = [
-    ['стили', html.match(/<link rel="stylesheet" href="([^"]*assets\/styles\.css)"/)?.[1]],
-    ['скрипт', html.match(/<script src="([^"]*assets\/main\.js)"/)?.[1]],
+    ['стили', html.match(/<link rel="stylesheet" href="([^"]*assets\/styles\.css(?:\?[^\"]+)?)"/)?.[1]],
+    ['скрипт', html.match(/<script src="([^"]*assets\/main\.js(?:\?[^\"]+)?)"/)?.[1]],
     ['фото', html.match(/<img src="([^"]*assets\/mikhail-larkin\.jpg)"/)?.[1]],
   ];
 
@@ -36,6 +36,16 @@ test('локальный file-preview загружает собственные 
     const resolvedPath = fileURLToPath(new URL(reference, pageUrl));
     assert.equal(existsSync(resolvedPath), true, `file-preview должен находить ассет: ${label}`);
   }
+});
+
+test('mutable CSS и JavaScript получают новую версию без недельного immutable-кэша', () => {
+  const html = readFileSync(pagePath, 'utf8');
+  const nginx = readFileSync(nginxPath, 'utf8');
+
+  assert.match(html, /assets\/styles\.css\?v=[a-z0-9.-]+/i);
+  assert.match(html, /assets\/main\.js\?v=[a-z0-9.-]+/i);
+  assert.doesNotMatch(nginx, /\.(?:css\|js)[^}]*immutable/s);
+  assert.match(nginx, /max-age=300, must-revalidate/);
 });
 
 test('главная показывает утверждённый продукт и тарифы', () => {
