@@ -252,22 +252,18 @@ h2 { margin-bottom: 28px; font-size: clamp(40px, 5vw, 72px); line-height: 1; let
 .company-proof { margin-top: 44px; padding: 28px; background: var(--navy); color: white; }
 .company-proof > p { margin-bottom: 22px; color: var(--acid); }
 .company-logo-wall { margin: 0; padding: 1px; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 1px; background: #53617f; list-style: none; }
-.company-proof .company-logo { min-width: 0; min-height: 82px; padding: 12px; border: 0; background: white; display: flex; align-items: center; justify-content: center; gap: 7px; color: var(--ink); font-size: 16px; font-weight: 800; line-height: 1; text-align: center; }
-.logo-sber { color: #17a263 !important; letter-spacing: -.04em; }
-.logo-sber > span { display: grid; width: 24px; aspect-ratio: 1; place-items: center; border: 3px solid #17a263; border-radius: 50%; font-size: 12px; }
-.logo-sberuniversity { color: #1b9a62 !important; flex-direction: column; gap: 2px !important; font-size: 15px !important; }
-.logo-sberuniversity span { font-size: 11px; font-weight: 600; }
-.logo-colvir { color: #f06b31 !important; font-size: 19px !important; letter-spacing: -.05em; text-transform: lowercase; }
-.logo-avito { color: #292b38 !important; }
-.logo-avito i { width: 7px; aspect-ratio: 1; border-radius: 50%; background: #00aaff; box-shadow: 9px 0 #965eeb, 0 9px #ff6163, 9px 9px #97cf26; }
-.logo-magnit { color: #e31837 !important; font-size: 18px !important; }
-.logo-vtb { color: #0b4da2 !important; font-size: 20px !important; }
-.logo-vtb > span, .logo-vtb-large > span { width: 25px; height: 5px; background: #16a0e8; box-shadow: 0 8px #16a0e8, 0 16px #16a0e8; transform: skewX(-28deg); }
-.logo-s7 { width: auto; color: white !important; background: #bed632 !important; font-size: 22px !important; }
-.logo-rostelecom { color: #762bc4 !important; font-size: 14px !important; }
-.logo-gazprom { color: #0875bc !important; font-size: 14px !important; }
-.logo-uds { color: #17181c !important; font-size: 18px !important; }
-.logo-uds span { font-size: 9px; letter-spacing: .16em; }
+.company-proof .company-logo { min-width: 0; min-height: 100px; padding: 16px; border: 0; background: white; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.company-logo img { display: block; width: min(100%, var(--logo-width, 150px)); max-width: 100%; height: auto; max-height: var(--logo-height, 48px); object-fit: contain; }
+.company-logo-sber img { --logo-width: 176px; --logo-height: 38px; }
+.company-logo-sberuniversity img { --logo-width: 190px; --logo-height: 72px; }
+.company-logo-colvir img { --logo-width: 138px; --logo-height: 34px; }
+.company-logo-avito img { --logo-width: 128px; --logo-height: 36px; }
+.company-logo-magnit img { --logo-width: 132px; --logo-height: 40px; }
+.company-logo-vtb img { --logo-width: 148px; --logo-height: 52px; }
+.company-logo-s7 img { --logo-width: 148px; --logo-height: 48px; }
+.company-logo-rostelecom img { --logo-width: 156px; --logo-height: 54px; }
+.company-logo-gazprom img { --logo-width: 152px; --logo-height: 58px; }
+.company-logo-uds img { --logo-width: 120px; --logo-height: 46px; }
 .author-testimonials { margin-top: 48px; }
 .author-proof-heading { max-width: 580px; margin-bottom: 24px; }
 .testimonial-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
@@ -275,7 +271,7 @@ h2 { margin-bottom: 28px; font-size: clamp(40px, 5vw, 72px); line-height: 1; let
 .testimonial-logo { min-height: 72px; margin-bottom: 22px; display: flex; align-items: center; color: var(--ink); font-size: 28px; font-weight: 800; line-height: .8; letter-spacing: -.05em; }
 .logo-goodwood { width: 88px; padding: 12px; background: #1cab61; color: white; font-size: 17px; letter-spacing: -.02em; }
 .logo-vtb-large { gap: 12px; color: #0b4da2; font-size: 32px; }
-.logo-vtb-large > span { width: 32px; height: 6px; }
+.logo-vtb-large > span { width: 32px; height: 6px; background: #16a0e8; box-shadow: 0 8px #16a0e8, 0 16px #16a0e8; transform: skewX(-28deg); }
 .logo-fesco { color: #0055a6; font-size: 34px; font-style: italic; letter-spacing: -.06em; }
 .testimonial-story { background: var(--royal); color: white; }
 .testimonial-brand { display: flex; flex-direction: column; gap: 3px; }
