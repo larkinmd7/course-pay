@@ -34,7 +34,7 @@ function loadMetrikaTag(root, runtime) {
     clickmap: true,
     trackLinks: true,
     accurateTrackBounce: true,
-    webvisor: true,
+    webvisor: false,
   });
 }
 

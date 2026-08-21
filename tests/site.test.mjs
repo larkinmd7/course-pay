@@ -89,15 +89,28 @@ test('клики по трём тарифам отправляют отдель�
 
 test('главный скрипт подключает Метрику, а success-страницы загружают тот же модуль', () => {
   const main = readFileSync(jsPath, 'utf8');
+  const metrika = readFileSync(metrikaPath, 'utf8');
 
   assert.match(main, /from ['"]\.\/metrika\.mjs['"]/);
   assert.match(main, /initMetrikaForPage\(/);
+  assert.match(metrika, /webvisor:\s*false/);
   for (const path of Object.keys(successPages)) {
     const resultPath = fileURLToPath(new URL(`../${path}`, import.meta.url));
     const page = readFileSync(resultPath, 'utf8');
     assert.match(page, /\/assets\/metrika\.mjs\?v=[a-z0-9.-]+/i);
     assert.match(page, /initMetrikaForPage\(/);
   }
+});
+
+test('политика раскрывает использование существующего счётчика Метрики', () => {
+  const privacyPath = fileURLToPath(new URL('../privacy/index.html', import.meta.url));
+  const privacy = readFileSync(privacyPath, 'utf8');
+
+  assert.match(privacy, /Яндекс Метрика/);
+  assert.match(privacy, /101476340/);
+  assert.match(privacy, /cookie/i);
+  assert.match(privacy, /Вебвизор[^<]*отключён/);
+  assert.doesNotMatch(privacy, /Сайт не использует системы веб-аналитики/);
 });
 
 test('Nginx отдаёт дубль на /tg и /tg/ с теми же ассетами', () => {
