@@ -286,6 +286,18 @@ test('блок автора содержит фото и подтверждён�
   assert.ok(productsPosition > -1 && educationPosition > productsPosition, 'практические кейсы должны идти раньше преподавательского опыта');
 });
 
+test('кейсы продуктов поясняют роль Михаила как руководителя AI-проектов в корпорации', () => {
+  const html = readFileSync(pagePath, 'utf8');
+  const css = readFileSync(cssPath, 'utf8');
+  const blockStart = html.indexOf('<div class="product-proof"');
+  const blockEnd = html.indexOf('</div>\n\n        <p class="author-method"', blockStart);
+  const block = html.slice(blockStart, blockEnd);
+
+  assert.match(block, /class="product-proof-context"/);
+  assert.match(block, /Эти продукты я создал как руководитель AI-проектов в корпорации/);
+  assert.match(css, /\.product-proof-context\s*\{[^}]*font-size:\s*\d+px/s);
+});
+
 test('блок компаний показывает двенадцать локальных логотипов без сломанных ассетов', () => {
   const html = readFileSync(pagePath, 'utf8');
   const blockStart = html.indexOf('<section class="company-proof"');
