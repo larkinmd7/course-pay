@@ -284,7 +284,7 @@ test('три тарифа подключены к официальной фор�
   const js = readFileSync(jsPath, 'utf8');
 
   assert.equal((html.match(/action="https:\/\/yookassa\.ru\/integration\/simplepay\/payment"/g) ?? []).length, 3);
-  assert.equal((html.match(/name="shopId" value="1275315"/g) ?? []).length, 3);
+  assert.equal((html.match(/name="shopId" value="1436088"/g) ?? []).length, 3);
   assert.match(html, /name="sum"[^>]*value="29900"/);
   assert.match(html, /name="sum"[^>]*value="49900"/);
   assert.match(html, /name="sum"[^>]*value="89900"/);
