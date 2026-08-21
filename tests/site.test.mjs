@@ -365,15 +365,19 @@ test('номер образовательной лицензии открыва�
   );
 });
 
-test('тарифы равной ширины и каждый содержит общий бонус', () => {
+test('бонус указан только в первом тарифе и наследуется остальными', () => {
   const html = readFileSync(pagePath, 'utf8');
   const css = readFileSync(cssPath, 'utf8');
   const pricingStart = html.indexOf('<section class="section pricing"');
   const pricingEnd = html.indexOf('</section>', pricingStart);
   const pricing = html.slice(pricingStart, pricingEnd);
+  const cards = pricing.match(/<article class="price-card\b[\s\S]*?<\/article>/g) ?? [];
 
   assert.match(css, /\.pricing-grid\s*\{[^}]*grid-template-columns:\s*repeat\(3,\s*minmax\(0,\s*1fr\)\)/s);
-  assert.equal((pricing.match(/Как дать AI-агенту управлять личными WhatsApp и Telegram/g) ?? []).length, 3);
+  assert.equal(cards.length, 3);
+  assert.match(cards[0], /Как дать AI-агенту управлять личными WhatsApp и Telegram/);
+  assert.doesNotMatch(cards[1], /class="bonus-item"/);
+  assert.doesNotMatch(cards[2], /class="bonus-item"/);
   assert.match(pricing, /До старта: разбор проекта, ТЗ и целей/);
   assert.match(pricing, /В середине или конце: консультация и докрутка решения/);
 });
