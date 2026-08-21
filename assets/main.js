@@ -1,8 +1,10 @@
 import { improveVisibleTypography } from './typography.mjs';
 import { initHeroOrbit } from './hero-orbit.mjs';
+import { initTestimonialCarousel } from './testimonial-carousel.mjs';
 
 improveVisibleTypography();
 initHeroOrbit(document.querySelector('[data-hero-orbit]'));
+initTestimonialCarousel(document.querySelector('[data-testimonial-carousel]'));
 
 const dialog = document.querySelector('#payment-dialog');
 const slot = document.querySelector('#payment-slot');

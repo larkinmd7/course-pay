@@ -272,19 +272,19 @@ h2 { margin-bottom: 28px; font-size: clamp(40px, 5vw, 72px); line-height: 1; let
 .company-logo-dasreda img { --logo-width: 158px; --logo-height: 48px; }
 .author-testimonials { margin-top: 48px; }
 .author-proof-heading { max-width: 580px; margin-bottom: 24px; }
-.testimonial-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
-.testimonial-card { min-width: 0; min-height: 510px; border: 1px solid #34415c; background: var(--navy); color: white; display: grid; grid-template-rows: auto minmax(240px, 1fr); overflow: hidden; }
-.testimonial-copy { min-width: 0; padding: 24px 24px 22px; }
-.testimonial-logo { min-height: 46px; margin-bottom: 18px; display: flex; align-items: center; color: white; font-size: 27px; font-weight: 800; line-height: 1; letter-spacing: -.05em; }
-.testimonial-logo img { display: block; width: auto; max-width: 138px; height: auto; max-height: 38px; object-fit: contain; }
+.testimonial-carousel { position: relative; }
+.testimonial-controls { position: absolute; right: 0; bottom: calc(100% + 24px); display: flex; gap: 8px; }
+.testimonial-arrow { width: 46px; height: 46px; padding: 0; border: 1px solid var(--ink); border-radius: 0; background: var(--paper); color: var(--ink); font: 700 21px/1 "IBM Plex Mono", monospace; cursor: pointer; transition: background .2s ease, color .2s ease, opacity .2s ease; }
+.testimonial-arrow:hover { background: var(--royal); color: white; }
+.testimonial-arrow:disabled { opacity: .3; cursor: default; }
+.testimonial-track { display: grid; grid-auto-flow: column; grid-auto-columns: calc((100% - 28px) / 3); gap: 14px; overflow-x: auto; overscroll-behavior-x: contain; scroll-behavior: smooth; scroll-snap-type: x mandatory; scrollbar-width: none; }
+.testimonial-track::-webkit-scrollbar { display: none; }
+.testimonial-card { min-width: 0; min-height: 500px; border: 1px solid #34415c; background: var(--navy); color: white; display: grid; grid-template-rows: 86px minmax(0, 1fr); overflow: hidden; scroll-snap-align: start; }
+.testimonial-logo { min-width: 0; min-height: 86px; padding: 20px 24px; display: flex; align-items: center; color: white; font-size: 30px; font-weight: 800; line-height: 1; letter-spacing: -.05em; }
+.testimonial-logo img { display: block; width: auto; max-width: 154px; height: auto; max-height: 42px; object-fit: contain; }
 .testimonial-logo-wordmark { font-family: "IBM Plex Mono", monospace; letter-spacing: -.04em; }
-.testimonial-copy h4 { margin: 11px 0 10px; font-size: 21px; line-height: 1.08; letter-spacing: -.03em; }
-.testimonial-copy p { margin: 0; color: #bac5dc; font-size: 13px; line-height: 1.5; }
-.testimonial-copy > span { color: var(--acid); }
-.testimonial-document { position: relative; min-height: 240px; border-top: 1px solid #34415c; background: #e8ebf1; color: var(--ink); display: block; overflow: hidden; }
-.testimonial-document img { display: block; width: 100%; height: 100%; min-height: 240px; object-fit: cover; object-position: center top; filter: saturate(.72) contrast(.96); transition: transform .35s ease, filter .35s ease; }
-.testimonial-document::after { position: absolute; inset: 0; background: linear-gradient(180deg, transparent 52%, rgba(6, 15, 34, .82)); content: ""; }
-.testimonial-document > span { position: absolute; z-index: 1; right: 16px; bottom: 15px; padding: 8px 10px; background: var(--acid); color: var(--ink); font-family: "IBM Plex Mono", monospace; font-size: 10px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+.testimonial-document { min-height: 0; border-top: 1px solid #34415c; background: #e8ebf1; color: var(--ink); display: block; overflow: hidden; }
+.testimonial-document img { display: block; width: 100%; height: 100%; min-height: 0; object-fit: cover; object-position: center top; filter: saturate(.72) contrast(.96); transition: transform .35s ease, filter .35s ease; }
 .testimonial-document:hover img { transform: scale(1.025); filter: saturate(1) contrast(1); }
 .pricing { padding-bottom: 150px; }
 .pricing-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; align-items: stretch; }
@@ -402,12 +402,16 @@ footer > div:first-child { display: grid; gap: 5px; }
   .schedule-event + .schedule-event { border-top: 1px solid var(--ink); border-left: 0; }
   .schedule-event h4 { font-size: 26px; }
   .author-numbers div + div { border-top: 1px solid var(--ink); border-left: 0; }
-  .product-proof article, .testimonial-grid { grid-template-columns: 1fr; }
+  .product-proof article { grid-template-columns: 1fr; }
   .product-metric { border-top: 1px solid var(--line); border-left: 0; }
   .company-logo-wall { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .company-proof { padding: 20px; }
   .company-proof .company-logo { min-height: 92px; padding: 17px; }
-  .testimonial-card { min-height: 0; grid-template-rows: auto 280px; }
+  .author-proof-heading { margin-bottom: 18px; padding-right: 112px; }
+  .testimonial-controls { bottom: calc(100% + 18px); }
+  .testimonial-track { grid-auto-columns: 86%; gap: 10px; }
+  .testimonial-card { min-height: 480px; grid-template-rows: 76px minmax(0, 1fr); }
+  .testimonial-logo { min-height: 76px; padding: 17px 20px; font-size: 27px; }
   .education-card { min-height: 0; padding: 20px; grid-template-columns: 1fr; gap: 18px; }
   .education-logo { height: 82px; padding: 8px 8px 18px; border-right: 0; border-bottom: 1px solid var(--line); justify-content: flex-start; }
   .education-logo-hse img { width: 66px; max-height: 66px; }

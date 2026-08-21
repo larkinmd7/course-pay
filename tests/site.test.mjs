@@ -17,6 +17,8 @@ const typographyUrl = new URL('../assets/typography.mjs', import.meta.url);
 const typographyPath = fileURLToPath(typographyUrl);
 const orbitUrl = new URL('../assets/hero-orbit.mjs', import.meta.url);
 const orbitPath = fileURLToPath(orbitUrl);
+const testimonialCarouselUrl = new URL('../assets/testimonial-carousel.mjs', import.meta.url);
+const testimonialCarouselPath = fileURLToPath(testimonialCarouselUrl);
 
 test('главная страница существует', () => {
   assert.equal(existsSync(pagePath), true, 'site/index.html должен существовать');
@@ -251,12 +253,12 @@ test('блок автора содержит фото и подтверждён�
   assert.match(html, /Речевая аналитика для контроля качества продаж/);
   assert.match(html, /AI-консультант на сайте для повышения конверсии/);
   assert.match(html, /Внутренняя low-code платформа/);
-  assert.match(html, /Благодарность от Сбера/);
-  assert.match(html, /Подтверждение от S7 Group/);
-  assert.match(html, /Благодарность от СКБ Контур/);
+  assert.match(html, /Благодарственное письмо Сбера Михаилу Ларькину/);
+  assert.match(html, /Подтверждение проведения занятий для S7 Group/);
+  assert.match(html, /Благодарственное письмо СКБ Контур Михаилу Ларькину/);
   assert.doesNotMatch(html, /Альфа-Банк/);
   assert.ok((html.match(/class="company-logo/g) ?? []).length >= 10, 'компании должны показываться визуальными логотипами');
-  assert.equal((html.match(/class="testimonial-logo/g) ?? []).length, 3, 'каждый отзыв должен начинаться с логотипа компании');
+  assert.equal((html.match(/class="testimonial-logo/g) ?? []).length, 8, 'каждая благодарность должна начинаться с логотипа компании');
   assert.equal((html.match(/class="product-metric"/g) ?? []).length, 3, 'каждый продукт должен иметь отдельную колонку с результатом');
 
   const productsPosition = html.indexOf('class="product-proof"');
@@ -301,23 +303,40 @@ test('все логотипы компаний стоят на едином тё
   assert.match(css, /\.company-proof \.company-logo\s*\{[^}]*background:\s*#[0-9a-f]{6}/is);
 });
 
-test('благодарности показывают три настоящих документа с основного сайта', () => {
+test('благодарности показывают горизонтальную ленту настоящих документов без рекламных описаний', () => {
   const html = readFileSync(pagePath, 'utf8');
   const blockStart = html.indexOf('<section class="author-testimonials"');
   const blockEnd = html.indexOf('</section>', blockStart);
   const block = html.slice(blockStart, blockEnd);
   const documents = [...block.matchAll(/<a class="testimonial-document" href="([^"]+)"[\s\S]*?<img src="([^"]+)" alt="([^"]+)"/g)];
 
-  assert.equal(documents.length, 3);
+  assert.equal(documents.length, 8);
   assert.deepEqual(documents.map(([, , , alt]) => alt), [
     'Благодарственное письмо Сбера Михаилу Ларькину',
     'Подтверждение проведения занятий для S7 Group',
     'Благодарственное письмо СКБ Контур Михаилу Ларькину',
+    'Благодарственное письмо Государственной комиссии по запасам полезных ископаемых',
+    'Благодарственное письмо Colvir Михаилу Ларькину',
+    'Благодарственное письмо компании Елва Михаилу Ларькину',
+    'Благодарственное письмо ВОИ Михаилу Ларькину',
+    'Благодарственное письмо S7 Airlines Михаилу Ларькину',
   ]);
+  assert.match(block, /data-testimonial-track/);
+  assert.match(block, /data-testimonial-prev/);
+  assert.match(block, /data-testimonial-next/);
+  assert.doesNotMatch(block, /<h4|<p>В письме|<p>В документе|Материал выступления/);
   for (const [, href, source] of documents) {
     assert.equal(href, source, 'превью должно открывать полный локальный документ');
     assert.equal(existsSync(fileURLToPath(new URL(`../${source}`, import.meta.url))), true, `документ ${source} должен храниться вместе с сайтом`);
   }
+});
+
+test('карусель благодарностей листает на одну карточку в выбранную сторону', async () => {
+  assert.equal(existsSync(testimonialCarouselPath), true, 'должен существовать модуль карусели благодарностей');
+  const { calculateCarouselDelta } = await import(testimonialCarouselUrl.href);
+
+  assert.equal(calculateCarouselDelta(320, 14, 1), 334);
+  assert.equal(calculateCarouselDelta(320, 14, -1), -334);
 });
 
 test('преподавательский опыт показывает логотипы РАНХиГС и ВШЭ', () => {
@@ -328,6 +347,7 @@ test('преподавательский опыт показывает лого�
   const logos = [...block.matchAll(/<img src="([^"]+)" alt="([^"]+)"/g)];
 
   assert.deepEqual(logos.map(([, , alt]) => alt), ['РАНХиГС', 'ВШЭ — Высшая школа экономики']);
+  assert.doesNotMatch(block, /С проектом «Офис на районе» занял первое место в треке MVP на HSE Startup Cup\./);
   for (const [, source] of logos) {
     assert.equal(existsSync(fileURLToPath(new URL(`../${source}`, import.meta.url))), true, `логотип ${source} должен храниться вместе с сайтом`);
   }
