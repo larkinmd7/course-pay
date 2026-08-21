@@ -38,6 +38,20 @@ function loadMetrikaTag(root, runtime) {
   });
 }
 
+function scheduleMetrikaTag(root, runtime) {
+  const load = () => {
+    if (typeof runtime.requestIdleCallback === 'function') {
+      runtime.requestIdleCallback(() => loadMetrikaTag(root, runtime), { timeout: 1500 });
+      return;
+    }
+    runtime.setTimeout?.(() => loadMetrikaTag(root, runtime), 0);
+  };
+
+  if (root.readyState === 'complete') load();
+  else if (typeof runtime.addEventListener === 'function') runtime.addEventListener('load', load, { once: true });
+  else loadMetrikaTag(root, runtime);
+}
+
 function bindTariffGoals(root, runtime) {
   root.querySelectorAll('[data-telegram-tariff]').forEach((link) => {
     if (link.dataset.metrikaBound === 'true') return;
@@ -59,7 +73,7 @@ export function initMetrikaForPage(
   if (!shouldInitMetrika(pathname)) return false;
 
   ensureMetrikaQueue(runtime);
-  loadMetrikaTag(root, runtime);
+  scheduleMetrikaTag(root, runtime);
   if (/^\/tg(?:\/|$)/.test(pathname)) bindTariffGoals(root, runtime);
   return true;
 }
