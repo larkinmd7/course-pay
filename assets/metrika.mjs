@@ -6,8 +6,10 @@ export const METRIKA_GOALS = Object.freeze({
   pro: 'tg_tariff_advanced_click',
 });
 
-export function shouldInitMetrika(pathname = '') {
-  return /^\/tg(?:\/|$)/.test(pathname) || /^\/success(?:\/|$)/.test(pathname);
+// Счётчик работает на всех страницах домена, включая главную и правовые
+// документы. Цели кликов по тарифам остаются только на /tg.
+export function shouldInitMetrika() {
+  return true;
 }
 
 export function getMetrikaGoalForTariff(tariff) {

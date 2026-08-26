@@ -62,18 +62,45 @@ test('Telegram-ссылка открывает @starsevast с готовым с�
   assert.equal(generalUrl.searchParams.get('text'), 'У меня вопрос по курсу «ИИ для экспертов»: ');
 });
 
-test('существующий счётчик Метрики включается на /tg и success-страницах', async () => {
+test('существующий счётчик Метрики включается на всех страницах сайта', async () => {
   assert.equal(existsSync(metrikaPath), true, 'должен существовать модуль Метрики');
   const { METRIKA_COUNTER_ID, shouldInitMetrika } = await import(metrikaUrl.href);
 
   assert.equal(METRIKA_COUNTER_ID, 101476340);
-  assert.equal(shouldInitMetrika('/tg'), true);
-  assert.equal(shouldInitMetrika('/tg/'), true);
-  assert.equal(shouldInitMetrika('/success/start/'), true);
-  assert.equal(shouldInitMetrika('/success/middle/'), true);
-  assert.equal(shouldInitMetrika('/success/advanced/'), true);
-  assert.equal(shouldInitMetrika('/'), false);
-  assert.equal(shouldInitMetrika('/offer/'), false);
+  for (const pathname of [
+    '/',
+    '/tg',
+    '/tg/',
+    '/success/start/',
+    '/success/middle/',
+    '/success/advanced/',
+    '/offer/',
+    '/privacy/',
+    '/personal-data-consent/',
+  ]) {
+    assert.equal(shouldInitMetrika(pathname), true, `Метрика должна работать на ${pathname}`);
+  }
+});
+
+test('каждая публичная страница подключает модуль Метрики', () => {
+  const pages = [
+    'index.html',
+    'offer/index.html',
+    'privacy/index.html',
+    'personal-data-consent/index.html',
+    'error/index.html',
+    'success/index.html',
+    'success/start/index.html',
+    'success/middle/index.html',
+    'success/advanced/index.html',
+  ];
+
+  for (const page of pages) {
+    const html = readFileSync(fileURLToPath(new URL(`../${page}`, import.meta.url)), 'utf8');
+    const hasDirectImport = /\/assets\/metrika\.mjs\?v=[a-z0-9.-]+/i.test(html);
+    const hasBundle = /assets\/main\.js\?v=[a-z0-9.-]+/i.test(html);
+    assert.ok(hasDirectImport || hasBundle, `страница ${page} должна подключать Метрику`);
+  }
 });
 
 test('клики по трём тарифам отправляют отдельные цели Метрики', async () => {
@@ -114,6 +141,7 @@ test('политика раскрывает использование суще�
   assert.match(privacy, /cookie/i);
   assert.match(privacy, /Вебвизор[^<]*отключён/);
   assert.doesNotMatch(privacy, /Сайт не использует системы веб-аналитики/);
+  assert.match(privacy, /На всех страницах сайта используется Яндекс Метрика/);
 });
 
 test('Nginx отдаёт дубль на /tg и /tg/ с теми же ассетами', () => {
