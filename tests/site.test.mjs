@@ -671,7 +671,7 @@ test('опубликованная оферта — редакция от 3 се
   assert.match(pdfText, /Редакция от 3 сентября 2026 года/);
   assert.match(pdfText, /Севастьянов Матвей Алексеевич/);
   assert.match(pdfText, /661305367793/);
-  assert.match(pdfText, /Михаил Ларькин лично проводит все 6 основных групповых онлайн-сессий/);
+  assert.match(pdfText, /Михаил Ларькин\s+лично проводит все 6 основных групповых онлайн-сессий/);
   for (const [tariff, price] of [['Старт', '29 900'], ['Средний', '49 900'], ['Продвинутый', '89 900']]) {
     assert.match(pdfText, new RegExp(`Тариф\\s+«${tariff}»`));
     assert.match(pdfText, new RegExp(price));
