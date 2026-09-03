@@ -659,7 +659,7 @@ for (const path of ['offer/index.html', 'privacy/index.html', 'personal-data-con
   });
 }
 
-test('опубликованная оферта — редакция от 3 сентября 2026 года от ИП Севастьянова с актуальными ценами', () => {
+test('опубликованная оферта — редакция от 3 сентября 2026 от ИП Севастьянова, тарифы как на сайте', () => {
   assert.equal(existsSync(offerPdfPath), true, 'offer/public-offer.pdf должен существовать');
 
   const page = readFileSync(offerPagePath, 'utf8');
@@ -672,15 +672,17 @@ test('опубликованная оферта — редакция от 3 се
   assert.match(pdfText, /Севастьянов Матвей Алексеевич/);
   assert.match(pdfText, /661305367793/);
   assert.match(pdfText, /Михаил Ларькин лично проводит все 6 основных групповых онлайн-сессий/);
-  for (const price of ['29 900', '49 900', '89 900']) {
+  for (const [tariff, price] of [['Старт', '29 900'], ['Средний', '49 900'], ['Продвинутый', '89 900']]) {
+    assert.match(pdfText, new RegExp(`Тариф «${tariff}»`));
     assert.match(pdfText, new RegExp(price));
   }
-  // Известное расхождение: в оферте тарифы называются «Самостоятельный», «С внедрением»,
-  // «Персональный», а на сайте — «Старт», «Средний», «Продвинутый». Цены совпадают.
-  // Названия в PDF правит исполнитель оферты (@starsevast), поэтому здесь не проверяются.
-  for (const tariff of ['Самостоятельный', 'С внедрением', 'Персональный']) {
-    assert.match(pdfText, new RegExp(`Тариф «${tariff}»`));
-  }
+  assert.doesNotMatch(pdfText, /Тариф «(?:Самостоятельный|С внедрением|Персональный)»/);
+  assert.doesNotMatch(pdfText, /технический аудит/i);
+  const middleTariff = pdfText.match(/Тариф «Средний»[\s\S]*?Тариф «Продвинутый»/)?.[0] ?? '';
+  assert.doesNotMatch(middleTariff, /персональн\S* (?:онлайн-)?созвон/i);
+  const advancedTariff = pdfText.match(/Тариф «Продвинутый»[\s\S]*?5\.2\./)?.[0] ?? '';
+  assert.match(advancedTariff, /два персональных онлайн-созвона/i);
+  assert.match(advancedTariff, /персональный канал связи/i);
 });
 
 const successPages = {
