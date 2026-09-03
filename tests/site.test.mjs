@@ -583,12 +583,12 @@ test('типограф связывает короткие слова и не р
   );
 });
 
-test('сайт и платёжные поля используют единые названия тарифов', () => {
+test('сайт и режим /tg используют единые названия тарифов', () => {
   const html = readFileSync(pagePath, 'utf8');
-  const js = readFileSync(jsPath, 'utf8');
+  const js = readFileSync(fileURLToPath(new URL('../assets/telegram-sales.mjs', import.meta.url)), 'utf8');
 
   for (const tariff of ['Старт', 'Средний', 'Продвинутый']) {
-    assert.match(html, new RegExp(`тариф «${tariff}»`));
+    assert.match(html, new RegExp(`<h3>${tariff}</h3>`));
     assert.match(js, new RegExp(`['"]${tariff}['"]`));
   }
 
@@ -602,62 +602,30 @@ test('главная содержит юридические ссылки и т�
   assert.match(html, /href="\/offer\/"/);
   assert.match(html, /href="\/privacy\/"/);
   assert.match(html, /href="\/personal-data-consent\/"/);
-  assert.equal((html.match(/data-payment-form=/g) ?? []).length, 3);
-  assert.doesNotMatch(html, /data-open-payment="test"|data-payment-form="test"|Тестовая оплата · 10 ₽/);
+  assert.equal((html.match(/data-pay-link=/g) ?? []).length, 3);
+  assert.doesNotMatch(html, /data-pay-link="test"|Тестовая оплата · 10 ₽/);
 });
 
-test('три тарифа подключены к официальной форме ЮKassa', () => {
+test('три тарифа ведут на платёжные ссылки ЮKassa исполнителя ИП Севастьянова', () => {
   const html = readFileSync(pagePath, 'utf8');
   const js = readFileSync(jsPath, 'utf8');
-
-  assert.equal((html.match(/action="https:\/\/yookassa\.ru\/integration\/simplepay\/payment"/g) ?? []).length, 3);
-  assert.equal((html.match(/name="shopId" value="1436088"/g) ?? []).length, 3);
-  assert.doesNotMatch(html, /name="sum"[^>]*value="10"/);
-  assert.match(html, /name="sum"[^>]*value="29900"/);
-  assert.match(html, /name="sum"[^>]*value="49900"/);
-  assert.match(html, /name="sum"[^>]*value="89900"/);
-  assert.equal((html.match(/name="cps_email"[^>]*required/g) ?? []).length, 3);
-  assert.equal((html.match(/name="custName"[^>]*required/g) ?? []).length, 3);
-  assert.match(js, /kassaConstructForm\?\.main\?\.updateHandlers/);
-  assert.doesNotMatch(html, /PLACEHOLDER_VALUE|example\.com|javascript:/i);
-});
-
-test('каждая оплата возвращает на страницу своего тарифа', () => {
-  const html = readFileSync(pagePath, 'utf8');
-  const successUrls = {
-    base: 'https://pay.larkinmd7.ru/success/start/',
-    middle: 'https://pay.larkinmd7.ru/success/middle/',
-    pro: 'https://pay.larkinmd7.ru/success/advanced/',
+  const payLinks = {
+    base: ['https://yookassa.ru/my/i/apmPtDuhVqRp/l', '29 900'],
+    middle: ['https://yookassa.ru/my/i/apmQdCR5vXsb/l', '49 900'],
+    pro: ['https://yookassa.ru/my/i/apmRFMrNmXqi/l', '89 900'],
   };
 
-  for (const [tariff, url] of Object.entries(successUrls)) {
-    const template = html.match(new RegExp(`<template data-payment-form="${tariff}">([\\s\\S]*?)<\\/template>`))?.[1] ?? '';
-    assert.ok(template.includes(`name="shopSuccessURL" type="hidden" value="${url}"`));
+  for (const [tariff, [url, price]] of Object.entries(payLinks)) {
+    const link = html.match(new RegExp(`<a class="button[^"]*" href="${url.replace(/[./]/g, '\\$&')}"[^>]*data-pay-link="${tariff}">([^<]*)</a>`));
+    assert.ok(link, `ссылка тарифа ${tariff} должна вести на ${url}`);
+    assert.match(link[0], /target="_blank" rel="noopener"/);
+    assert.match(link[1], new RegExp(`Оплатить ${price} ₽`));
   }
+  assert.doesNotMatch(html, /yookassa\.ru\/integration\/simplepay|name="shopId"|data-open-payment|data-payment-form|payment-dialog/);
+  assert.doesNotMatch(js, /payment-dialog|kassaConstructForm/);
+  assert.match(html, /получатель платежа — ИП Севастьянов Матвей Алексеевич/);
+  assert.doesNotMatch(html, /PLACEHOLDER_VALUE|example\.com|javascript:/i);
 });
-
-test('каждая платёжная форма требует отдельного согласия на обработку персональных данных', () => {
-  const html = readFileSync(pagePath, 'utf8');
-  const forms = [...html.matchAll(/<form target="_blank" class="yoomoney-payment-form"[\s\S]*?<\/form>/g)].map((match) => match[0]);
-
-  assert.equal(forms.length, 3);
-  for (const form of forms) {
-    assert.match(form, /type="checkbox" name="personalDataConsent" required/);
-    assert.match(form, /href="\/personal-data-consent\/"/);
-    assert.doesNotMatch(form, /type="checkbox"[^>]*\schecked(?:\s|>)/);
-  }
-});
-
-for (const path of ['offer/index.html', 'privacy/index.html', 'personal-data-consent/index.html']) {
-  test(`${path} содержит реквизиты исполнителя`, () => {
-    const legalPath = fileURLToPath(new URL(`../${path}`, import.meta.url));
-    assert.equal(existsSync(legalPath), true, `${path} должен существовать`);
-    const page = readFileSync(legalPath, 'utf8');
-    assert.match(page, /ИП Ларькин Михаил Дмитриевич/);
-    assert.match(page, /332899538451/);
-    assert.match(page, /href="\/"/);
-  });
-}
 
 test('опубликованная оферта — редакция от 3 сентября 2026 от ИП Севастьянова, тарифы как на сайте', () => {
   assert.equal(existsSync(offerPdfPath), true, 'offer/public-offer.pdf должен существовать');

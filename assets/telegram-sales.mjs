@@ -44,8 +44,8 @@ export function initTelegramSalesMode(root = document, pathname = globalThis.loc
   root.documentElement?.classList.add('telegram-sales-mode');
   root.querySelectorAll('.price').forEach((price) => price.remove());
 
-  root.querySelectorAll('[data-open-payment]').forEach((button) => {
-    const tariff = button.dataset.openPayment;
+  root.querySelectorAll('[data-pay-link]').forEach((button) => {
+    const tariff = button.dataset.payLink;
     if (!tariffNames[tariff]) return;
     button.replaceWith(createContactLink(button, tariff, root));
   });
@@ -57,6 +57,5 @@ export function initTelegramSalesMode(root = document, pathname = globalThis.loc
   }
 
   root.querySelector('[data-telegram-questions]')?.removeAttribute('hidden');
-  root.querySelector('#payment-dialog')?.remove();
   return true;
 }
