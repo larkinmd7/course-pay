@@ -673,14 +673,14 @@ test('опубликованная оферта — редакция от 3 се
   assert.match(pdfText, /661305367793/);
   assert.match(pdfText, /Михаил Ларькин лично проводит все 6 основных групповых онлайн-сессий/);
   for (const [tariff, price] of [['Старт', '29 900'], ['Средний', '49 900'], ['Продвинутый', '89 900']]) {
-    assert.match(pdfText, new RegExp(`Тариф «${tariff}»`));
+    assert.match(pdfText, new RegExp(`Тариф\\s+«${tariff}»`));
     assert.match(pdfText, new RegExp(price));
   }
   assert.doesNotMatch(pdfText, /Тариф «(?:Самостоятельный|С внедрением|Персональный)»/);
   assert.doesNotMatch(pdfText, /технический аудит/i);
-  const middleTariff = pdfText.match(/Тариф «Средний»[\s\S]*?Тариф «Продвинутый»/)?.[0] ?? '';
+  const middleTariff = pdfText.match(/Тариф\s+«Средний»[\s\S]*?Тариф\s+«Продвинутый»/)?.[0] ?? '';
   assert.doesNotMatch(middleTariff, /персональн\S* (?:онлайн-)?созвон/i);
-  const advancedTariff = pdfText.match(/Тариф «Продвинутый»[\s\S]*?5\.2\./)?.[0] ?? '';
+  const advancedTariff = pdfText.match(/Тариф\s+«Продвинутый»[\s\S]*?5\.2\./)?.[0] ?? '';
   assert.match(advancedTariff, /два персональных онлайн-созвона/i);
   assert.match(advancedTariff, /персональный канал связи/i);
 });
