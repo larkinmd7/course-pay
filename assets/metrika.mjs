@@ -6,14 +6,27 @@ export const METRIKA_GOALS = Object.freeze({
   pro: 'tg_tariff_advanced_click',
 });
 
+// Клики по кнопкам «Оплатить» на главной: ссылки ЮKassa исполнителя
+// ИП Севастьянова. Идентификаторы совпадают с JS-целями в счётчике.
+export const METRIKA_PAY_GOALS = Object.freeze({
+  base: 'pay_tariff_start_click',
+  middle: 'pay_tariff_middle_click',
+  pro: 'pay_tariff_advanced_click',
+});
+
 // Счётчик работает на всех страницах домена, включая главную и правовые
-// документы. Цели кликов по тарифам остаются только на /tg.
+// документы. На /tg считаются клики «Узнать стоимость», на остальных
+// страницах – клики «Оплатить».
 export function shouldInitMetrika() {
   return true;
 }
 
 export function getMetrikaGoalForTariff(tariff) {
   return METRIKA_GOALS[tariff] ?? null;
+}
+
+export function getMetrikaGoalForPayLink(tariff) {
+  return METRIKA_PAY_GOALS[tariff] ?? null;
 }
 
 function ensureMetrikaQueue(runtime) {
@@ -54,10 +67,10 @@ function scheduleMetrikaTag(root, runtime) {
   else loadMetrikaTag(root, runtime);
 }
 
-function bindTariffGoals(root, runtime) {
-  root.querySelectorAll('[data-telegram-tariff]').forEach((link) => {
+function bindClickGoals(root, runtime, selector, readTariff, resolveGoal) {
+  root.querySelectorAll(selector).forEach((link) => {
     if (link.dataset.metrikaBound === 'true') return;
-    const goal = getMetrikaGoalForTariff(link.dataset.telegramTariff);
+    const goal = resolveGoal(readTariff(link));
     if (!goal) return;
 
     link.dataset.metrikaBound = 'true';
@@ -65,6 +78,14 @@ function bindTariffGoals(root, runtime) {
       runtime.ym(METRIKA_COUNTER_ID, 'reachGoal', goal);
     });
   });
+}
+
+function bindTariffGoals(root, runtime) {
+  bindClickGoals(root, runtime, '[data-telegram-tariff]', (link) => link.dataset.telegramTariff, getMetrikaGoalForTariff);
+}
+
+function bindPayGoals(root, runtime) {
+  bindClickGoals(root, runtime, '[data-pay-link]', (link) => link.dataset.payLink, getMetrikaGoalForPayLink);
 }
 
 export function initMetrikaForPage(
@@ -77,5 +98,6 @@ export function initMetrikaForPage(
   ensureMetrikaQueue(runtime);
   scheduleMetrikaTag(root, runtime);
   if (/^\/tg(?:\/|$)/.test(pathname)) bindTariffGoals(root, runtime);
+  else bindPayGoals(root, runtime);
   return true;
 }

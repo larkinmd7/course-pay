@@ -117,6 +117,64 @@ test('клики по трём тарифам отправляют отдель�
   assert.equal(getMetrikaGoalForTariff('unknown'), null);
 });
 
+test('кнопки «Оплатить» на главной отправляют отдельные цели Метрики', async () => {
+  const { METRIKA_PAY_GOALS, getMetrikaGoalForPayLink } = await import(metrikaUrl.href);
+
+  assert.deepEqual(METRIKA_PAY_GOALS, {
+    base: 'pay_tariff_start_click',
+    middle: 'pay_tariff_middle_click',
+    pro: 'pay_tariff_advanced_click',
+  });
+  assert.equal(getMetrikaGoalForPayLink('base'), 'pay_tariff_start_click');
+  assert.equal(getMetrikaGoalForPayLink('middle'), 'pay_tariff_middle_click');
+  assert.equal(getMetrikaGoalForPayLink('pro'), 'pay_tariff_advanced_click');
+  assert.equal(getMetrikaGoalForPayLink('unknown'), null);
+});
+
+function createFakeMetrikaPage(links) {
+  const elements = links.map(([attribute, tariff]) => {
+    const handlers = [];
+    const dataset = attribute === 'data-pay-link' ? { payLink: tariff } : { telegramTariff: tariff };
+    return {
+      attribute,
+      dataset,
+      addEventListener: (type, handler) => { if (type === 'click') handlers.push(handler); },
+      click: () => handlers.forEach((handler) => handler()),
+      handlers,
+    };
+  });
+  const root = {
+    readyState: 'loading',
+    querySelectorAll: (selector) => elements.filter((element) => selector === `[${element.attribute}]`),
+    querySelector: () => null,
+  };
+  const calls = [];
+  const runtime = {
+    ym: (...args) => calls.push(args),
+    addEventListener: () => {},
+  };
+  return { elements, root, runtime, calls };
+}
+
+test('клик «Оплатить» на главной вызывает reachGoal, а на /tg цели остаются прежними', async () => {
+  const { initMetrikaForPage, METRIKA_COUNTER_ID } = await import(metrikaUrl.href);
+
+  const home = createFakeMetrikaPage([['data-pay-link', 'base'], ['data-pay-link', 'middle'], ['data-pay-link', 'pro']]);
+  initMetrikaForPage(home.root, '/', home.runtime);
+  initMetrikaForPage(home.root, '/', home.runtime);
+  home.elements.forEach((element) => element.click());
+  assert.deepEqual(home.calls, [
+    [METRIKA_COUNTER_ID, 'reachGoal', 'pay_tariff_start_click'],
+    [METRIKA_COUNTER_ID, 'reachGoal', 'pay_tariff_middle_click'],
+    [METRIKA_COUNTER_ID, 'reachGoal', 'pay_tariff_advanced_click'],
+  ], 'каждый клик даёт ровно одну цель, повторная инициализация не дублирует обработчики');
+
+  const tg = createFakeMetrikaPage([['data-telegram-tariff', 'base'], ['data-pay-link', 'base']]);
+  initMetrikaForPage(tg.root, '/tg/', tg.runtime);
+  tg.elements.forEach((element) => element.click());
+  assert.deepEqual(tg.calls, [[METRIKA_COUNTER_ID, 'reachGoal', 'tg_tariff_start_click']]);
+});
+
 test('главный скрипт подключает Метрику, а success-страницы загружают тот же модуль', () => {
   const main = readFileSync(jsPath, 'utf8');
   const metrika = readFileSync(metrikaPath, 'utf8');
@@ -654,9 +712,9 @@ test('опубликованная оферта — редакция от 3 се
 });
 
 const successPages = {
-  'success/start/index.html': ['Старт', 'https://t.me/+M58vxwOgYKBkZWQ6'],
-  'success/middle/index.html': ['Средний', 'https://t.me/+WfXhSCnq9t5kODJi'],
-  'success/advanced/index.html': ['Продвинутый', 'https://t.me/+2MA6iCe5y2w4ZDAy'],
+  'success/start/index.html': 'Старт',
+  'success/middle/index.html': 'Средний',
+  'success/advanced/index.html': 'Продвинутый',
 };
 
 test('временная тестовая success-страница удалена после проверки оплаты', () => {
@@ -664,16 +722,17 @@ test('временная тестовая success-страница удален�
   assert.equal(existsSync(testResultPath), false);
 });
 
-for (const [path, [tariff, telegramUrl]] of Object.entries(successPages)) {
-  test(`${path} ведёт в чат нужного тарифа и к первому заданию`, () => {
+for (const [path, tariff] of Object.entries(successPages)) {
+  test(`${path} не раздаёт приглашение в чат: доступ выдаёт менеджер после подтверждения оплаты`, () => {
     const resultPath = fileURLToPath(new URL(`../${path}`, import.meta.url));
     assert.equal(existsSync(resultPath), true, `${path} должен существовать`);
     const page = readFileSync(resultPath, 'utf8');
     assert.match(page, new RegExp(tariff));
-    assert.match(page, new RegExp(`href="${telegramUrl.replace('+', '\\+')}`));
-    assert.match(page, /первое задание/i);
-    assert.match(page, /закреп/i);
-    assert.match(page, /расписани/i);
+    assert.doesNotMatch(page, /t\.me\/\+|t\.me\/joinchat|joinchat/i, 'success-страница открыта без оплаты и не должна содержать инвайт');
+    assert.match(page, /Доступ в чат курса выдаёт менеджер после подтверждения оплаты/);
+    assert.match(page, /href="https:\/\/t\.me\/starsevast"/);
+    assert.match(page, /href="\/"/);
+    assert.doesNotMatch(page, /место в программе подтверждено/i);
   });
 }
 
