@@ -1,0 +1,281 @@
+/* ============================================================
+   Брендбук — секция внизу pay.larkinmd7.ru.
+   Показывает две визуальные системы вживую: сам pay-сайт и aicjm.ru.
+   Значения не сочинены: скопированы из assets/styles.css (pay)
+   и styles/redesign.css + styles/home.css (AICJM.ru).
+   Подключается после assets/styles.css.
+============================================================ */
+
+/* Inter для превью AICJM — первой стороной, как на самом aicjm.ru */
+@font-face { font-family: "Inter"; src: url("fonts/inter-cyrillic.woff2") format("woff2"); font-weight: 400 800; font-display: swap; unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116; }
+@font-face { font-family: "Inter"; src: url("fonts/inter-latin.woff2") format("woff2"); font-weight: 400 800; font-display: swap; unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+2000-206F,U+20AC,U+2122,U+2212,U+FEFF,U+FFFD; }
+
+.bb-intro { max-width: 760px; margin: 22px 0 0; color: var(--muted); font-size: 19px; }
+
+/* ---------- Переключатель систем (CSS-only, работает без JS) ---------- */
+.bb-switch { display: flex; margin: 46px 0 0; border: 1px solid var(--ink); }
+.bb-switch label {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+  padding: 18px 22px; cursor: pointer;
+  border-right: 1px solid var(--ink); background: var(--surface);
+  transition: background .18s ease, color .18s ease;
+}
+.bb-switch label:last-child { border-right: 0; }
+.bb-switch label:hover { background: var(--acid); }
+.bb-switch b { font-size: 19px; letter-spacing: -.02em; }
+.bb-switch span {
+  color: var(--muted); font-family: "IBM Plex Mono", monospace;
+  font-size: 11px; letter-spacing: .06em; text-transform: uppercase;
+}
+.bb-radio { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.bb-radio:focus-visible + label { outline: 3px solid var(--royal); outline-offset: -3px; }
+#bb-tab-pay:checked   ~ .bb-switch label[for="bb-tab-pay"],
+#bb-tab-aicjm:checked ~ .bb-switch label[for="bb-tab-aicjm"] { background: var(--navy); color: white; }
+#bb-tab-pay:checked   ~ .bb-switch label[for="bb-tab-pay"] span,
+#bb-tab-aicjm:checked ~ .bb-switch label[for="bb-tab-aicjm"] span { color: var(--acid); }
+
+/* Без JS и без :checked обе панели видны — деградация безопасная */
+#bb-tab-pay:checked   ~ .bb-panels .bb-panel-aicjm,
+#bb-tab-aicjm:checked ~ .bb-panels .bb-panel-pay { display: none; }
+
+/* ---------- Полотно системы ---------- */
+.bb-panel { margin-top: 40px; }
+.bb-block { padding-top: 46px; border-top: 1px solid var(--line); margin-top: 46px; }
+.bb-panel > .bb-block:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+.bb-block-head { display: flex; gap: 16px; align-items: baseline; margin-bottom: 26px; }
+.bb-block-num {
+  flex: 0 0 auto; color: var(--royal);
+  font-family: "IBM Plex Mono", monospace; font-size: 12px; font-weight: 600; letter-spacing: .08em;
+}
+.bb-block h3 { margin: 0; font-size: clamp(24px, 2.2vw, 32px); font-weight: 700; letter-spacing: -.035em; line-height: 1.1; }
+.bb-block-note { max-width: 680px; margin: 8px 0 0; color: var(--muted); font-size: 15px; }
+
+/* ---------- Палитра ---------- */
+.bb-swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px; }
+.bb-swatch { border: 1px solid var(--line); background: var(--surface); }
+.bb-swatch i { display: block; height: 92px; background: var(--c); border-bottom: 1px solid var(--line); }
+.bb-swatch-body { padding: 14px 16px 16px; }
+.bb-swatch code {
+  display: block; margin-bottom: 4px; color: var(--ink);
+  font-family: "IBM Plex Mono", monospace; font-size: 13px; font-weight: 600;
+}
+.bb-swatch b { display: block; font-size: 14px; }
+.bb-swatch span { display: block; margin-top: 4px; color: var(--muted); font-size: 12.5px; line-height: 1.45; }
+
+/* ---------- Шрифты ---------- */
+.bb-fonts { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+.bb-font { padding: 26px 28px; border: 1px solid var(--ink); background: var(--surface); }
+.bb-font-name { margin: 0; font-size: 26px; font-weight: 700; letter-spacing: -.03em; }
+.bb-font-role {
+  margin: 4px 0 18px; color: var(--royal);
+  font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: .08em; text-transform: uppercase;
+}
+.bb-font-sample { margin: 0; font-size: 27px; line-height: 1.25; letter-spacing: -.02em; word-break: break-word; }
+.bb-font-weights { display: flex; flex-wrap: wrap; gap: 10px 18px; margin: 18px 0 0; padding: 16px 0 0; border-top: 1px solid var(--line); }
+.bb-font-weights span { font-size: 15px; }
+.bb-font-src { margin: 14px 0 0; color: var(--muted); font-size: 12.5px; }
+
+/* ---------- Типографическая шкала ---------- */
+.bb-scale { display: grid; gap: 0; border: 1px solid var(--line); background: var(--surface); }
+.bb-scale-row { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 26px; padding: 22px 26px; border-bottom: 1px solid var(--line); align-items: baseline; }
+.bb-scale-row:last-child { border-bottom: 0; }
+.bb-scale-meta b { display: block; font-size: 14px; }
+.bb-scale-meta code {
+  display: block; margin-top: 5px; color: var(--muted);
+  font-family: "IBM Plex Mono", monospace; font-size: 11.5px; line-height: 1.6;
+}
+.bb-scale-demo { min-width: 0; overflow: hidden; }
+.bb-scale-demo > * { margin: 0; }
+
+/* ---------- Радиусы, тени, линии ---------- */
+.bb-tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 22px; }
+.bb-tile { text-align: left; }
+.bb-tile-demo { height: 108px; margin-bottom: 12px; border: 1px solid var(--ink); background: var(--surface); }
+.bb-tile b { display: block; font-size: 14px; }
+.bb-tile code { color: var(--muted); font-family: "IBM Plex Mono", monospace; font-size: 12px; }
+
+/* ---------- Сетка и ритм ---------- */
+.bb-metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); border: 1px solid var(--ink); }
+.bb-metrics div { padding: 22px 24px; border-right: 1px solid var(--line); }
+.bb-metrics div:last-child { border-right: 0; }
+.bb-metrics dt { color: var(--muted); font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; }
+.bb-metrics dd { margin: 8px 0 0; font-size: 21px; font-weight: 700; letter-spacing: -.03em; }
+
+/* ---------- Компоненты: полотно превью ---------- */
+.bb-specimens { display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 16px; }
+.bb-specimen { display: flex; flex-direction: column; border: 1px solid var(--line); background: var(--surface); }
+.bb-specimen-title {
+  padding: 13px 18px; border-bottom: 1px solid var(--line); color: var(--muted);
+  font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: .07em; text-transform: uppercase;
+}
+.bb-specimen-body { flex: 1; display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-start; padding: 26px; }
+.bb-specimen-body > * { max-width: 100%; }
+.bb-specimen-stack { flex-direction: column; align-items: stretch; }
+.bb-specimen-dark { background: var(--navy); }
+
+/* ---------- Структура страницы ---------- */
+.bb-flow { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; counter-reset: bbflow; }
+.bb-flow li { display: flex; gap: 12px; padding: 16px 18px; border: 1px solid var(--line); background: var(--surface); font-size: 14.5px; line-height: 1.45; }
+.bb-flow li::before {
+  counter-increment: bbflow; content: counter(bbflow, decimal-leading-zero);
+  color: var(--royal); font-family: "IBM Plex Mono", monospace; font-size: 12px; font-weight: 600;
+}
+
+/* ---------- Правила ---------- */
+.bb-rules { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.bb-rules > div { padding: 24px 26px; border: 1px solid var(--ink); }
+.bb-rules-do { background: var(--surface); border-top: 8px solid var(--royal); }
+.bb-rules-dont { background: var(--navy); color: white; border-top: 8px solid var(--acid); }
+.bb-rules h4 { margin: 0 0 16px; font-size: 18px; letter-spacing: -.02em; }
+.bb-rules ul { margin: 0; padding: 0; list-style: none; }
+.bb-rules li { position: relative; padding: 11px 0 11px 24px; border-top: 1px solid var(--line); font-size: 14.5px; line-height: 1.5; }
+.bb-rules li:first-child { border-top: 0; }
+.bb-rules-do li::before { position: absolute; left: 0; color: var(--royal); content: "↳"; }
+.bb-rules-dont li { border-top-color: #46516a; color: #c9d1e4; }
+.bb-rules-dont li::before { position: absolute; left: 0; color: var(--acid); content: "×"; }
+
+/* ============================================================
+   СИСТЕМА 1 — pay.larkinmd7.ru (демо совпадает с боевыми стилями)
+============================================================ */
+.bb-pay-btn {
+  display: inline-flex; min-height: 54px; padding: 0 24px; align-items: center; justify-content: center;
+  border: 1px solid var(--royal); border-radius: 3px; background: var(--royal); color: white;
+  font-weight: 700; text-decoration: none;
+}
+.bb-pay-btn-small { min-height: 42px; padding-inline: 17px; font-size: 14px; }
+.bb-pay-btn-light { border-color: white; background: white; color: var(--navy); }
+.bb-pay-btn-ghost { border: 1px solid var(--ink); background: transparent; color: var(--ink); }
+.bb-pay-eyebrow {
+  margin: 0; color: var(--royal); font-family: "IBM Plex Mono", monospace;
+  font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+}
+.bb-pay-tag {
+  display: inline-block; padding: 9px 14px; background: var(--acid); color: var(--ink);
+  font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 600; text-transform: uppercase;
+}
+.bb-pay-module { width: 100%; padding: 26px; border: 1px solid var(--line); background: var(--paper); }
+.bb-pay-module-navy { border-color: var(--navy); background: var(--navy); color: white; }
+.bb-pay-module-acid { border-color: var(--acid); background: var(--acid); }
+.bb-pay-num { display: grid; width: 42px; aspect-ratio: 1; place-items: center; border: 1px solid currentColor; color: var(--royal); font-family: "IBM Plex Mono", monospace; font-size: 13px; }
+.bb-pay-module-navy .bb-pay-num, .bb-pay-module-acid .bb-pay-num { color: currentColor; }
+.bb-pay-module h5 { margin: 16px 0 6px; font-size: 22px; font-weight: 700; letter-spacing: -.03em; }
+.bb-pay-module p { margin: 0; font-size: 14px; }
+.bb-pay-module-navy p { color: #c9d1e4; }
+.bb-pay-price { width: 100%; padding: 26px; border: 1px solid var(--navy); background: var(--navy); color: white; box-shadow: 13px 13px 0 var(--acid); }
+.bb-pay-price ul { margin: 18px 0 0; padding: 0; list-style: none; }
+.bb-pay-price li { position: relative; padding: 11px 0 11px 22px; border-top: 1px solid #34415c; font-size: 14px; }
+.bb-pay-price li::before { position: absolute; left: 0; color: var(--acid); content: "↳"; }
+.bb-pay-underline { background: linear-gradient(transparent 82%, var(--acid) 82%, var(--acid) 94%, transparent 94%); }
+.bb-pay-hard { box-shadow: 13px 13px 0 var(--acid); }
+.bb-pay-hardblue { box-shadow: 9px 9px 0 var(--royal); }
+.bb-pay-details { width: 100%; }
+.bb-pay-details summary { position: relative; padding: 18px 40px 18px 0; border-top: 1px solid var(--ink); font-size: 18px; font-weight: 700; cursor: pointer; list-style: none; }
+.bb-pay-details summary::-webkit-details-marker { display: none; }
+.bb-pay-details summary::after { position: absolute; top: 14px; right: 4px; color: var(--royal); font-size: 24px; content: "+"; }
+.bb-pay-details[open] summary::after { content: "−"; }
+.bb-pay-details p { margin: 0 0 18px; color: var(--muted); font-size: 14.5px; }
+
+/* ============================================================
+   СИСТЕМА 2 — aicjm.ru (превью в родных токенах домена)
+============================================================ */
+.bb-panel-aicjm {
+  --a-bg: #ffffff; --a-bg1: #f4f7fb; --a-blue: #0b1f4d;
+  --a-line: #e3e8f0; --a-line-soft: #eef1f6; --a-line-input: #cdd5e2;
+  --a-ink: #0f172a; --a-ink2: #566075; --a-ink3: #8089a0;
+  --a-accent: #1D4ED8; --a-bright: #2563EB; --a-accent-ink: #1A43BC;
+  --a-shadow: 0 24px 70px rgba(15, 23, 42, .12);
+}
+.bb-panel-aicjm .bb-specimen,
+.bb-panel-aicjm .bb-scale,
+.bb-panel-aicjm .bb-swatch,
+.bb-panel-aicjm .bb-font,
+.bb-panel-aicjm .bb-flow li { border-color: var(--a-line); background: var(--a-bg); }
+.bb-panel-aicjm .bb-specimen-title,
+.bb-panel-aicjm .bb-scale-row { border-color: var(--a-line); }
+.bb-panel-aicjm .bb-block-num,
+.bb-panel-aicjm .bb-font-role,
+.bb-panel-aicjm .bb-flow li::before,
+.bb-panel-aicjm .bb-rules-do li::before { color: var(--a-accent); }
+.bb-panel-aicjm .bb-scale-demo,
+.bb-panel-aicjm .bb-specimen-body,
+.bb-panel-aicjm .bb-font { font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--a-ink); }
+.bb-panel-aicjm .bb-rules-do { background: var(--a-bg); border-top-color: var(--a-accent); }
+.bb-panel-aicjm .bb-rules-dont { background: var(--a-blue); border-top-color: var(--a-bright); }
+.bb-panel-aicjm .bb-rules-dont li { border-top-color: rgba(255,255,255,.16); color: rgba(255,255,255,.72); }
+.bb-panel-aicjm .bb-rules-dont li::before { color: #ffffff; }
+.bb-panel-aicjm .bb-specimen-dark { background: var(--a-blue); }
+
+.bb-a-btn {
+  display: inline-flex; gap: 10px; align-items: center; padding: 16px 30px;
+  border: none; border-radius: 0; background: var(--a-accent); color: #fff;
+  font-family: "Inter", system-ui, sans-serif; font-size: 15px; font-weight: 600; text-decoration: none;
+}
+.bb-a-btn-hover { background: var(--a-accent-ink); }
+.bb-a-btn-onblue { background: #ffffff; color: var(--a-blue); }
+.bb-a-link { display: inline-flex; gap: 8px; align-items: center; color: var(--a-accent); font-size: 15px; font-weight: 600; border-bottom: 1px solid var(--a-line-input); padding-bottom: 3px; }
+.bb-a-proof { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; color: var(--a-ink3); font-size: 13px; }
+.bb-a-proof i { width: 4px; height: 4px; background: var(--a-accent); }
+.bb-a-metrics { display: grid; grid-template-columns: repeat(3, 1fr); width: 100%; border-top: 1px solid var(--a-line); }
+.bb-a-metrics div { padding: 20px 16px 0 0; }
+.bb-a-metrics div + div { padding-left: 18px; border-left: 1px solid var(--a-line); }
+.bb-a-metrics dt { color: var(--a-ink); font-size: 20px; font-weight: 700; letter-spacing: -.03em; }
+.bb-a-metrics dd { margin: 3px 0 0; color: var(--a-ink3); font-size: 12px; }
+.bb-a-card { width: 100%; padding: 26px; border: 1px solid var(--a-line); background: var(--a-bg); box-shadow: var(--a-shadow); }
+.bb-a-card h5 { margin: 0 0 8px; font-size: 22px; font-weight: 600; letter-spacing: -.04em; }
+.bb-a-card p { margin: 0; color: var(--a-ink2); font-size: 15px; line-height: 1.55; }
+.bb-a-deep { width: 100%; padding: 30px; background: var(--a-blue); color: #fff; }
+.bb-a-deep p { margin: 0; font-size: 26px; font-weight: 550; letter-spacing: -.05em; line-height: 1.08; }
+.bb-a-deep p b { font-style: italic; font-weight: 550; }
+.bb-a-field { display: flex; flex-direction: column; width: 100%; }
+.bb-a-field span { margin-bottom: 8px; color: rgba(255,255,255,.72); font-size: 12px; }
+.bb-a-field input { width: 100%; padding: 15px 0; border: 0; border-bottom: 1px solid rgba(255,255,255,.16); border-radius: 0; background: transparent; color: #fff; font-size: 15px; }
+.bb-a-field input::placeholder { color: rgba(255,255,255,.4); }
+.bb-a-italic { color: var(--a-accent); font-style: italic; }
+
+/* ---------- Мобильная адаптация ---------- */
+@media (max-width: 900px) {
+  .bb-scale-row { grid-template-columns: 1fr; gap: 12px; }
+  .bb-switch { flex-direction: column; }
+  .bb-switch label { border-right: 0; border-bottom: 1px solid var(--ink); }
+  .bb-switch label:last-child { border-bottom: 0; }
+  .bb-metrics div { border-right: 0; border-bottom: 1px solid var(--line); }
+  .bb-metrics div:last-child { border-bottom: 0; }
+}
+@media (max-width: 580px) {
+  .bb-pay-price, .bb-pay-hard { box-shadow: 7px 7px 0 var(--acid); }
+  .bb-pay-hardblue { box-shadow: 5px 5px 0 var(--royal); }
+  .bb-specimen-body { padding: 20px; }
+  .bb-a-metrics { grid-template-columns: 1fr; }
+  .bb-a-metrics div + div { padding-left: 0; border-left: 0; border-top: 1px solid var(--a-line); padding-top: 16px; }
+}
+
+/* ============================================================
+   Отдельная страница /brandbook/ — первый экран и полотно
+============================================================ */
+.bb-page main { display: block; }
+.bb-hero {
+  width: min(calc(100% - 48px), var(--max)); margin: 0 auto;
+  padding: 78px 0 64px; border-bottom: 1px solid var(--ink);
+}
+.bb-hero h1 {
+  margin: 22px 0 0;
+  font-size: clamp(40px, 6vw, 88px); font-weight: 700;
+  letter-spacing: -.06em; line-height: .96;
+}
+.bb-hero-lead { max-width: 760px; margin: 26px 0 0; color: var(--muted); font-size: clamp(18px, 1.8vw, 23px); line-height: 1.4; }
+.bb-hero-meta {
+  display: grid; grid-template-columns: repeat(3, auto); justify-content: start;
+  gap: 48px; margin: 42px 0 0; padding-top: 30px; border-top: 1px solid var(--line);
+}
+.bb-hero-meta dt { color: var(--muted); font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: .07em; text-transform: uppercase; }
+.bb-hero-meta dd { margin: 7px 0 0; font-size: 23px; font-weight: 700; letter-spacing: -.03em; }
+.bb-body { padding-top: 56px; }
+.bb-body .bb-switch { margin-top: 0; }
+
+@media (max-width: 900px) {
+  .bb-hero-meta { grid-template-columns: 1fr; gap: 22px; }
+}
+@media (max-width: 580px) {
+  .bb-hero { width: min(calc(100% - 32px), var(--max)); padding: 52px 0 44px; }
+  .bb-body { padding-top: 40px; }
+}
