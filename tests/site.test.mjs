@@ -356,7 +356,7 @@ test('практикум предлагает модули и еженедель
   assert.match(html, /Четыре групповые консультации/);
   assert.doesNotMatch(html, /id="platform"|href="#platform"/);
   assert.match(html, /Шесть модулей доступны на нашей учебной платформе/);
-  for (const [before, current] of [['49 900', '39 900'], ['69 990', '59 900'], ['139 900', '99 900']]) {
+  for (const [before, current] of [['49 900', '39 900'], ['69 900', '59 900'], ['139 900', '99 900']]) {
     assert.ok(html.includes(`${before} ₽</s><span class="price-current">${current} ₽`));
   }
 });
