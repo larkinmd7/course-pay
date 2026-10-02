@@ -293,7 +293,7 @@ test('первый экран выделяет ключевой результа
   const hero = html.slice(heroStart, heroEnd);
 
   assert.match(hero, /<span class="hero-accent">AI-систему<\/span>/);
-  assert.match(hero, /<span class="hero-accent-underline">под свою работу<\/span>/);
+  assert.match(hero, /<span class="hero-accent-underline">автоматизации задач и роста дохода<\/span>/);
 });
 
 test('блок «Что изменится» повторяет левую композицию программы', () => {
@@ -733,7 +733,7 @@ test('мобильная сетка ограничивает ширину доч
   assert.match(css, /\.limits\s*>\s*\*\s*\{[^}]*min-width:\s*0/s);
   assert.match(css, /h1,\s*h2,\s*h3\s*\{[^}]*overflow-wrap:\s*normal[^}]*word-break:\s*normal[^}]*text-wrap:\s*balance/s);
   assert.match(css, /p,\s*li\s*\{[^}]*text-wrap:\s*pretty/s);
-  assert.match(css, /@media \(max-width:\s*580px\)[\s\S]*h1\s*\{[^}]*font-size:\s*clamp\(42px,\s*12vw,\s*52px\)/s);
+  assert.match(css, /@media \(max-width:\s*580px\)[\s\S]*h1\s*\{[^}]*font-size:\s*clamp\(32px,\s*8.5vw,\s*40px\)/s);
 });
 
 test('статический контейнер имеет healthcheck и не публикует внутренний порт сам', () => {
