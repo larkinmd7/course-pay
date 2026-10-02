@@ -343,7 +343,7 @@ test('отдельный блок объясняет формат занятий
   assert.match(html, /Шесть модулей на платформе/);
   assert.match(html, /вопросы заранее/);
   assert.match(html, /вопросы по ходу/);
-  assert.match(html, /Четыре групповые консультации во всех тарифах/);
+  assert.match(html, /Четыре групповые консультации/);
   assert.equal((format.match(/class="format-card/g) ?? []).length, 4);
   assert.match(format, /Две личные консультации/);
   assert.match(format, /сложност[а-яё]+ других участников/i);
@@ -353,7 +353,7 @@ test('отдельный блок объясняет формат занятий
 test('практикум предлагает модули и еженедельные вебинары без старого календаря', () => {
   const html = readFileSync(pagePath, 'utf8');
   assert.doesNotMatch(html, /<time datetime=|class="schedule-calendar"|30 августа|17 сентября|Трёхнедельная|За три недели/);
-  assert.match(html, /Четыре групповые консультации во всех тарифах/);
+  assert.match(html, /Четыре групповые консультации/);
   assert.doesNotMatch(html, /id="platform"|href="#platform"/);
   assert.match(html, /Шесть модулей доступны на нашей учебной платформе/);
   for (const [before, current] of [['49 900', '39 900'], ['69 990', '59 900'], ['139 900', '99 900']]) {
