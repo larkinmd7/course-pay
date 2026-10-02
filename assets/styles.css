@@ -498,3 +498,8 @@ footer > div:first-child { display: grid; gap: 5px; }
   .offer-page > header { grid-template-columns: 1fr; align-items: start; }
   .offer-document { min-height: 620px; height: 75vh; }
 }
+
+/* Practicum: platform and revised pricing */
+.price-before{display:block;font-size:20px;font-weight:500;line-height:1.4;opacity:.75;margin-bottom:8px}
+.price-current{display:block}
+@media(max-width:760px){.price-before{font-size:18px}}

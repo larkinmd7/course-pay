@@ -240,13 +240,13 @@ test('главная показывает утверждённый продук�
   const html = readFileSync(pagePath, 'utf8');
   const required = [
     'ИИ для экспертов: личная операционная система и AI-инструменты под свою нишу',
-    '30 августа 2026',
+    'модули на платформе',
     'Старт',
-    '29 900 ₽',
+    '39 900 ₽',
     'Средний',
-    '49 900 ₽',
+    '59 900 ₽',
     'Продвинутый',
-    '89 900 ₽',
+    '99 900 ₽',
   ];
 
   for (const value of required) assert.match(html, new RegExp(value));
@@ -340,37 +340,25 @@ test('отдельный блок объясняет формат занятий
   const format = html.slice(formatStart, formatEnd);
 
   assert.match(html, /id="format"/);
-  assert.match(html, /Шесть живых занятий/);
+  assert.match(html, /Шесть модулей на платформе/);
   assert.match(html, /вопросы заранее/);
   assert.match(html, /вопросы по ходу/);
-  assert.match(html, /30 августа 2026/);
-  assert.equal((format.match(/class="format-card/g) ?? []).length, 5);
+  assert.match(html, /Четыре групповые консультации во всех тарифах/);
+  assert.equal((format.match(/class="format-card/g) ?? []).length, 4);
   assert.match(format, /Две личные консультации/);
   assert.match(format, /сложност[а-яё]+ других участников/i);
   assert.match(format, /до того, как столкнётесь с ними сами/i);
 });
 
-test('календарь показывает день 0 и шесть занятий по понедельникам и четвергам', () => {
+test('практикум предлагает модули и еженедельные вебинары без старого календаря', () => {
   const html = readFileSync(pagePath, 'utf8');
-  const scheduleStart = html.indexOf('<section class="schedule-calendar"');
-  const scheduleEnd = html.indexOf('</section>', scheduleStart);
-  const schedule = html.slice(scheduleStart, scheduleEnd);
-  const datetimes = [...schedule.matchAll(/<time datetime="([^"]+)"/g)].map((match) => match[1]);
-
-  assert.deepEqual(datetimes, [
-    '2026-08-30',
-    '2026-08-31T18:00:00+03:00',
-    '2026-09-03T18:00:00+03:00',
-    '2026-09-07T18:00:00+03:00',
-    '2026-09-10T18:00:00+03:00',
-    '2026-09-14T18:00:00+03:00',
-    '2026-09-17T18:00:00+03:00',
-  ]);
-  assert.match(schedule, /День 0/);
-  assert.equal((schedule.match(/class="schedule-event(?:\s[^"]*)?"/g) ?? []).length, 6);
-  assert.equal((schedule.match(/<span>18:00 МСК<\/span>/g) ?? []).length, 6);
-  assert.match(schedule, /Понедельник/);
-  assert.match(schedule, /Четверг/);
+  assert.doesNotMatch(html, /<time datetime=|class="schedule-calendar"|30 августа|17 сентября|Трёхнедельная|За три недели/);
+  assert.match(html, /Четыре групповые консультации во всех тарифах/);
+  assert.doesNotMatch(html, /id="platform"|href="#platform"/);
+  assert.match(html, /Шесть модулей доступны на нашей учебной платформе/);
+  for (const [before, current] of [['49 900', '39 900'], ['69 990', '59 900'], ['139 900', '99 900']]) {
+    assert.ok(html.includes(`${before} ₽</s><span class="price-current">${current} ₽`));
+  }
 });
 
 test('результаты объясняют переход от чат-ботов к созданию продуктов через локальный визуал', () => {
@@ -664,25 +652,20 @@ test('главная содержит юридические ссылки и т�
   assert.doesNotMatch(html, /data-pay-link="test"|Тестовая оплата · 10 ₽/);
 });
 
-test('три тарифа ведут на платёжные ссылки ЮKassa исполнителя ИП Севастьянова', () => {
+test('новые тарифы оформляются через менеджера без ссылок на прежние суммы ЮKassa', () => {
   const html = readFileSync(pagePath, 'utf8');
-  const js = readFileSync(jsPath, 'utf8');
-  const payLinks = {
-    base: ['https://yookassa.ru/my/i/apmPtDuhVqRp/l', '29 900'],
-    middle: ['https://yookassa.ru/my/i/apmQdCR5vXsb/l', '49 900'],
-    pro: ['https://yookassa.ru/my/i/apmRFMrNmXqi/l', '89 900'],
-  };
-
-  for (const [tariff, [url, price]] of Object.entries(payLinks)) {
-    const link = html.match(new RegExp(`<a class="button[^"]*" href="${url.replace(/[./]/g, '\\$&')}"[^>]*data-pay-link="${tariff}">([^<]*)</a>`));
-    assert.ok(link, `ссылка тарифа ${tariff} должна вести на ${url}`);
-    assert.match(link[0], /target="_blank" rel="noopener"/);
-    assert.match(link[1], new RegExp(`Оплатить ${price} ₽`));
+  const links = [...html.matchAll(/<a class="button[^"]*" href="([^"]+)"[^>]*data-pay-link="([^"]+)">([^<]*)<\/a>/g)];
+  assert.equal(links.length, 3);
+  const expected = {base: ['Старт', '39 900'], middle: ['Средний', '59 900'], pro: ['Продвинутый', '99 900']};
+  for (const [, href, tariff, label] of links) {
+    const url = new URL(href);
+    assert.equal(url.origin, 'https://t.me');
+    assert.equal(url.pathname, '/starsevast');
+    assert.ok(url.searchParams.get('text').includes(expected[tariff][0]));
+    assert.ok(url.searchParams.get('text').includes(expected[tariff][1]));
+    assert.equal(label, 'Оформить заявку');
   }
-  assert.doesNotMatch(html, /yookassa\.ru\/integration\/simplepay|name="shopId"|data-open-payment|data-payment-form|payment-dialog/);
-  assert.doesNotMatch(js, /payment-dialog|kassaConstructForm/);
-  assert.match(html, /получатель платежа — ИП Севастьянов Матвей Алексеевич/);
-  assert.doesNotMatch(html, /PLACEHOLDER_VALUE|example\.com|javascript:/i);
+  assert.doesNotMatch(html, /href="https:\/\/yookassa.ru\/my\/i\//);
 });
 
 test('опубликованная оферта — редакция от 3 сентября 2026 от ИП Севастьянова, тарифы как на сайте', () => {
