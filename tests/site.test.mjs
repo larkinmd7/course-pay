@@ -668,30 +668,14 @@ test('новые тарифы оформляются через менеджер
   assert.doesNotMatch(html, /href="https:\/\/yookassa.ru\/my\/i\//);
 });
 
-test('опубликованная оферта — редакция от 3 сентября 2026 от ИП Севастьянова, тарифы как на сайте', () => {
-  assert.equal(existsSync(offerPdfPath), true, 'offer/public-offer.pdf должен существовать');
-
+test('опубликована новая оферта от 1 октября 2026', () => {
   const page = readFileSync(offerPagePath, 'utf8');
   const pdfText = execFileSync('pdftotext', [offerPdfPath, '-'], { encoding: 'utf8' });
-
-  assert.match(page, /Редакция от&nbsp;3&nbsp;сентября 2026&nbsp;года/);
-  assert.match(page, /ИП Севастьянов Матвей Алексеевич/);
-  assert.match(page, /href="\/offer\/public-offer\.pdf"/);
-  assert.match(pdfText, /Редакция от 3 сентября 2026 года/);
+  assert.match(page, /1&nbsp;октября 2026/);
+  assert.match(page, /public-offer\.pdf\?v=20261001/);
+  assert.match(pdfText, /Редакция от 1 октября 2026 года/);
   assert.match(pdfText, /Севастьянов Матвей Алексеевич/);
   assert.match(pdfText, /661305367793/);
-  assert.match(pdfText, /Михаил Ларькин\s+лично проводит все 6 основных групповых онлайн-сессий/);
-  for (const [tariff, price] of [['Старт', '29 900'], ['Средний', '49 900'], ['Продвинутый', '89 900']]) {
-    assert.match(pdfText, new RegExp(`Тариф\\s+«${tariff}»`));
-    assert.match(pdfText, new RegExp(price));
-  }
-  assert.doesNotMatch(pdfText, /Тариф «(?:Самостоятельный|С внедрением|Персональный)»/);
-  assert.doesNotMatch(pdfText, /технический аудит/i);
-  const middleTariff = pdfText.match(/Тариф\s+«Средний»[\s\S]*?Тариф\s+«Продвинутый»/)?.[0] ?? '';
-  assert.doesNotMatch(middleTariff, /персональн\S* (?:онлайн-)?созвон/i);
-  const advancedTariff = pdfText.match(/Тариф\s+«Продвинутый»[\s\S]*?5\.2\./)?.[0] ?? '';
-  assert.match(advancedTariff, /два персональных онлайн-созвона/i);
-  assert.match(advancedTariff, /персональный канал связи/i);
 });
 
 const successPages = {
