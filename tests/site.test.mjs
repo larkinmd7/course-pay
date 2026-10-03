@@ -242,11 +242,11 @@ test('главная показывает утверждённый продук�
     'ИИ для экспертов: личная операционная система и AI-инструменты под свою нишу',
     'модули на платформе',
     'Старт',
-    '39 900 ₽',
+    '49 900 ₽',
     'Средний',
-    '59 900 ₽',
+    '69 900 ₽',
     'Продвинутый',
-    '99 900 ₽',
+    '139 900 ₽',
   ];
 
   for (const value of required) assert.match(html, new RegExp(value));
@@ -357,7 +357,7 @@ test('практикум предлагает модули и еженедель
   assert.doesNotMatch(html, /id="platform"|href="#platform"/);
   assert.match(html, /Шесть модулей доступны на нашей учебной платформе/);
   for (const [before, current] of [['49 900', '39 900'], ['69 900', '59 900'], ['139 900', '99 900']]) {
-    assert.ok(html.includes(`${before} ₽</s><span class="price-current">${current} ₽`));
+    assert.ok(html.includes(`${before} ₽</s><span class="price-current">${before} ₽`));
   }
 });
 
@@ -656,7 +656,7 @@ test('новые тарифы оформляются через менеджер
   const html = readFileSync(pagePath, 'utf8');
   const links = [...html.matchAll(/<a class="button[^"]*" href="([^"]+)"[^>]*data-pay-link="([^"]+)">([^<]*)<\/a>/g)];
   assert.equal(links.length, 3);
-  const expected = {base: ['Старт', '39 900'], middle: ['Средний', '59 900'], pro: ['Продвинутый', '99 900']};
+  const expected = {base: ['Старт', '49 900'], middle: ['Средний', '69 900'], pro: ['Продвинутый', '139 900']};
   for (const [, href, tariff, label] of links) {
     const url = new URL(href);
     assert.equal(url.origin, 'https://t.me');

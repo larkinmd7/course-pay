@@ -1,3 +1,4 @@
+import { initDiscountTimer } from './discount-timer.mjs';
 import { improveVisibleTypography } from './typography.mjs';
 import { initHeroOrbit } from './hero-orbit.mjs';
 import { initTestimonialCarousel } from './testimonial-carousel.mjs';
@@ -9,4 +10,5 @@ initHeroOrbit(document.querySelector('[data-hero-orbit]'));
 initTestimonialCarousel(document.querySelector('[data-testimonial-carousel]'));
 
 initTelegramSalesMode(document, globalThis.location.pathname);
+initDiscountTimer(document, globalThis.location.pathname);
 initMetrikaForPage(document, globalThis.location.pathname);
