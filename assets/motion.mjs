@@ -19,6 +19,7 @@ const REVEAL_SELECTOR = [
   '.price-card',
   '.factory-steps li',
   '.factory-shots figure',
+  '.platform-shots figure',
   '.outcomes-cards article',
   '.product-proof article',
   '.education-card',
@@ -97,19 +98,53 @@ export function initMotion(root = document) {
 
   const counterByNode = new Map(counters.map((item) => [item.node, item.parsed]));
 
+  const show = (node) => {
+    if (node.dataset.reveal === 'idle') node.dataset.reveal = 'in';
+    const parsed = counterByNode.get(node);
+    if (parsed) {
+      counterByNode.delete(node);
+      countUp(node, parsed);
+    }
+    observer.unobserve(node);
+  };
+
   const observer = new globalThis.IntersectionObserver((entries) => {
     entries.forEach((entry) => {
-      if (!entry.isIntersecting) return;
-      const node = entry.target;
-      if (node.dataset.reveal === 'idle') node.dataset.reveal = 'in';
-      const parsed = counterByNode.get(node);
-      if (parsed) countUp(node, parsed);
-      observer.unobserve(node);
+      // Порог 0: блок выше экрана никогда не наберёт долю видимости, а блок,
+      // мимо которого проскочили рывком или по якорю, иначе останется невидимым навсегда.
+      if (entry.isIntersecting || entry.boundingClientRect.bottom < 0) show(entry.target);
     });
-  }, { rootMargin: '0px 0px -12% 0px', threshold: 0.15 });
+  }, { rootMargin: '0px 0px -10% 0px', threshold: 0 });
 
   revealed.forEach((node) => observer.observe(node));
   counters.forEach(({ node }) => observer.observe(node));
 
-  return () => observer.disconnect();
+  // Сеть безопасности. IntersectionObserver считает пересечения по кадрам: если
+  // страница прыгает рывком — клик по «Тарифы» в шапке перелистывает полстраницы, —
+  // блок успевает уйти вверх между двумя кадрами, события не будет, и он останется
+  // невидимым навсегда. Поэтому на каждом скролле добираем всё, что уже вошло в экран.
+  let pending = [...new Set([...revealed, ...counters.map((item) => item.node)])];
+  let scheduled = false;
+  const sweep = () => {
+    scheduled = false;
+    pending = pending.filter((node) => {
+      if (node.dataset.reveal === 'in' && !counterByNode.has(node)) return false;
+      if (node.getBoundingClientRect().top >= globalThis.innerHeight) return true;
+      show(node);
+      return false;
+    });
+    if (pending.length === 0) globalThis.removeEventListener('scroll', onScroll);
+  };
+  const onScroll = () => {
+    if (scheduled) return;
+    scheduled = true;
+    globalThis.requestAnimationFrame(sweep);
+  };
+  globalThis.addEventListener('scroll', onScroll, { passive: true });
+  sweep();
+
+  return () => {
+    observer.disconnect();
+    globalThis.removeEventListener('scroll', onScroll);
+  };
 }

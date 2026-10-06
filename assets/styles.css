@@ -685,3 +685,16 @@ footer > div:first-child { display: grid; gap: 5px; }
   [data-reveal] { opacity: 1 !important; transform: none !important; transition: none !important; }
   .orbit-ring-outer, .orbit-ring-inner, .orbit-core::before, .orbit-satellite { animation: none; }
 }
+
+/* Кабинет платформы: блок «как устроена программа» был чистым текстом,
+   а это ровно то место, где человек хочет увидеть, за что платит. */
+.platform-shots { margin-top: 40px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 24px; }
+.platform-shots figure { margin: 0; display: flex; flex-direction: column; gap: 12px; }
+.platform-shots img { width: 100%; height: auto; border-radius: var(--radius); background: var(--surface); }
+.platform-shots figcaption { margin-top: auto; color: var(--muted); font-size: 14px; }
+
+@media (max-width: 760px) {
+  .platform-shots { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 84%; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding-bottom: 4px; }
+  .platform-shots::-webkit-scrollbar { display: none; }
+  .platform-shots figure { scroll-snap-align: start; }
+}
