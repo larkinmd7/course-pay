@@ -552,3 +552,27 @@ footer > div:first-child { display: grid; gap: 5px; }
 }
 .section-dark .section-label { color: var(--signal) !important; }
 .section-dark .section-head > p:not(.section-label) { color: var(--on-dark); }
+
+/* карточки примеров: ниша должна считываться первой, чтобы читатель узнал себя */
+.example-card > span { margin-bottom: 14px; color: var(--royal); font-family: "IBM Plex Mono", monospace; font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }
+.example-card { border-radius: var(--radius); border-color: var(--line); }
+.example-card h3 { font-size: 22px; line-height: 1.2; }
+.example-card:nth-child(2) > span, .example-card:nth-child(5) > span { color: var(--signal); }
+.example-card:nth-child(4) { border-color: var(--royal-soft); }
+
+/* кейсы участников: тёмная глава прямо перед тарифами */
+.cases-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; align-items: stretch; }
+.case-card { display: flex; flex-direction: column; gap: 14px; padding: 30px; border: 1px solid var(--line-dark); border-radius: var(--radius); background: rgba(255,255,255,.04); }
+.case-role { margin: 0; color: var(--signal); font-family: "IBM Plex Mono", monospace; font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }
+.case-card h3 { margin: 0; font-size: 22px; line-height: 1.2; }
+.case-before { margin: 0; color: var(--on-dark-dim); font-size: 15px; }
+.case-metric { display: flex; flex-direction: column; gap: 2px; margin: 4px 0; padding: 16px 18px; border-radius: var(--radius-sm); background: rgba(25,211,255,.08); }
+.case-metric strong { font-family: "Unbounded", sans-serif; font-size: 26px; line-height: 1.1; color: var(--signal); }
+.case-metric span { color: var(--on-dark-dim); font-size: 13px; }
+.case-list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 11px; }
+.case-list li { position: relative; padding-left: 18px; color: var(--on-dark); font-size: 15px; line-height: 1.45; }
+.case-list li::before { position: absolute; left: 0; top: .62em; width: 5px; height: 5px; border-radius: 50%; background: var(--signal); content: ""; }
+.case-outcome { margin: auto 0 0; color: var(--on-dark); font-size: 15px; }
+.case-quote { margin: auto 0 0; padding: 18px 20px; border-left: 3px solid var(--signal); background: rgba(255,255,255,.04); color: var(--on-dark); font-size: 15px; line-height: 1.5; }
+.case-quote cite { display: block; margin-top: 10px; color: var(--signal); font-style: normal; font-weight: 600; }
+@media (max-width: 1000px) { .cases-grid { grid-template-columns: 1fr; } }
