@@ -808,7 +808,7 @@ footer > div:first-child { display: grid; gap: 5px; }
    ширину сетки: только так паре «телефон + результат» хватает места на любой
    ширине, и заодно блок модулей получает смысловую точку в конце. */
 .module:nth-child(6) { grid-column: 1 / -1; }
-.module:nth-child(6) .module-tail { grid-template-columns: 150px minmax(260px, 1fr); max-width: 760px; }
+.module:nth-child(6) .module-tail { grid-template-columns: 150px minmax(260px, 1fr); max-width: 760px; margin-top: 18px; }
 
 
 /* Ниже 760px колонка под текст рядом с телефоном становится уже 190px и результат
@@ -817,8 +817,14 @@ footer > div:first-child { display: grid; gap: 5px; }
    пополам) — ставим его по центру в натуральном размере, результат полной строкой
    под ним. Телефон либо в паре с текстом, либо по центру; третьего не бывает. */
 @media (max-width: 760px) {
-  .module:nth-child(6) .module-tail { grid-template-columns: 1fr; gap: 22px; justify-items: center; }
-  .module-demo { width: 190px; align-items: center; text-align: center; }
-  .module-demo figcaption { font-size: 12px; }
-  .module:nth-child(6) .module-result { justify-self: stretch; }
+  /* Пара сохраняется и здесь: телефон слева, результат справа. Чтобы текст
+     не рассыпался на два слова в строке, карточка отдаёт свои отступы,
+     а плашка результата теряет подложку и живёт голым текстом. */
+  .module:nth-child(6) { padding-inline: 18px; }
+  /* Телефон растёт вместе с экраном: на 390 он 104px, к 760 доходит до 150px —
+     иначе рядом с широкой колонкой текста выглядит недомерком. */
+  .module:nth-child(6) .module-tail { grid-template-columns: clamp(104px, 21vw, 150px) minmax(0, 1fr); gap: clamp(14px, 3vw, 22px); align-items: center; }
+  .module-demo { width: 100%; }
+  .module-demo figcaption { font-size: 11px; }
+  .module:nth-child(6) .module-result { padding: 0; background: none; font-size: 15px; line-height: 1.45; }
 }
