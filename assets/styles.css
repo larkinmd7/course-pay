@@ -808,8 +808,10 @@ footer > div:first-child { display: grid; gap: 5px; }
    ширину сетки: только так паре «телефон + результат» хватает места на любой
    ширине, и заодно блок модулей получает смысловую точку в конце. */
 .module:nth-child(6) { grid-column: 1 / -1; }
-.module:nth-child(6) .module-tail { grid-template-columns: 268px minmax(280px, 620px); max-width: none; margin-top: 22px; gap: 40px; }
-.module:nth-child(6) .module-result { font-size: 18px; }
+/* Колонка результата намеренно узкая: текст идёт в столбик на больше строк,
+   высвобождая ширину под телефон. Телефон — главный аргумент этого модуля. */
+.module:nth-child(6) .module-tail { grid-template-columns: 360px minmax(240px, 360px); max-width: none; margin-top: 22px; gap: 44px; align-items: start; }
+.module:nth-child(6) .module-result { font-size: 17px; line-height: 1.5; }
 .module:nth-child(6) .module-demo { width: 100%; }
 
 
@@ -823,9 +825,9 @@ footer > div:first-child { display: grid; gap: 5px; }
      не рассыпался на два слова в строке, карточка отдаёт свои отступы,
      а плашка результата теряет подложку и живёт голым текстом. */
   .module:nth-child(6) { padding-inline: 18px; }
-  /* Телефон растёт вместе с экраном: на 390 он 118px, к 760 доходит до 220px —
+  /* Телефон растёт вместе с экраном: на 390 он 150px, к 760 доходит до 300px —
      иначе рядом с широкой колонкой текста выглядит недомерком. */
-  .module:nth-child(6) .module-tail { grid-template-columns: clamp(118px, 26vw, 220px) minmax(0, 1fr); gap: clamp(14px, 3vw, 24px); align-items: center; }
+  .module:nth-child(6) .module-tail { grid-template-columns: clamp(150px, 38vw, 300px) minmax(0, 1fr); gap: clamp(14px, 3vw, 28px); align-items: center; }
   .module-demo { width: 100%; }
   .module-demo figcaption { font-size: 11px; }
   .module:nth-child(6) .module-result { padding: 0; background: none; font-size: 15px; line-height: 1.45; }
