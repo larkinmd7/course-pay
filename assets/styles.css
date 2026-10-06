@@ -810,20 +810,15 @@ footer > div:first-child { display: grid; gap: 5px; }
 .module:nth-child(6) { grid-column: 1 / -1; }
 .module:nth-child(6) .module-tail { grid-template-columns: 150px minmax(260px, 1fr); max-width: 760px; }
 
-@media (max-width: 760px) {
-  .module:nth-child(6) .module-tail { grid-template-columns: 104px minmax(0, 1fr); gap: 16px; }
-  .module-demo { width: 104px; }
-  .module-demo figcaption { font-size: 11px; }
-}
 
-/* Ниже 560px колонка под текст рядом с телефоном уже 190px — результат рассыпается
-   на два слова в строке. Телефон разворачивается во всю ширину и подрезается
-   сверху экрана, как на первом экране десктопа, а результат уходит под него
-   полной строкой. Приём один и тот же, пропорции разные. */
-@media (max-width: 560px) {
-  .module:nth-child(6) .module-tail { grid-template-columns: 1fr; gap: 20px; }
-  .module-demo { width: 100%; }
-  .module-demo .phone-frame { height: 200px; overflow: hidden; padding-bottom: 0; border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
-  .module-demo .phone-frame video { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+/* Ниже 760px колонка под текст рядом с телефоном становится уже 190px и результат
+   рассыпается на два слова в строке. Телефон не ужимаем и не растягиваем на всю
+   ширину (подрезка по фиксированной высоте зумит содержимое и режет строку чата
+   пополам) — ставим его по центру в натуральном размере, результат полной строкой
+   под ним. Телефон либо в паре с текстом, либо по центру; третьего не бывает. */
+@media (max-width: 760px) {
+  .module:nth-child(6) .module-tail { grid-template-columns: 1fr; gap: 22px; justify-items: center; }
+  .module-demo { width: 190px; align-items: center; text-align: center; }
   .module-demo figcaption { font-size: 12px; }
+  .module:nth-child(6) .module-result { justify-self: stretch; }
 }
