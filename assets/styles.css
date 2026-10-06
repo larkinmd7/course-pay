@@ -602,7 +602,7 @@ footer > div:first-child { display: grid; gap: 5px; }
 .factory-step-num { color: var(--royal); font-family: "IBM Plex Mono", monospace; font-size: 12px; font-weight: 600; letter-spacing: .14em; }
 .factory-steps p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.5; }
 .factory-steps strong { display: block; margin-bottom: 4px; color: var(--ink); font-weight: 600; }
-.factory-shots { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+.factory-shots { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
 .factory-shots figure { margin: 0; display: flex; flex-direction: column; gap: 12px; }
 .factory-shots img { width: 100%; height: auto; border-radius: var(--radius); background: var(--surface); }
 .factory-shots figcaption { color: var(--muted); font-size: 14px; }
