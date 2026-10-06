@@ -40,17 +40,20 @@ export function initThemeToggle(root = document, storage = globalThis.localStora
 
   apply(resolveTheme(stored, media?.matches === true));
 
-  button.addEventListener('click', () => {
+  const onClick = () => {
     const next = html.dataset.theme === 'dark' ? 'light' : 'dark';
     stored = next;
     try { storage?.setItem(STORAGE_KEY, next); } catch { /* без хранилища выбор живёт до перезагрузки */ }
     apply(next);
-  });
-
+  };
   // Пока человек не выбрал сам, следуем за системной настройкой на лету
-  media?.addEventListener?.('change', (event) => {
-    if (stored === null) apply(event.matches ? 'dark' : 'light');
-  });
+  const onSystem = (event) => { if (stored === null) apply(event.matches ? 'dark' : 'light'); };
 
-  return () => apply('light');
+  button.addEventListener('click', onClick);
+  media?.addEventListener?.('change', onSystem);
+
+  return () => {
+    button.removeEventListener('click', onClick);
+    media?.removeEventListener?.('change', onSystem);
+  };
 }

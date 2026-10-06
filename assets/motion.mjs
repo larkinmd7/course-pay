@@ -160,9 +160,15 @@ export function initDemoVideos(root = document) {
   const videos = [...root.querySelectorAll('[data-demo-video]')];
   if (videos.length === 0) return undefined;
 
+  // src проставляется только из JS, в разметке его нет. Без этого кнопка play
+  // у появившихся контролов нажимается, а ролик не стартует — мёртвый плеер.
+  const attach = (video) => {
+    if (!video.src) video.src = video.poster.replace(/\.jpg$/, '.mp4');
+  };
+
   if (prefersReducedMotion() || typeof globalThis.IntersectionObserver !== 'function') {
-    // Постера достаточно: кадр статичен, смысл блока не теряется.
-    videos.forEach((video) => { video.controls = true; video.preload = 'metadata'; });
+    // Сами не запускаем, но даём человеку включить вручную.
+    videos.forEach((video) => { attach(video); video.controls = true; video.preload = 'metadata'; });
     return undefined;
   }
 
@@ -170,10 +176,7 @@ export function initDemoVideos(root = document) {
     entries.forEach((entry) => {
       const video = entry.target;
       if (entry.isIntersecting) {
-        if (!video.src) {
-          video.src = video.poster.replace(/\.jpg$/, '.mp4');
-          video.load();
-        }
+        if (!video.src) { attach(video); video.load(); }
         video.play?.().catch(() => { /* автовоспроизведение могли запретить — остаётся постер */ });
       } else {
         video.pause?.();
