@@ -95,7 +95,6 @@ nav a, .footer-links a { text-underline-offset: 5px; text-decoration-thickness: 
 .hero, .section, .facts, footer { width: min(calc(100% - 48px), var(--max)); margin-inline: auto; }
 .hero { position: relative; min-height: 680px; padding: 98px 0 70px; display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(260px, .6fr); gap: 90px; align-items: end; overflow: hidden; isolation: isolate; }
 .hero-copy { position: relative; z-index: 1; }
-.product-name { max-width: 760px; margin-bottom: 16px; font-weight: 650; }
 .eyebrow, .section-kicker, .tariff-label, .note-index { margin: 0 0 22px; color: var(--royal); font-family: "IBM Plex Mono", monospace; font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
 h1, h2, h3, p { margin-top: 0; }
 h1, h2 { font-weight: 800; }
@@ -314,7 +313,10 @@ h2 { margin-bottom: 28px; font-size: clamp(28px, 3.8vw, 50px); line-height: 1.04
 .testimonial-document { min-height: 0; aspect-ratio: 210 / 297; border-top: 1px solid var(--line-dark); background: var(--surface); color: var(--ink); display: block; overflow: hidden; }
 .testimonial-document img { display: block; width: 100%; height: 100%; min-height: 0; object-fit: contain; object-position: center top; filter: none; transition: opacity .2s ease; }
 .testimonial-document:hover img { opacity: .93; }
-.pricing { padding-bottom: 150px; }
+/* 150px снизу у тарифов плюс 112px сверху у вопросов давали 262px пустоты
+   между юридической строкой и первым вопросом — целый пустой экран на ноутбуке. */
+.pricing { padding-bottom: 72px; }
+.faq { padding-top: 72px; }
 .pricing-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; align-items: stretch; }
 .price-card { min-height: 0; padding: 40px; border: 0; border-radius: var(--radius); background: var(--surface); display: flex; flex-direction: column; }
 .price-card-featured { position: relative; margin-top: -22px; padding-top: 52px; border-color: var(--navy); border-radius: var(--radius); background: var(--navy); color: var(--inv-ink); box-shadow: none; }
@@ -351,7 +353,7 @@ h2 { margin-bottom: 28px; font-size: clamp(28px, 3.8vw, 50px); line-height: 1.04
 .telegram-questions p:last-child { max-width: 720px; margin-bottom: 0; color: var(--on-dark); }
 .telegram-general-button { min-width: 245px; }
 .telegram-sales-mode .legal-note { display: none; }
-.legal-note { max-width: 760px; margin: 45px auto 0; color: var(--muted); font-size: 13px; text-align: center; }
+.legal-note { max-width: 760px; margin: 36px auto 0; color: var(--muted); font-size: 13px; text-align: center; }
 .limits { position: relative; width: 100%; max-width: none; padding-inline: max(24px, calc((100% - var(--max)) / 2)); display: grid; grid-template-columns: 1fr 1fr; gap: 90px; background: repeating-linear-gradient(-45deg, var(--navy-deep), var(--navy-deep) 18px, var(--navy) 18px, var(--navy) 36px); color: var(--inv-ink); }
 .limits::before { position: absolute; top: -16px; left: 7%; width: 150px; height: 8px; background: var(--signal); content: ""; }
 .limits > * { min-width: 0; }
