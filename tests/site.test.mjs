@@ -373,13 +373,14 @@ test('результаты объясняют переход от чат-бот�
   assert.match(html, /linkedin\.com\/posts\/stevenbartlett/);
 });
 
-test('важные названия секций визуально главнее поясняющих заголовков', () => {
+test('у каждой секции есть метка и заголовок, оба адаптивные', () => {
   const html = readFileSync(pagePath, 'utf8');
   const css = readFileSync(cssPath, 'utf8');
 
   for (const label of ['Что изменится', 'Программа', 'Что будет на выходе', 'Как устроена программа', 'Примеры результатов', 'Практический опыт', 'Тарифы']) {
     assert.match(html, new RegExp(`<p class="eyebrow section-label">${label}</p>`));
   }
+  // иерархия изменена осознанно: метка стала мелкой метой, главным стал заголовок
   assert.match(css, /\.section-label\s*\{[^}]*font-size:\s*clamp\(/s);
   assert.match(css, /\.section-subtitle\s*\{[^}]*font-size:\s*clamp\(/s);
 });
