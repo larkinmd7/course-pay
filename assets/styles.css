@@ -661,3 +661,27 @@ footer > div:first-child { display: grid; gap: 5px; }
 .outcomes-intro-solo { display: block; }
 .outcomes-intro-solo .outcomes-copy { max-width: 880px; }
 .outcomes-intro-solo .outcomes-lead { max-width: 68ch; }
+
+/* Появление блоков при скролле. Состояние ставит motion.mjs, поэтому без JS
+   и при prefers-reduced-motion всё видно сразу — ничего не прячем в CSS «на всякий». */
+[data-reveal="idle"] { opacity: 0; transform: translate3d(0, 18px, 0); }
+[data-reveal="in"] { opacity: 1; transform: none; transition: opacity .55s cubic-bezier(.2,.7,.3,1), transform .55s cubic-bezier(.2,.7,.3,1); }
+
+/* Внутри одной сетки карточки въезжают лесенкой, а не хором */
+.module[data-reveal="in"]:nth-child(2n) { transition-delay: .07s; }
+.example-card[data-reveal="in"]:nth-child(3n+2) { transition-delay: .06s; }
+.example-card[data-reveal="in"]:nth-child(3n) { transition-delay: .12s; }
+.case-card[data-reveal="in"]:nth-child(2) { transition-delay: .08s; }
+.case-card[data-reveal="in"]:nth-child(3) { transition-delay: .16s; }
+.factory-steps li[data-reveal="in"]:nth-child(2) { transition-delay: .06s; }
+.factory-steps li[data-reveal="in"]:nth-child(3) { transition-delay: .12s; }
+.factory-steps li[data-reveal="in"]:nth-child(4) { transition-delay: .18s; }
+.factory-steps li[data-reveal="in"]:nth-child(5) { transition-delay: .24s; }
+.facts div[data-reveal="in"]:nth-child(2) { transition-delay: .05s; }
+.facts div[data-reveal="in"]:nth-child(3) { transition-delay: .1s; }
+.facts div[data-reveal="in"]:nth-child(4) { transition-delay: .15s; }
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] { opacity: 1 !important; transform: none !important; transition: none !important; }
+  .orbit-ring-outer, .orbit-ring-inner, .orbit-core::before, .orbit-satellite { animation: none; }
+}
