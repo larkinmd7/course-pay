@@ -20,6 +20,7 @@ const REVEAL_SELECTOR = [
   '.factory-steps li',
   '.factory-shots figure',
   '.platform-shots figure',
+  '.demo-figure',
   '.outcomes-cards article',
   '.product-proof article',
   '.education-card',
@@ -147,4 +148,39 @@ export function initMotion(root = document) {
     observer.disconnect();
     globalThis.removeEventListener('scroll', onScroll);
   };
+}
+
+/**
+ * Демо-ролики интерфейсов. Не autoplay в разметке: видео стартует только когда
+ * попало в экран, и ставится на паузу, когда ушло. Так страница не тащит мегабайты
+ * ради блока, до которого человек не долистал, и не греет телефон вхолостую.
+ * При prefers-reduced-motion не играет вообще — остаётся постер.
+ */
+export function initDemoVideos(root = document) {
+  const videos = [...root.querySelectorAll('[data-demo-video]')];
+  if (videos.length === 0) return undefined;
+
+  if (prefersReducedMotion() || typeof globalThis.IntersectionObserver !== 'function') {
+    // Постера достаточно: кадр статичен, смысл блока не теряется.
+    videos.forEach((video) => { video.controls = true; video.preload = 'metadata'; });
+    return undefined;
+  }
+
+  const observer = new globalThis.IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      const video = entry.target;
+      if (entry.isIntersecting) {
+        if (!video.src) {
+          video.src = video.poster.replace(/\.jpg$/, '.mp4');
+          video.load();
+        }
+        video.play?.().catch(() => { /* автовоспроизведение могли запретить — остаётся постер */ });
+      } else {
+        video.pause?.();
+      }
+    });
+  }, { threshold: 0.25 });
+
+  videos.forEach((video) => observer.observe(video));
+  return () => observer.disconnect();
 }

@@ -5,7 +5,7 @@ import { initTestimonialCarousel } from './testimonial-carousel.mjs';
 import { initTelegramSalesMode } from './telegram-sales.mjs';
 import { initMetrikaForPage } from './metrika.mjs';
 import { initStickyCta } from './sticky-cta.mjs';
-import { initMotion } from './motion.mjs';
+import { initMotion, initDemoVideos } from './motion.mjs';
 
 improveVisibleTypography();
 initHeroOrbit(document.querySelector('[data-hero-orbit]'));
@@ -16,3 +16,4 @@ initDiscountTimer(document, globalThis.location.pathname);
 initStickyCta(document, globalThis.location.pathname);
 initMetrikaForPage(document, globalThis.location.pathname);
 initMotion(document);
+initDemoVideos(document);
