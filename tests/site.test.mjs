@@ -239,7 +239,7 @@ test('mutable CSS и JavaScript получают новую версию без 
 test('главная показывает утверждённый продукт и тарифы', () => {
   const html = readFileSync(pagePath, 'utf8');
   const required = [
-    'ИИ для экспертов: личная операционная система и AI-инструменты под свою нишу',
+    'ИИ для экспертов и предпринимателей: личная операционная система и AI-инструменты под свою нишу',
     'модули на платформе',
     'Старт',
     '49 900 ₽',
@@ -266,14 +266,12 @@ test('оплата от компании или ИП ведёт в Telegram @sta
   assert.doesNotMatch(answer, /mailto:/);
 });
 
-test('обращение по возврату ведёт в Telegram @starsevast', () => {
+test('на странице есть контакт для обращений в Telegram, без почты в вопросах', () => {
   const html = readFileSync(pagePath, 'utf8');
-  const questionStart = html.indexOf('<summary>Как оформить возврат?</summary>');
-  const questionEnd = html.indexOf('</details>', questionStart);
-  const answer = html.slice(questionStart, questionEnd);
-
-  assert.match(answer, /<a href="https:\/\/t\.me\/starsevast"[^>]*>@starsevast<\/a>/);
-  assert.doesNotMatch(answer, /mailto:/);
+  assert.match(html, /<a href="https:\/\/t\.me\/starsevast"[^>]*>@starsevast<\/a>/);
+  const faqStart = html.indexOf('<div class="faq-list">');
+  const faqEnd = html.indexOf('</section>', faqStart);
+  assert.doesNotMatch(html.slice(faqStart, faqEnd), /mailto:/);
 });
 
 test('интерактивная орбита ограничивает смещение относительно указателя', async () => {
@@ -356,7 +354,7 @@ test('практикум предлагает модули и еженедель
   assert.doesNotMatch(html, /<time datetime=|class="schedule-calendar"|30 августа|17 сентября|Трёхнедельная|За три недели/);
   assert.match(html, /Четыре групповые консультации/);
   assert.doesNotMatch(html, /id="platform"|href="#platform"/);
-  assert.match(html, /Шесть модулей доступны на нашей учебной платформе/);
+  assert.match(html, /Шесть модулей на платформе/);
   for (const [before, current] of [['49 900', '39 900'], ['69 900', '59 900'], ['139 900', '99 900']]) {
     assert.ok(html.includes(`${before} ₽</s><span class="price-current">${before} ₽`));
   }
@@ -420,8 +418,8 @@ test('страница показывает примеры инструмент�
   for (const value of ['Контент-конвейер целиком', 'Утренний пульт управления', 'От списка позиций до счёта']) {
     assert.match(html, new RegExp(value));
   }
-  // секция «Границы программы» убрана, её условия перенесены в блок вопросов
-  assert.match(html, /Разработка проекта за участника не входит ни в один тариф/);
+  // секция «Границы программы» и вопрос про состав тарифов убраны по решению владельца:
+  // условия остаются только в публичной оферте
 });
 
 test('блок автора содержит фото и подтверждённые факты', () => {
