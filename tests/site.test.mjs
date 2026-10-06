@@ -360,15 +360,14 @@ test('практикум предлагает модули и еженедель
   }
 });
 
-test('результаты объясняют переход от чат-ботов к созданию продуктов через локальный визуал', () => {
+test('результаты объясняют переход от чат-ботов к созданию продуктов', () => {
   const html = readFileSync(pagePath, 'utf8');
 
-  assert.equal(existsSync(aiAdoptionImagePath), true, 'визуал про уровни использования AI должен храниться локально');
-  assert.match(html, /src="assets\/ai-adoption-visual\.jpg"/);
-  assert.match(html, /class="ai-adoption-visual"/);
+  // Схема уровней использования AI со ссылкой на LinkedIn убрана по решению от 06.10.2026:
+  // блок должен держаться на обещании результата, а не на чужой инфографике.
+  // Файл assets/ai-adoption-visual.jpg остаётся в репозитории на случай возврата.
   assert.match(html, /созданию собственных продуктов/i);
-  assert.match(html, /Красная точка/);
-  assert.match(html, /linkedin\.com\/posts\/stevenbartlett/);
+  assert.doesNotMatch(html, /ai-adoption-visual\.jpg/);
 });
 
 test('у каждой секции есть метка и заголовок, оба адаптивные', () => {
