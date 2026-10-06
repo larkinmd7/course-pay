@@ -634,8 +634,6 @@ footer > div:first-child { display: grid; gap: 5px; }
 
 /* Точка входа в оплату там, где человек только что получил доказательство */
 .section-cta { margin: 56px 0 0; display: flex; flex-wrap: wrap; gap: 12px 22px; align-items: center; }
-.section-cta span { color: var(--muted); font-size: 15px; }
-.section-cta-dark span { color: var(--on-dark-dim); }
 
 /* Шапка остаётся на экране: единственный путь к оплате на мобильном */
 @media (max-width: 900px) {
@@ -912,4 +910,32 @@ footer > div:first-child { display: grid; gap: 5px; }
   /* Телефон во всю ширину колонки делал первый экран выше 1000px и уводил
      заметку с таймером под сгиб. 288px держат блок в пределах экрана ноутбука. */
   .hero-demo { grid-column: 2; grid-row: 1 / span 2; align-self: start; justify-self: end; width: min(288px, 100%); }
+}
+
+/* Кнопка темы: у <button> в Safari своя внутренняя геометрия, из-за которой
+   иконка вставала не по центру кружка. Обнуляем всё и центруем сам svg. */
+.theme-toggle { padding: 0; line-height: 0; -webkit-appearance: none; appearance: none; flex: none; }
+.theme-toggle svg { display: block; margin: 0 auto; }
+
+/* Телефон первого экрана на мобильном крупнее: 152px читались как миниатюра.
+   Заметка рядом сохраняет колонку не уже 180px, иначе текст уходит в столбик. */
+@media (max-width: 1023px) {
+  .hero { grid-template-columns: minmax(176px, 30%) minmax(180px, 1fr); column-gap: 18px; }
+  .hero-demo { width: 100%; }
+}
+@media (max-width: 430px) {
+  .hero { grid-template-columns: 158px minmax(0, 1fr); column-gap: 14px; }
+  .hero-demo { width: 158px; }
+}
+
+/* Ниже 560px колонка рядом с телефоном уже 186px: «предпринимателей» рвётся
+   переносом посреди слова. Ставим в стопку — заметка идёт полной строкой
+   сразу над телефоном и работает его текстовой парой по вертикали. */
+@media (max-width: 560px) {
+  .hero { grid-template-columns: minmax(0, 1fr); column-gap: 0; }
+  .hero-copy, .hero-note, .hero-demo { grid-column: 1; grid-row: auto; }
+  .hero-note { margin: 0; max-width: none; }
+  .hero-note p { hyphens: manual; }
+  .hero-demo { width: min(248px, 68%); margin-top: 4px; justify-self: start; }
+  .hero-demo figcaption { font-size: 13px; }
 }
