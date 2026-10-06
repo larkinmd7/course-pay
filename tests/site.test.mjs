@@ -181,7 +181,7 @@ test('главный скрипт подключает Метрику, а succes
 
   assert.match(main, /from ['"]\.\/metrika\.mjs['"]/);
   assert.match(main, /initMetrikaForPage\(/);
-  assert.match(metrika, /webvisor:\s*false/);
+  assert.match(metrika, /webvisor:\s*true/);
   for (const path of Object.keys(successPages)) {
     const resultPath = fileURLToPath(new URL(`../${path}`, import.meta.url));
     const page = readFileSync(resultPath, 'utf8');
@@ -197,7 +197,7 @@ test('политика раскрывает использование суще�
   assert.match(privacy, /Яндекс Метрика/);
   assert.match(privacy, /101476340/);
   assert.match(privacy, /cookie/i);
-  assert.match(privacy, /Вебвизор[^<]*отключён/);
+  assert.match(privacy, /Вебвизор[^<]*включён/);
   assert.doesNotMatch(privacy, /Сайт не использует системы веб-аналитики/);
   assert.match(privacy, /На всех страницах сайта используется Яндекс Метрика/);
 });
