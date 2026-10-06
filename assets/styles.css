@@ -811,7 +811,7 @@ footer > div:first-child { display: grid; gap: 5px; }
 :root[data-theme="dark"] {
   color-scheme: dark;
   --paper: #01061C;
-  --surface: #071040;
+  --surface: #0C1747;
   --ink: #EDF1FF;
   --muted: #98A4CC;
   --line: rgba(169,194,255,.16);
@@ -956,3 +956,8 @@ footer > div:first-child { display: grid; gap: 5px; }
 @media (max-width: 580px) {
   .brand-logo { width: 88px; height: 26px; }
 }
+
+/* Сетка модулей шла сразу после блока «что будет на выходе» — заголовок секции
+   оставался далеко вверху, и было непонятно, что за карточки идут дальше. */
+.modules-head { margin: 0 0 32px; }
+.modules-title { margin: 0; font-size: clamp(24px, 2.4vw, 34px); line-height: 1.1; letter-spacing: -.02em; }
