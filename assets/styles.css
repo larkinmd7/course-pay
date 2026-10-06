@@ -413,7 +413,6 @@ footer > div:first-child { display: grid; gap: 5px; }
 @media (max-width: 580px) {
   .topbar, .hero, .section, .facts, footer { width: min(calc(100% - 32px), var(--max)); }
   .topbar { min-height: 70px; }
-  .brand > span:last-child { display: none; }
   .hero { padding: 58px 0 50px; }
   h1 { font-size: clamp(30px, 7.8vw, 40px); }
   .hero-actions { align-items: flex-start; flex-direction: column; }
