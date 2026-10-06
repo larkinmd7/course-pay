@@ -145,7 +145,7 @@ h2 { margin-bottom: 28px; font-size: clamp(26px, 3.4vw, 44px); line-height: 1.1;
 .module-topics h4 { margin: 0 0 14px; color: var(--royal); font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
 .module-topics ul { margin: 0; padding: 0; list-style: none; }
 .module-topics li { position: relative; padding: 6px 0 6px 21px; }
-.module-topics li::before { position: absolute; left: 0; color: var(--royal); content: "↳"; }
+.module-topics li::before { position: absolute; left: 0; top: .62em; width: 5px; height: 5px; border-radius: 50%; background: var(--royal); content: ""; }
 .module-practice { margin: 28px 0 0; padding-top: 22px; border-top: 1px solid var(--line); color: var(--muted); }
 .module-result { margin: 24px 0 0; padding: 20px; background: white; color: var(--ink); }
 .module:nth-child(2) .module-goal, .module:nth-child(2) .module-practice, .module:nth-child(6) .module-goal, .module:nth-child(6) .module-practice { color: var(--on-dark); }
@@ -311,12 +311,12 @@ h2 { margin-bottom: 28px; font-size: clamp(26px, 3.4vw, 44px); line-height: 1.1;
 .testimonial-document:hover img { opacity: .93; }
 .pricing { padding-bottom: 150px; }
 .pricing-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; align-items: stretch; }
-.price-card { min-height: 620px; padding: 30px; border: 1px solid var(--ink); background: var(--surface); display: flex; flex-direction: column; }
-.price-card-featured { position: relative; margin-top: -22px; padding-top: 52px; border-color: var(--navy); background: var(--navy); color: white; box-shadow: none; }
-.popular-tag { position: absolute; top: 0; left: 0; padding: 9px 14px; border-radius: 0 0 var(--radius-xs) 0; background: var(--royal); color: white; font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 600; text-transform: uppercase; }
-.price-card-pro { border-top: 8px solid var(--royal); }
+.price-card { min-height: 620px; padding: 30px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); display: flex; flex-direction: column; }
+.price-card-featured { position: relative; margin-top: -22px; padding-top: 52px; border-color: var(--navy); border-radius: var(--radius); background: var(--navy); color: white; box-shadow: none; }
+.popular-tag { position: absolute; top: 0; left: 0; padding: 9px 14px; border-radius: var(--radius) 0 var(--radius-xs) 0; background: var(--royal); color: white; font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 600; text-transform: uppercase; }
+.price-card-pro { border-top: 1px solid var(--line); }
 .tariff-label { margin-bottom: 12px; }
-.price-card h3 { margin-bottom: 10px; font-size: 38px; }
+.price-card h3 { margin-bottom: 10px; font-size: 32px; }
 .price { font-size: 38px; font-weight: 700; letter-spacing: -.04em; }
 .price-card ul { margin: 28px 0 38px; padding: 0; list-style: none; }
 .price-card li { position: relative; padding: 13px 0 13px 24px; border-top: 1px solid var(--line); }
@@ -324,7 +324,7 @@ h2 { margin-bottom: 28px; font-size: clamp(26px, 3.4vw, 44px); line-height: 1.1;
 .price-card li small { display: block; margin-top: 7px; color: var(--muted); font-size: 12px; line-height: 1.45; }
 .price-card-featured li { border-color: var(--line-dark); }
 .price-card-featured li small { color: var(--on-dark-dim); }
-.price-card li::before { position: absolute; left: 0; color: var(--royal); content: "↳"; }
+.price-card li::before { position: absolute; left: 0; top: 1.25em; width: 5px; height: 5px; border-radius: 50%; background: var(--royal); content: ""; }
 .price-card-featured li::before { color: var(--signal); }
 .price-card .bonus-item { margin-top: 8px; border: 1px solid var(--royal); padding: 14px 14px 14px 24px; }
 .price-card-featured .bonus-item { border-color: var(--signal); }
@@ -534,3 +534,5 @@ footer > div:first-child { display: grid; gap: 5px; }
 @media (max-width: 860px) {
   .hero-orbit { display: none; }
 }
+
+.price-card-featured .price-current { color: var(--signal); }
