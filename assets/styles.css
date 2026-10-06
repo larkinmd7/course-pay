@@ -787,9 +787,9 @@ footer > div:first-child { display: grid; gap: 5px; }
    говорит ровно то же самое. Лучше честно убрать, чем сжимать текст в столбик.
    На первом экране телефон встаёт в пару с заметкой о формате: там текст есть. */
 @media (max-width: 1023px) {
-  .hero { grid-template-columns: 136px minmax(0, 1fr); column-gap: 20px; }
+  .hero { grid-template-columns: 152px minmax(0, 1fr); column-gap: 20px; }
   .hero-copy { grid-column: 1 / -1; grid-row: 1; }
-  .hero-demo { grid-column: 1; grid-row: 2; width: 136px; display: flex; flex-direction: column; gap: 10px; }
+  .hero-demo { grid-column: 1; grid-row: 2; width: 152px; display: flex; flex-direction: column; gap: 10px; }
   .hero-demo .phone-frame { height: auto; }
   .hero-demo figcaption { order: 1; font-size: 12px; }
   .hero-note { grid-column: 2; grid-row: 2; margin-left: 0; align-self: center; }
@@ -800,15 +800,17 @@ footer > div:first-child { display: grid; gap: 5px; }
   .hero-note p { overflow-wrap: break-word; hyphens: auto; }
 }
 @media (max-width: 430px) {
-  .hero { grid-template-columns: 116px minmax(0, 1fr); column-gap: 16px; }
-  .hero-demo { width: 116px; }
+  .hero { grid-template-columns: 128px minmax(0, 1fr); column-gap: 14px; }
+  .hero-demo { width: 128px; }
 }
 
 /* Шестой модуль — финал программы и единственный с демо. Растягиваем его на всю
    ширину сетки: только так паре «телефон + результат» хватает места на любой
    ширине, и заодно блок модулей получает смысловую точку в конце. */
 .module:nth-child(6) { grid-column: 1 / -1; }
-.module:nth-child(6) .module-tail { grid-template-columns: 150px minmax(260px, 1fr); max-width: 760px; margin-top: 18px; }
+.module:nth-child(6) .module-tail { grid-template-columns: 268px minmax(280px, 620px); max-width: none; margin-top: 22px; gap: 40px; }
+.module:nth-child(6) .module-result { font-size: 18px; }
+.module:nth-child(6) .module-demo { width: 100%; }
 
 
 /* Ниже 760px колонка под текст рядом с телефоном становится уже 190px и результат
@@ -821,9 +823,9 @@ footer > div:first-child { display: grid; gap: 5px; }
      не рассыпался на два слова в строке, карточка отдаёт свои отступы,
      а плашка результата теряет подложку и живёт голым текстом. */
   .module:nth-child(6) { padding-inline: 18px; }
-  /* Телефон растёт вместе с экраном: на 390 он 104px, к 760 доходит до 150px —
+  /* Телефон растёт вместе с экраном: на 390 он 118px, к 760 доходит до 220px —
      иначе рядом с широкой колонкой текста выглядит недомерком. */
-  .module:nth-child(6) .module-tail { grid-template-columns: clamp(104px, 21vw, 150px) minmax(0, 1fr); gap: clamp(14px, 3vw, 22px); align-items: center; }
+  .module:nth-child(6) .module-tail { grid-template-columns: clamp(118px, 26vw, 220px) minmax(0, 1fr); gap: clamp(14px, 3vw, 24px); align-items: center; }
   .module-demo { width: 100%; }
   .module-demo figcaption { font-size: 11px; }
   .module:nth-child(6) .module-result { padding: 0; background: none; font-size: 15px; line-height: 1.45; }
