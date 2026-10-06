@@ -6,6 +6,14 @@
   <meta name="description" content="Практикум Михаила Ларькина: модули на учебной платформе и четыре групповые консультации по понедельникам; личный AI-контекст, интеграции, агенты, свой инструмент и публикация.">
   <title>ИИ для экспертов — практикум Михаила Ларькина</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><rect width=%2264%22 height=%2264%22 rx=%2212%22 fill=%22%232653ff%22/><text x=%2232%22 y=%2242%22 text-anchor=%22middle%22 font-size=%2230%22 fill=%22white%22>AI</text></svg>">
+  <script>
+    // Выполняется до отрисовки: иначе при тёмной теме страница моргает белым.
+    try {
+      var t = localStorage.getItem('ai-prime-theme');
+      if (t !== 'dark' && t !== 'light') t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      document.documentElement.dataset.theme = t;
+    } catch (e) { document.documentElement.dataset.theme = 'light'; }
+  </script>
   <link rel="stylesheet" href="assets/styles.css?v=20261003-discount">
   <script src="assets/main.js?v=20261003-discount" type="module"></script>
 </head>
@@ -22,6 +30,10 @@
       <a href="#pricing">Тарифы</a>
       <a href="#faq">Вопросы</a>
     </nav>
+    <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false" aria-label="Включить тёмную тему">
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.1M12 19.3v2.1M4.2 4.2l1.5 1.5M18.3 18.3l1.5 1.5M2.6 12h2.1M19.3 12h2.1M4.2 19.8l1.5-1.5M18.3 5.7l1.5-1.5"/></svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.2A8.4 8.4 0 1 1 9.8 4a6.8 6.8 0 0 0 10.2 10.2Z"/></svg>
+    </button>
     <a class="button button-small" href="#pricing">Выбрать тариф</a>
   </header>
 

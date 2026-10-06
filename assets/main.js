@@ -6,7 +6,9 @@ import { initTelegramSalesMode } from './telegram-sales.mjs';
 import { initMetrikaForPage } from './metrika.mjs';
 import { initStickyCta } from './sticky-cta.mjs';
 import { initMotion, initDemoVideos } from './motion.mjs';
+import { initThemeToggle } from './theme.mjs';
 
+initThemeToggle(document);
 improveVisibleTypography();
 initHeroOrbit(document.querySelector('[data-hero-orbit]'));
 initTestimonialCarousel(document.querySelector('[data-testimonial-carousel]'));
