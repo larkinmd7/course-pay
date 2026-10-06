@@ -832,3 +832,11 @@ footer > div:first-child { display: grid; gap: 5px; }
   .module-demo figcaption { font-size: 11px; }
   .module:nth-child(6) .module-result { padding: 0; background: none; font-size: 15px; line-height: 1.45; }
 }
+
+/* Главная кнопка первого экрана на мобильном — во всю ширину. Палец попадает
+   куда угодно, а не только в узкий прямоугольник слева. */
+@media (max-width: 760px) {
+  .hero-actions { align-items: stretch; flex-direction: column; gap: 18px; }
+  .hero-actions .button { width: 100%; min-height: 58px; font-size: 17px; }
+  .hero-actions .text-link { align-self: flex-start; }
+}
