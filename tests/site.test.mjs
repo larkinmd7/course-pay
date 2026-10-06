@@ -673,7 +673,7 @@ test('опубликована новая оферта от 3 октября 202
   const page = readFileSync(offerPagePath, 'utf8');
   const pdfText = execFileSync('pdftotext', [offerPdfPath, '-'], { encoding: 'utf8' });
   assert.match(page, /3&nbsp;октября 2026/);
-  assert.match(page, /public-offer\.pdf\?v=20261003/);
+  assert.match(page, /public-offer\.pdf\?v=20261006/);
   assert.match(pdfText, /Редакция от 3 октября 2026 года/);
   assert.match(pdfText, /Севастьянов Матвей Алексеевич/);
   assert.match(pdfText, /661305367793/);
@@ -765,7 +765,10 @@ test('обещание возврата на сайте подкреплено �
   // в оферте, страница обещает то, чего договор не даёт, — это прямой риск спора.
   assert.match(
     pdfText,
-    /(трёх|3) (календарных )?дн(ей|я) (с момента|после) оплаты/i,
+    /3\s*\(трёх\)\s*календарных\s+дней\s+после\s+оплаты/i,
     'в оферте нет пункта про трёхдневное окно возврата — обещание на сайте ничем не обеспечено',
   );
+  // pdftotext переносит строки внутри абзаца, поэтому пробелы в шаблонах гибкие
+  assert.match(pdfText, /возврат\s+уплаченной\s+суммы\s+в\s+полном\s+объёме/i);
+  assert.match(pdfText, /независимо\s+от\s+объёма\s+фактически\s+оказанных\s+услуг/i);
 });
