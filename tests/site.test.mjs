@@ -669,14 +669,26 @@ test('новые тарифы оформляются через менеджер
   assert.doesNotMatch(html, /href="https:\/\/yookassa.ru\/my\/i\//);
 });
 
-test('опубликована новая оферта от 1 октября 2026', () => {
+test('опубликована новая оферта от 3 октября 2026', () => {
   const page = readFileSync(offerPagePath, 'utf8');
   const pdfText = execFileSync('pdftotext', [offerPdfPath, '-'], { encoding: 'utf8' });
-  assert.match(page, /1&nbsp;октября 2026/);
-  assert.match(page, /public-offer\.pdf\?v=20261001/);
-  assert.match(pdfText, /Редакция от 1 октября 2026 года/);
+  assert.match(page, /3&nbsp;октября 2026/);
+  assert.match(page, /public-offer\.pdf\?v=20261003/);
+  assert.match(pdfText, /Редакция от 3 октября 2026 года/);
   assert.match(pdfText, /Севастьянов Матвей Алексеевич/);
   assert.match(pdfText, /661305367793/);
+});
+
+test('реквизиты в подвале совпадают со стороной договора из оферты', () => {
+  const html = readFileSync(pagePath, 'utf8');
+  const pdfText = execFileSync('pdftotext', [offerPdfPath, '-'], { encoding: 'utf8' });
+  // Подвал обязан называть того, кто принимает оплату и отвечает по договору.
+  // Расхождение с офертой вводит потребителя в заблуждение относительно стороны сделки.
+  assert.match(html, /ИП Севастьянов Матвей Алексеевич/);
+  assert.match(html, /661305367793/);
+  assert.match(html, /325730000048020/);
+  assert.match(pdfText, /Исполнитель: Индивидуальный предприниматель Севастьянов Матвей Алексеевич/);
+  assert.doesNotMatch(html, /ИП Ларькин Михаил Дмитриевич/);
 });
 
 const successPages = {
