@@ -66,7 +66,7 @@
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 html { overflow-x: clip; }
-body { margin: 0; background: var(--paper); line-height: 1.55; overflow-x: clip; }
+body { margin: 0; background: var(--paper); color: var(--ink); line-height: 1.55; overflow-x: clip; }
 body::after {
   position: fixed;
   inset: 0;
@@ -814,8 +814,8 @@ footer > div:first-child { display: grid; gap: 5px; }
    не добирает контраста, это зафиксировано в AGENTS.md. */
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --paper: #050B2A;
-  --surface: #0B1437;
+  --paper: #01061C;
+  --surface: #071040;
   --ink: #EDF1FF;
   --muted: #98A4CC;
   --line: rgba(169,194,255,.16);
@@ -826,7 +826,7 @@ footer > div:first-child { display: grid; gap: 5px; }
   --fill-soft: rgba(95,141,255,.14);
   --royal-rgb: 127,163,255;
   --ink-soft: rgba(237,241,255,.74);
-  --navy-deep: #02040F;
+  --navy-deep: #000208;
 
   --inv-bg: #F2F5FF;
   --inv-ink: #050B2A;
@@ -902,3 +902,14 @@ footer > div:first-child { display: grid; gap: 5px; }
 .module-result { margin-top: auto; }
 .module-tail { margin-top: auto; }
 .module-tail .module-result { margin-top: 0; }
+
+/* Первый экран: заметка о формате уходит в нижний левый угол, а заголовок,
+   подзаголовок и телефон поднимаются вверх — пустое поле сверху исчезает. */
+@media (min-width: 1024px) {
+  .hero { grid-template-rows: auto 1fr; align-items: start; padding-top: 64px; row-gap: 0; }
+  .hero-copy { grid-column: 1; grid-row: 1; align-self: start; }
+  .hero-note { grid-column: 1; grid-row: 2; align-self: end; margin: 44px 0 0; max-width: 460px; }
+  /* Телефон во всю ширину колонки делал первый экран выше 1000px и уводил
+     заметку с таймером под сгиб. 288px держат блок в пределах экрана ноутбука. */
+  .hero-demo { grid-column: 2; grid-row: 1 / span 2; align-self: start; justify-self: end; width: min(288px, 100%); }
+}
