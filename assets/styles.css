@@ -729,3 +729,25 @@ footer > div:first-child { display: grid; gap: 5px; }
 @media (max-width: 900px) {
   .hero-copy, .hero-note, .hero-demo { grid-column: 1; grid-row: auto; }
 }
+
+/* Композиция вертикальных демо.
+   Телефон 9:19.5 рядом с широкой колонкой всегда оставляет пустоту сбоку.
+   Два решения: в модуле текст обтекает его, на первом экране он занимает
+   колонку целиком и подрезается нижней границей секции — так кадр выглядит
+   решением, а не случайностью. */
+.module-tail { margin-top: 26px; display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 26px; align-items: center; }
+.module-tail .module-result { margin: 0; }
+.module-demo { width: 150px; margin: 0; gap: 8px; }
+.module-demo figcaption { font-size: 12px; }
+.module { overflow: hidden; }
+
+.hero-demo { width: 100%; position: relative; }
+.hero-demo .phone-frame { height: clamp(300px, 34vw, 430px); overflow: hidden; padding-bottom: 0; border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+.hero-demo .phone-frame video { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+.hero-demo figcaption { order: -1; }
+
+@media (max-width: 900px) {
+  .hero-demo { width: min(260px, 70%); }
+  .module-tail { grid-template-columns: 1fr; gap: 20px; }
+  .module-demo { width: 150px; }
+}
