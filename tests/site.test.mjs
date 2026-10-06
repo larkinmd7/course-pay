@@ -753,3 +753,19 @@ test('nginx отдаёт ES-модули .mjs с JavaScript MIME при вклю
   assert.match(nginx, /types\s*\{[^}]*application\/javascript\s+mjs;[^}]*\}/s);
   assert.match(nginx, /X-Content-Type-Options\s+nosniff/);
 });
+
+test('обещание возврата на сайте подкреплено пунктом в оферте', () => {
+  const html = readFileSync(pagePath, 'utf8');
+  const pdfText = execFileSync('pdftotext', [offerPdfPath, '-'], { encoding: 'utf8' });
+
+  const promisesWindow = /Первые 3 дня после оплаты — возврат полной суммы/.test(html);
+  if (!promisesWindow) return;
+
+  // Сайт заявляет безусловный возврат в трёхдневное окно. Если такого пункта нет
+  // в оферте, страница обещает то, чего договор не даёт, — это прямой риск спора.
+  assert.match(
+    pdfText,
+    /(трёх|3) (календарных )?дн(ей|я) (с момента|после) оплаты/i,
+    'в оферте нет пункта про трёхдневное окно возврата — обещание на сайте ничем не обеспечено',
+  );
+});
