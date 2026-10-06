@@ -130,15 +130,16 @@ h2 { margin-bottom: 28px; font-size: clamp(28px, 3.8vw, 50px); line-height: 1.04
 .prep-card p { max-width: 690px; margin: 0; color: var(--on-dark); font-size: 18px; }
 .prep-index { display: block; margin-bottom: 18px; color: var(--signal); font-family: "IBM Plex Mono", monospace; font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
 .module-grid { margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; list-style: none; align-items: start; }
-.module { min-height: 0; padding: 44px; border: 0; border-radius: var(--radius); background: var(--surface); display: flex; flex-direction: column; }
-.module:nth-child(2), .module:nth-child(6) { border-color: var(--navy); background: var(--navy); color: var(--inv-ink); }
-.module:nth-child(4) { border-color: var(--royal-soft); background: var(--fill-soft); }
+/* Плашка модуля. Все шесть карточек одного цвета — инвертированные модули 2 и 6
+   убраны вместе со всеми правилами текста на тёмном.
+   Фон обязан быть --paper, а не --surface: секция .program залита --surface,
+   и при одинаковом значении плашки просто исчезают — ровно так и было.
+   Тот же приём, что у .program-outcomes article в этой же секции. */
+.module { min-height: 0; padding: 44px; border: 0; border-radius: var(--radius); background: var(--paper); display: flex; flex-direction: column; }
 .module-heading { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
 .module-number, .module-stage { font-family: "IBM Plex Mono", monospace; font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
 .module-number { display: grid; width: 42px; aspect-ratio: 1; place-items: center; border: 1px solid currentColor; color: var(--royal); }
 .module-stage { color: var(--muted); }
-.module:nth-child(2) .module-number, .module:nth-child(6) .module-number { color: var(--signal); }
-.module:nth-child(2) .module-stage, .module:nth-child(6) .module-stage { color: var(--on-dark-dim); }
 .module h3 { max-width: 580px; margin: 42px 0 18px; font-size: clamp(27px, 2.6vw, 38px); line-height: 1.08; letter-spacing: -.035em; }
 .module p { max-width: none; }
 .module-goal { margin-bottom: 26px; color: var(--muted); font-size: 17px; }
@@ -150,11 +151,6 @@ h2 { margin-bottom: 28px; font-size: clamp(28px, 3.8vw, 50px); line-height: 1.04
 .module-practice { margin: 28px 0 0; padding-top: 22px; border-top: 1px solid var(--line); color: var(--muted); }
 .module-result { margin: 24px 0 0; padding: 18px 20px; border-radius: var(--radius-sm); background: var(--fill-soft); color: var(--ink); font-size: 17px; }
 .module-result strong { display: block; margin-bottom: 4px; color: var(--royal); font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }
-.module:nth-child(2) .module-result, .module:nth-child(6) .module-result { background: var(--inv-fill); color: var(--inv-soft); }
-.module:nth-child(2) .module-result strong, .module:nth-child(6) .module-result strong { color: var(--signal); }
-.module:nth-child(2) .module-goal, .module:nth-child(2) .module-practice, .module:nth-child(6) .module-goal, .module:nth-child(6) .module-practice { color: var(--on-dark); }
-.module:nth-child(2) .module-topics, .module:nth-child(2) .module-practice, .module:nth-child(6) .module-topics, .module:nth-child(6) .module-practice { border-color: var(--line-dark); }
-.module:nth-child(2) .module-topics h4, .module:nth-child(2) .module-topics li::before, .module:nth-child(6) .module-topics h4, .module:nth-child(6) .module-topics li::before { color: var(--signal); }
 .program-outcomes { margin-top: 72px; padding-top: 34px; border-top: 1px solid var(--ink); }
 .outcomes-intro { margin: 28px 0 28px; display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(340px, .72fr); gap: clamp(30px, 5vw, 70px); align-items: center; }
 .outcomes-copy .section-subtitle { max-width: 760px; }
@@ -627,10 +623,6 @@ footer > div:first-child { display: grid; gap: 5px; }
 .module-more .module-goal { margin: 6px 0 22px; }
 .module-more .module-topics { padding-top: 0; }
 .module-more .module-practice { margin-top: 24px; }
-.module:nth-child(2) .module-more, .module:nth-child(6) .module-more { border-color: var(--line-dark); }
-.module:nth-child(2) .module-more summary, .module:nth-child(6) .module-more summary { color: var(--on-dark-dim); }
-.module:nth-child(2) .module-more summary::after, .module:nth-child(6) .module-more summary::after { color: var(--signal); }
-.module:nth-child(2) .module-more summary:hover, .module:nth-child(6) .module-more summary:hover { color: var(--inv-ink); }
 
 /* Точка входа в оплату там, где человек только что получил доказательство */
 .section-cta { margin: 56px 0 0; display: flex; flex-wrap: wrap; gap: 12px 22px; align-items: center; }
@@ -702,7 +694,6 @@ footer > div:first-child { display: grid; gap: 5px; }
 .demo-figure figcaption { color: var(--muted); font-size: 14px; }
 
 .module-demo { margin: 26px 0 0; display: flex; flex-direction: column; gap: 10px; width: 186px; }
-.module:nth-child(6) .module-demo figcaption { color: var(--on-dark-dim); }
 
 @media (max-width: 900px) {
   .module-demo { width: 160px; }
@@ -893,12 +884,12 @@ footer > div:first-child { display: grid; gap: 5px; }
 .factory .section-head { max-width: 920px; margin-inline: auto; text-align: center; }
 .factory .section-head p:not(.section-label) { margin-inline: auto; max-width: 720px; }
 
-/* Карточки модулей тянутся на всю высоту ряда, а блок результата прижимается
-   к низу — тогда «Результат» во всех карточках стоит на одной линии и сетка
-   читается как сетка, а не как набор разновысоких прямоугольников. */
+/* Карточки модулей тянутся на всю высоту ряда — сетка читается как сетка,
+   а не как набор разновысоких прямоугольников.
+   Прижимать «Результат» к низу карточки нельзя: ряд с модулем 6 высокий из-за
+   телефона, и в модуле 5 между текстом и результатом открывалась дыра в 325 px.
+   Содержимое идёт сверху вниз, свободное место остаётся внизу плашки. */
 .module-grid { align-items: stretch; }
-.module-result { margin-top: auto; }
-.module-tail { margin-top: auto; }
 .module-tail .module-result { margin-top: 0; }
 
 /* Первый экран: заметка о формате уходит в нижний левый угол, а заголовок,
