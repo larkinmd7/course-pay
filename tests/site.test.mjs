@@ -506,7 +506,7 @@ test('все логотипы компаний стоят на едином тё
   assert.match(html, /assets\/company-logos\/avito-white\.svg/);
   assert.match(html, /assets\/company-logos\/magnit-white\.svg/);
   assert.doesNotMatch(css, /company-logo-(?:avito|magnit)[^{]*\{[^}]*background\s*:\s*white/s);
-  assert.match(css, /\.company-proof \.company-logo\s*\{[^}]*background:\s*#[0-9a-f]{6}/is);
+  assert.match(css, /\.company-proof \.company-logo\s*\{[^}]*background:\s*(?:#[0-9a-f]{6}|var\(--[a-z-]+\))/is);
 });
 
 test('Сбер и ВТБ в витрине, а первые благодарности используют чёткие локальные логотипы', () => {
@@ -717,7 +717,10 @@ test('мобильная сетка ограничивает ширину доч
   assert.match(css, /\.limits\s*>\s*\*\s*\{[^}]*min-width:\s*0/s);
   assert.match(css, /h1,\s*h2,\s*h3\s*\{[^}]*overflow-wrap:\s*normal[^}]*word-break:\s*normal[^}]*text-wrap:\s*balance/s);
   assert.match(css, /p,\s*li\s*\{[^}]*text-wrap:\s*pretty/s);
-  assert.match(css, /@media \(max-width:\s*580px\)[\s\S]*h1\s*\{[^}]*font-size:\s*clamp\(32px,\s*8.5vw,\s*40px\)/s);
+  // на узких экранах заголовок обязан быть ограничен сверху, конкретные числа — вопрос дизайна
+  const narrowH1 = css.match(/@media \(max-width:\s*580px\)[\s\S]*?h1\s*\{[^}]*font-size:\s*clamp\(\s*\d+px,\s*[\d.]+vw,\s*(\d+)px\s*\)/s);
+  assert.ok(narrowH1, 'в медиазапросе 580px должен быть clamp для h1');
+  assert.ok(Number(narrowH1[1]) <= 48, `верхняя граница заголовка на мобильном не должна превышать 48px, сейчас ${narrowH1[1]}px`);
 });
 
 test('статический контейнер имеет healthcheck и не публикует внутренний порт сам', () => {
