@@ -298,7 +298,8 @@ test('первый экран выделяет ключевой результа
 
 test('блок «Что изменится» повторяет левую композицию программы', () => {
   const html = readFileSync(pagePath, 'utf8');
-  const introStart = html.indexOf('<section class="section intro">');
+  // класс секции может нести модификатор темы, поэтому ищем по началу атрибута
+  const introStart = html.indexOf('<section class="section intro');
   const introEnd = html.indexOf('</section>', introStart);
   const intro = html.slice(introStart, introEnd);
 
