@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { DISCOUNT_KEY, DISCOUNT_DURATION, getDiscountDeadline, getRemainingSeconds } from '../assets/discount-timer.mjs';
+import { DISCOUNT_KEY, DISCOUNT_DURATION, getDiscountDeadline, getRemainingSeconds, TARIFF_PRICES } from '../assets/discount-timer.mjs';
 const storage = () => {
   const data = new Map();
   return { getItem: key => data.get(key) ?? null, setItem: (key, value) => data.set(key, value) };
@@ -28,4 +28,18 @@ test('missing storage, invalid deadline and excessive future deadline use full p
 test('remaining time includes final second', () => {
   assert.equal(getRemainingSeconds(2000, 1001), 1);
   assert.equal(getRemainingSeconds(2000, 2000), 0);
+});
+
+// Returning visitors get the new campaign once, then keep its original deadline.
+test('new campaign starts after an expired previous campaign', () => {
+  const store = storage();
+  store.setItem('course-pay-discount-deadline-v1', '1');
+  const deadline = getDiscountDeadline(store, 1000);
+  assert.equal(deadline, 1000 + DISCOUNT_DURATION);
+  assert.equal(getDiscountDeadline(store, 2000), deadline);
+});
+test('requested discounted prices match their full prices', () => {
+  assert.deepEqual(Object.values(TARIFF_PRICES).map(({full, discounted}) => [full, discounted]), [
+    ['49 900 ₽', '39 900 ₽'], ['69 900 ₽', '59 900 ₽'], ['139 900 ₽', '109 900 ₽'],
+  ]);
 });

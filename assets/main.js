@@ -1,9 +1,9 @@
-import { initDiscountTimer } from './discount-timer.mjs';
+import { initDiscountTimer } from './discount-timer.mjs?v=20261010';
 import { improveVisibleTypography } from './typography.mjs';
 import { initTestimonialCarousel } from './testimonial-carousel.mjs';
 import { initTelegramSalesMode } from './telegram-sales.mjs';
 import { initMetrikaForPage } from './metrika.mjs';
-import { initStickyCta } from './sticky-cta.mjs';
+import { initStickyCta } from './sticky-cta.mjs?v=20261010';
 import { initMotion, initDemoVideos } from './motion.mjs';
 import { initThemeToggle } from './theme.mjs';
 

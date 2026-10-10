@@ -1,11 +1,11 @@
 import { isTelegramSalesPath, buildTelegramContactUrl } from './telegram-sales.mjs';
 
-export const DISCOUNT_KEY = 'course-pay-discount-deadline-v1';
+export const DISCOUNT_KEY = 'course-pay-discount-deadline-20261010';
 export const DISCOUNT_DURATION = 24 * 60 * 60 * 1000;
 export const TARIFF_PRICES = {
   base: { name: 'Старт', full: '49 900 ₽', discounted: '39 900 ₽' },
   middle: { name: 'Средний', full: '69 900 ₽', discounted: '59 900 ₽' },
-  pro: { name: 'Продвинутый', full: '139 900 ₽', discounted: '99 900 ₽' },
+  pro: { name: 'Продвинутый', full: '139 900 ₽', discounted: '109 900 ₽' },
 };
 
 export function getDiscountDeadline(storage, now = Date.now()) {
