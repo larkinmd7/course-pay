@@ -991,3 +991,32 @@ footer > div:first-child { display: grid; gap: 5px; }
    оставался далеко вверху, и было непонятно, что за карточки идут дальше. */
 .modules-head { margin: 0 0 32px; }
 .modules-title { margin: 0; font-size: clamp(24px, 2.4vw, 34px); line-height: 1.1; letter-spacing: -.02em; }
+
+/* Полоса-доказательство прямо перед ценой. Кейсы переехали в начало страницы,
+   и перед тарифами остался только блок про Мишу — доказательство про автора,
+   а не про учеников. Полоса возвращает лица участников на место решения
+   и уводит по якорю обратно в кейсы, не дублируя ни строчки текста. */
+.proof-strip {
+  display: flex; flex-wrap: wrap; gap: 14px 22px; align-items: center;
+  margin-bottom: 34px; padding: 18px 24px;
+  border-radius: 999px; background: var(--fill-soft);
+  color: var(--ink); text-decoration: none;
+  transition: background .16s;
+}
+.proof-strip:hover { background: var(--surface); }
+.proof-faces { flex: none; display: flex; }
+.proof-faces img {
+  width: 40px; height: 40px; border-radius: 50%; object-fit: cover;
+  border: 2px solid var(--paper);
+}
+/* Лица идут внахлёст — компактнее и читается как группа, а не как ряд иконок. */
+.proof-faces img + img { margin-left: -13px; }
+.proof-text { flex: 1 1 320px; min-width: 0; font-size: 16px; line-height: 1.4; text-wrap: pretty; }
+.proof-link { flex: none; color: var(--royal); font-weight: 600; white-space: nowrap; }
+.proof-link::after { content: " →"; }
+.proof-strip:hover .proof-link { color: var(--royal-dark); }
+
+@media (max-width: 620px) {
+  .proof-strip { border-radius: var(--radius); padding: 18px 20px; gap: 12px 16px; }
+  .proof-text { flex-basis: 100%; font-size: 15px; }
+}

@@ -827,3 +827,23 @@ test('фотографии участников лежат в репозитор
     assert.match(attrs, /alt="[^"]{5,}"/, `у фото нет осмысленного alt: ${attrs}`);
   }
 });
+
+test('полоса перед тарифами ведёт в кейсы и показывает тех же участников', () => {
+  const html = readFileSync(pagePath, 'utf8');
+  const strip = html.match(/<a class="proof-strip"[^>]*>(.*?)<\/a>/s);
+
+  assert.ok(strip, 'полоса-доказательство перед тарифами пропала');
+  // Якорь — единственный смысл полосы: кейсы уехали в начало страницы,
+  // и человеку у цены нужен короткий путь обратно к доказательству.
+  assert.match(strip[0], /href="#cases"/);
+  assert.match(html, /id="cases"/, 'якорь #cases ведёт в никуда');
+
+  // Лица в полосе — те же файлы, что в подписях под цитатами. Любое другое
+  // фото здесь означало бы участника, которого на странице нет.
+  const faces = [...strip[1].matchAll(/src="(assets\/cases\/[^"]+)"/g)].map((m) => m[1]);
+  assert.equal(faces.length, 4, `ожидали четыре лица, нашли ${faces.length}`);
+  for (const src of faces) {
+    assert.equal(existsSync(fileURLToPath(new URL('../' + src, import.meta.url))), true, `нет файла ${src}`);
+    assert.ok(html.includes(`<img src="${src}"`), `фото ${src} не используется в кейсах`);
+  }
+});
