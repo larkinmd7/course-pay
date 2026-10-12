@@ -780,3 +780,33 @@ test('старая редакция оферты не доступна по пр
   // любой, кто придёт по старой ссылке или из поиска, прочитает недействующий договор.
   assert.equal(existsSync(fileURLToPath(new URL('../offer/public-offer.html', import.meta.url))), false);
 });
+
+test('ссылки на проекты участников открываются в новой вкладке и не передают реферер', () => {
+  const html = readFileSync(pagePath, 'utf8');
+
+  // Блок кейсов ссылается на чужие сайты — живые проекты участников. Это самое
+  // сильное доказательство на странице, и одновременно единственное место, где
+  // мы уводим человека с лендинга. Поэтому ссылка обязана открываться отдельно,
+  // иначе посетитель уходит из воронки и не возвращается.
+  const links = [...html.matchAll(/<p class="case-links">(.*?)<\/p>/gs)]
+    .flatMap((block) => [...block[1].matchAll(/<a\s+([^>]*)>/g)].map((m) => m[1]));
+
+  assert.ok(links.length >= 5, `ожидали минимум пять ссылок на проекты, нашли ${links.length}`);
+
+  for (const attrs of links) {
+    assert.match(attrs, /href="https:\/\//, `ссылка без https: ${attrs}`);
+    assert.match(attrs, /target="_blank"/, `ссылка открывается в той же вкладке: ${attrs}`);
+    assert.match(attrs, /rel="[^"]*noopener/, `ссылка без noopener: ${attrs}`);
+  }
+});
+
+test('каждая цитата участника подписана именем', () => {
+  const html = readFileSync(pagePath, 'utf8');
+  const quotes = [...html.matchAll(/<blockquote class="case-quote">(.*?)<\/blockquote>/gs)].map((m) => m[1]);
+
+  assert.ok(quotes.length >= 4, `ожидали минимум четыре цитаты, нашли ${quotes.length}`);
+  // Цитата без подписи читается как выдуманная и обесценивает остальные.
+  for (const quote of quotes) {
+    assert.match(quote, /<cite>[^<]{3,}<\/cite>/, `цитата без имени: ${quote.slice(0, 60)}`);
+  }
+});
