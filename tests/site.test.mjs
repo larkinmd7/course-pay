@@ -810,3 +810,20 @@ test('каждая цитата участника подписана имене
     assert.match(quote, /<cite>[^<]{3,}<\/cite>/, `цитата без имени: ${quote.slice(0, 60)}`);
   }
 });
+
+test('фотографии участников лежат в репозитории и подписаны именем', () => {
+  const html = readFileSync(pagePath, 'utf8');
+  const avatars = [...html.matchAll(/<span class="case-avatar">\s*<img ([^>]*)>/g)].map((m) => m[1]);
+
+  assert.ok(avatars.length >= 4, `ожидали минимум четыре фото, нашли ${avatars.length}`);
+
+  for (const attrs of avatars) {
+    const src = attrs.match(/src="([^"]+)"/)?.[1];
+    assert.ok(src, `у аватарки нет src: ${attrs}`);
+    // Битое фото в кружке — пустая дырка рядом с настоящей цитатой.
+    const file = fileURLToPath(new URL('../' + src, import.meta.url));
+    assert.equal(existsSync(file), true, `файл фото не найден: ${src}`);
+    // Без alt человек со скринридером слышит только «изображение».
+    assert.match(attrs, /alt="[^"]{5,}"/, `у фото нет осмысленного alt: ${attrs}`);
+  }
+});

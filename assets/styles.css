@@ -577,13 +577,13 @@ footer > div:first-child { display: grid; gap: 5px; }
    открывает дыру посередине — тот же случай, что был в сетке модулей. */
 .case-quote { margin: 4px 0 0; padding: 18px 20px; border-left: 3px solid var(--signal); background: var(--inv-fill-2); color: var(--on-dark); font-size: 15px; line-height: 1.5; }
 .case-quote cite { color: var(--signal); font-style: normal; font-weight: 600; }
-/* Подпись под цитатой. Кружок с инициалом — заглушка под настоящее фото:
-   сгенерированные лица под реальными отзывами превращают их в подделку.
-   Когда участник пришлёт фото и разрешение, сюда встаёт <img> тех же размеров. */
-.case-author { display: flex; align-items: center; gap: 11px; margin-top: 14px; }
+/* Подпись под цитатой. В кружке — настоящее фото участника, присланное им
+   самим. Ни апскейла, ни дорисовки: файлы собраны уменьшением оригинала,
+   176 px при кружке в 44 — запас на любой ретина-экран. */
+.case-author { display: flex; align-items: center; gap: 12px; margin-top: 14px; }
 .case-avatar {
   flex: none; display: grid; place-items: center; overflow: hidden;
-  width: 36px; height: 36px; border-radius: 50%;
+  width: 44px; height: 44px; border-radius: 50%;
   background: var(--inv-tint); border: 1px solid var(--inv-line);
   color: var(--signal); font-family: "Inter Tight", sans-serif; font-weight: 800; font-size: 16px; line-height: 1;
 }
