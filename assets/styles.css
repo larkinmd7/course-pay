@@ -39,7 +39,9 @@
   --inv-soft: rgba(255,255,255,.80);
   --inv-dim: rgba(255,255,255,.60);
   --inv-line: rgba(169,194,255,.22);
-  --inv-accent: #19D3FF;
+  /* Фирменный акцент Seevasta. Был #19D3FF — бирюза, которой нет в палитре
+     бренда и которая читается как дежурный «AI-неон». */
+  --inv-accent: #A2B7FF;
   --inv-fill: rgba(255,255,255,.07);
   --inv-fill-2: rgba(255,255,255,.05);
   --inv-tint: rgba(25,211,255,.08);
@@ -652,9 +654,18 @@ footer > div:first-child { display: grid; gap: 5px; }
 /* Точка входа в оплату там, где человек только что получил доказательство */
 .section-cta { margin: 56px 0 0; display: flex; flex-wrap: wrap; gap: 12px 22px; align-items: center; }
 
-/* Шапка остаётся на экране: единственный путь к оплате на мобильном */
+/* Шапка остаётся на экране: единственный путь к оплате на мобильном.
+   Ширина обычной шапки равна ширине контента, и у залипшей полосы фон обрывался
+   за 16 px до края экрана — в эти щели было видно, как под ней едет страница.
+   Поэтому в залипшем состоянии полоса растягивается во всю ширину, а отступы
+   переезжают внутрь, чтобы содержимое осталось на той же сетке. */
 @media (max-width: 900px) {
-  .topbar { position: sticky; top: 0; z-index: 40; background: var(--paper); border-bottom-color: var(--line); }
+  .topbar {
+    position: sticky; top: env(safe-area-inset-top, 0px); z-index: 40;
+    width: 100%; margin: 0;
+    padding-inline: max(16px, calc((100% - var(--max)) / 2));
+    background: var(--paper); border-bottom-color: var(--line);
+  }
 }
 
 /* Скрины фабрики на мобильном — свайп вместо вертикальной простыни */
