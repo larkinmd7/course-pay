@@ -1,4 +1,4 @@
-import { getDiscountDeadline, getRemainingSeconds, TARIFF_PRICES } from './discount-timer.mjs?v=20261010';
+import { getDiscountDeadline, getRemainingSeconds, TARIFF_PRICES } from './discount-timer.mjs?v=20261014-payment';
 import { isTelegramSalesPath } from './telegram-sales.mjs';
 
 function formatClock(totalSeconds) {

@@ -1,11 +1,11 @@
-import { isTelegramSalesPath, buildTelegramContactUrl } from './telegram-sales.mjs';
+import { isTelegramSalesPath } from './telegram-sales.mjs';
 
 export const DISCOUNT_KEY = 'course-pay-discount-deadline-20261010';
 export const DISCOUNT_DURATION = 24 * 60 * 60 * 1000;
 export const TARIFF_PRICES = {
-  base: { name: 'Старт', full: '49 900 ₽', discounted: '39 900 ₽' },
-  middle: { name: 'Средний', full: '69 900 ₽', discounted: '59 900 ₽' },
-  pro: { name: 'Продвинутый', full: '139 900 ₽', discounted: '109 900 ₽' },
+  base: { name: 'Старт', full: '49 900 ₽', discounted: '39 900 ₽', fullUrl: 'https://t.me/LMS_Larkinmd7_bot?start=buy_1', discountedUrl: 'https://t.me/LMS_Larkinmd7_bot?start=buy_4' },
+  middle: { name: 'Средний', full: '69 900 ₽', discounted: '59 900 ₽', fullUrl: 'https://t.me/LMS_Larkinmd7_bot?start=buy_2', discountedUrl: 'https://t.me/LMS_Larkinmd7_bot?start=buy_5' },
+  pro: { name: 'Продвинутый', full: '139 900 ₽', discounted: '109 900 ₽', fullUrl: 'https://t.me/LMS_Larkinmd7_bot?start=buy_3', discountedUrl: 'https://t.me/LMS_Larkinmd7_bot?start=buy_6' },
 };
 
 export function getDiscountDeadline(storage, now = Date.now()) {
@@ -48,7 +48,7 @@ export function initDiscountTimer(root = document, pathname = globalThis.locatio
         card.querySelector('.price-before').hidden = !active;
         card.querySelector('.price-current').textContent = price;
         card.querySelector('.price-condition').textContent = active ? 'цена по вашему предложению' : 'полная стоимость';
-        button.href = buildTelegramContactUrl(`Хочу оформить тариф «${tariff.name}» практикума «ИИ для экспертов» за ${price}.`);
+        button.href = active ? tariff.discountedUrl : tariff.fullUrl;
       });
       previousActive = active;
     }

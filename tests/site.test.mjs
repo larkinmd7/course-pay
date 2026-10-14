@@ -654,18 +654,17 @@ test('главная содержит юридические ссылки и т�
   assert.doesNotMatch(html, /data-pay-link="test"|Тестовая оплата · 10 ₽/);
 });
 
-test('новые тарифы оформляются через менеджера без ссылок на прежние суммы ЮKassa', () => {
+test('три тарифа открывают оплату в LMS-боте по полной цене без JavaScript', () => {
   const html = readFileSync(pagePath, 'utf8');
   const links = [...html.matchAll(/<a class="button[^"]*" href="([^"]+)"[^>]*data-pay-link="([^"]+)">([^<]*)<\/a>/g)];
   assert.equal(links.length, 3);
-  const expected = {base: ['Старт', '49 900'], middle: ['Средний', '69 900'], pro: ['Продвинутый', '139 900']};
+  const expected = {base: 'buy_1', middle: 'buy_2', pro: 'buy_3'};
   for (const [, href, tariff, label] of links) {
     const url = new URL(href);
     assert.equal(url.origin, 'https://t.me');
-    assert.equal(url.pathname, '/starsevast');
-    assert.ok(url.searchParams.get('text').includes(expected[tariff][0]));
-    assert.ok(url.searchParams.get('text').includes(expected[tariff][1]));
-    assert.equal(label, 'Оформить заявку');
+    assert.equal(url.pathname, '/LMS_Larkinmd7_bot');
+    assert.equal(url.searchParams.get('start'), expected[tariff]);
+    assert.equal(label, 'Оплатить');
   }
   assert.doesNotMatch(html, /href="https:\/\/yookassa.ru\/my\/i\//);
 });
