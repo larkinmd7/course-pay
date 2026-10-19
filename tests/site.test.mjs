@@ -41,25 +41,27 @@ test('Telegram-версия включается только на маршру�
 
 test('Telegram-ссылка открывает @starsevast с готовым сообщением', async () => {
   assert.equal(existsSync(telegramSalesPath), true, 'должен существовать модуль Telegram-версии');
-  const { buildTelegramContactUrl, getTariffQuestion } = await import(telegramSalesUrl.href);
+  const { buildTelegramContactUrl, getTariffMessage } = await import(telegramSalesUrl.href);
   const messages = {
-    base: 'У меня вопрос по тарифу «Старт» в курсе «ИИ для экспертов»: ',
-    middle: 'У меня вопрос по тарифу «Средний» в курсе «ИИ для экспертов»: ',
-    pro: 'У меня вопрос по тарифу «Продвинутый» в курсе «ИИ для экспертов»: ',
+    base: 'Хочу на тариф «Старт» практикума «ИИ для экспертов». Подскажите стоимость и условия.',
+    middle: 'Хочу на тариф «Средний» практикума «ИИ для экспертов». Подскажите стоимость и условия.',
+    pro: 'Хочу на тариф «Продвинутый» практикума «ИИ для экспертов». Подскажите стоимость и условия.',
   };
 
   for (const [tariff, expectedMessage] of Object.entries(messages)) {
-    const contactUrl = buildTelegramContactUrl(getTariffQuestion(tariff));
+    const contactUrl = buildTelegramContactUrl(getTariffMessage(tariff));
     const url = new URL(contactUrl);
     assert.equal(url.origin, 'https://t.me');
     assert.equal(url.pathname, '/starsevast');
     assert.equal(url.searchParams.get('text'), expectedMessage);
     assert.equal(contactUrl.includes('+'), false, 'пробелы в сырой Telegram-ссылке не должны превращаться в плюсы');
-    assert.match(contactUrl, /text=%D0%A3%20%D0%BC%D0%B5%D0%BD%D1%8F%20/);
+    // Сообщение должно начинаться с заявленного намерения, а не с вопроса:
+    // человеку остаётся нажать отправку, ничего не дописывая.
+    assert.match(contactUrl, /\?text=%D0%A5%D0%BE%D1%87%D1%83%20/);
   }
 
-  const generalUrl = new URL(buildTelegramContactUrl(getTariffQuestion()));
-  assert.equal(generalUrl.searchParams.get('text'), 'У меня вопрос по курсу «ИИ для экспертов»: ');
+  const generalUrl = new URL(buildTelegramContactUrl(getTariffMessage()));
+  assert.equal(generalUrl.searchParams.get('text'), 'Хочу на практикум «ИИ для экспертов». Подскажите тарифы и условия.');
 });
 
 test('существующий счётчик Метрики включается на всех страницах сайта', async () => {

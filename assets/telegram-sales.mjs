@@ -10,10 +10,16 @@ export function isTelegramSalesPath(pathname = '') {
   return /^\/tg(?:\/|$)/.test(pathname);
 }
 
-export function getTariffQuestion(tariff) {
+/* Сообщение подставляется в поле ввода готовым, его остаётся отправить.
+   Раньше здесь было «У меня вопрос по тарифу…: » с двоеточием — человек должен
+   был сам придумать вопрос, и часть людей на этом месте закрывала телеграм.
+   Теперь это заявленное намерение плюс конкретный запрос, на который легко
+   ответить первым сообщением. Отправить за человека нельзя: Telegram
+   намеренно не даёт сайту слать сообщения от его имени. */
+export function getTariffMessage(tariff) {
   const tariffName = tariffNames[tariff];
-  if (!tariffName) return 'У меня вопрос по курсу «ИИ для экспертов»: ';
-  return `У меня вопрос по тарифу «${tariffName}» в курсе «ИИ для экспертов»: `;
+  if (!tariffName) return 'Хочу на практикум «ИИ для экспертов». Подскажите тарифы и условия.';
+  return `Хочу на тариф «${tariffName}» практикума «ИИ для экспертов». Подскажите стоимость и условия.`;
 }
 
 export function buildTelegramContactUrl(message, username = TELEGRAM_USERNAME) {
@@ -24,7 +30,7 @@ export function buildTelegramContactUrl(message, username = TELEGRAM_USERNAME) {
 function createContactLink(button, tariff, root) {
   const link = root.createElement('a');
   link.className = `${button.className} telegram-contact-button`;
-  link.href = buildTelegramContactUrl(getTariffQuestion(tariff));
+  link.href = buildTelegramContactUrl(getTariffMessage(tariff));
   link.target = '_blank';
   link.rel = 'noopener';
   link.dataset.telegramTariff = tariff;
@@ -52,7 +58,7 @@ export function initTelegramSalesMode(root = document, pathname = globalThis.loc
 
   const generalContact = root.querySelector('[data-telegram-general]');
   if (generalContact) {
-    generalContact.href = buildTelegramContactUrl(getTariffQuestion());
+    generalContact.href = buildTelegramContactUrl(getTariffMessage());
     generalContact.hidden = false;
   }
 
