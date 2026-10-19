@@ -43,9 +43,9 @@ test('Telegram-ссылка открывает @starsevast с готовым с�
   assert.equal(existsSync(telegramSalesPath), true, 'должен существовать модуль Telegram-версии');
   const { buildTelegramContactUrl, getTariffMessage } = await import(telegramSalesUrl.href);
   const messages = {
-    base: 'Хочу на тариф «Старт» практикума «ИИ для экспертов». Подскажите стоимость и условия.',
-    middle: 'Хочу на тариф «Средний» практикума «ИИ для экспертов». Подскажите стоимость и условия.',
-    pro: 'Хочу на тариф «Продвинутый» практикума «ИИ для экспертов». Подскажите стоимость и условия.',
+    base: 'Хочу на тариф «Старт» программы AI Prime. Подскажите стоимость и условия.',
+    middle: 'Хочу на тариф «Средний» программы AI Prime. Подскажите стоимость и условия.',
+    pro: 'Хочу на тариф «Продвинутый» программы AI Prime. Подскажите стоимость и условия.',
   };
 
   for (const [tariff, expectedMessage] of Object.entries(messages)) {
@@ -61,7 +61,7 @@ test('Telegram-ссылка открывает @starsevast с готовым с�
   }
 
   const generalUrl = new URL(buildTelegramContactUrl(getTariffMessage()));
-  assert.equal(generalUrl.searchParams.get('text'), 'Хочу на практикум «ИИ для экспертов». Подскажите тарифы и условия.');
+  assert.equal(generalUrl.searchParams.get('text'), 'Хочу на программу AI Prime. Подскажите тарифы и условия.');
 });
 
 test('существующий счётчик Метрики включается на всех страницах сайта', async () => {

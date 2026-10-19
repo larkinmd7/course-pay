@@ -18,8 +18,8 @@ export function isTelegramSalesPath(pathname = '') {
    намеренно не даёт сайту слать сообщения от его имени. */
 export function getTariffMessage(tariff) {
   const tariffName = tariffNames[tariff];
-  if (!tariffName) return 'Хочу на практикум «ИИ для экспертов». Подскажите тарифы и условия.';
-  return `Хочу на тариф «${tariffName}» практикума «ИИ для экспертов». Подскажите стоимость и условия.`;
+  if (!tariffName) return 'Хочу на программу AI Prime. Подскажите тарифы и условия.';
+  return `Хочу на тариф «${tariffName}» программы AI Prime. Подскажите стоимость и условия.`;
 }
 
 export function buildTelegramContactUrl(message, username = TELEGRAM_USERNAME) {
