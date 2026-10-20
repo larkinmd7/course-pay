@@ -63,5 +63,25 @@ export function initTelegramSalesMode(root = document, pathname = globalThis.loc
   }
 
   root.querySelector('[data-telegram-questions]')?.removeAttribute('hidden');
+  revealAccessTerms(root);
   return true;
+}
+
+/* Баннер суточного предложения показывает таймер прячет discount-timer.mjs, который
+   на /tg не запускается вовсе. Вместе с ним с телеграм-версии пропадал и второй
+   аргумент — бессрочный доступ с обновлениями, а он к цене отношения не имеет
+   и для человека из канала важен не меньше. Поэтому баннер здесь показывается
+   без отсчёта и без строки про цену: условие доступа остаётся, обещание цены —
+   нет, её на этой версии вообще не называют. */
+function revealAccessTerms(root) {
+  const banner = root.querySelector('[data-discount-banner]');
+  if (!banner) return;
+
+  banner.querySelector('.countdown')?.remove();
+  banner.querySelector('[data-perk-price]')?.remove();
+
+  const heading = banner.querySelector('[data-discount-heading]');
+  if (heading) heading.textContent = 'Если оплатить в первые сутки';
+
+  banner.hidden = false;
 }

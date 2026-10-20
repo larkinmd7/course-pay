@@ -346,7 +346,7 @@ test('отдельный блок объясняет формат занятий
   assert.match(html, /вопросы заранее/);
   assert.match(html, /вопросы по ходу/);
   assert.match(html, /Четыре групповые консультации/);
-  assert.equal((format.match(/class="format-card/g) ?? []).length, 4);
+  assert.equal((format.match(/class="format-card/g) ?? []).length, 5);
   assert.match(format, /Две личные консультации/);
   assert.match(format, /сложност[а-яё]+ других участников/i);
   assert.match(format, /до того, как столкнётесь с ними сами/i);
@@ -675,7 +675,7 @@ test('опубликована новая оферта от 3 октября 202
   const page = readFileSync(offerPagePath, 'utf8');
   const pdfText = execFileSync('pdftotext', [offerPdfPath, '-'], { encoding: 'utf8' });
   assert.match(page, /3&nbsp;октября 2026/);
-  assert.match(page, /public-offer\.pdf\?v=20261006/);
+  assert.match(page, /public-offer\.pdf\?v=20261021/);
   assert.match(pdfText, /Редакция от 3 октября 2026 года/);
   assert.match(pdfText, /Севастьянов Матвей Алексеевич/);
   assert.match(pdfText, /661305367793/);

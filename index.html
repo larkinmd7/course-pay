@@ -14,7 +14,7 @@
       document.documentElement.dataset.theme = t;
     } catch (e) { document.documentElement.dataset.theme = 'light'; }
   </script>
-  <link rel="stylesheet" href="assets/styles.css?v=20261003-discount">
+  <link rel="stylesheet" href="assets/styles.css?v=20261020-term">
   <script src="assets/main.js?v=20261014-payment" type="module"></script>
 </head>
 <body>
@@ -60,6 +60,8 @@
     </section>
 
     <section class="facts" aria-label="Ключевые параметры">
+      <div><strong>3 недели</strong><span>основная программа</span></div>
+      <div><strong>+3 недели</strong><span>сопровождение внедрения<small>в «Среднем» и «Продвинутом»</small></span></div>
       <div><strong>6</strong><span>модулей на платформе</span></div>
       <div><strong>4</strong><span>групповые консультации</span></div>
       <div><strong>Свой</strong><span>проект в практике</span></div>
@@ -333,7 +335,7 @@
         <figure><img src="assets/content-factory/reel-card.jpg" alt="Карточка ролика: референс, статистика, сценарий и расшифровка" width="1600" height="988" loading="lazy" decoding="async"><figcaption>Карточка ролика с разбором и расшифровкой</figcaption></figure>
         <figure><img src="assets/content-factory/analytics.jpg" alt="Аналитика: подписчики, просмотры, охваты и обращения по дням" width="1600" height="922" loading="lazy" decoding="async"><figcaption>Аналитика по каналам и дням в одном окне</figcaption></figure>
       </div>
-      <p class="factory-result"><strong>с 900 до 17 000</strong><span>подписчиков в Instagram за два месяца работы системы</span></p>
+      <p class="factory-result"><strong>с 900 до 17 000</strong><span>подписчиков в моём Instagram за два месяца. Этой же системой мы вырастили его вместе с командой — <a href="https://www.instagram.com/larkinmd7" target="_blank" rel="noopener">посмотреть аккаунт</a></span></p>
       <div class="section-cta">
         <a class="button" href="#pricing">Выбрать тариф</a>
       </div>
@@ -365,6 +367,11 @@
           <span class="format-label"><b>04</b><span>Продвинутый<br>тариф</span></span>
           <h3>Две личные консультации</h3>
           <p>До старта мы глубоко разбираем проект, собираем ТЗ и фиксируем цель. В середине или конце программы созваниваемся снова, чтобы решить конкретную проблему и докрутить ваш продукт.</p>
+        </article>
+        <article class="format-card format-card-support">
+          <span class="format-label"><b>05</b><span>Средний и<br>Продвинутый</span></span>
+          <h3>Ещё три недели сопровождения</h3>
+          <p>Основная часть идёт три недели. После неё в тарифах «Средний» и «Продвинутый» остаются ещё три недели: техническая обратная связь, проверка практических результатов и чат, а в «Продвинутом» — личная переписка с Михаилом. Это время, чтобы довести проект до рабочего состояния, а не бросить его на половине. В «Старте» на эти три недели остаётся общий чат участников.</p>
         </article>
       </div>
       <div class="platform-shots">
@@ -419,7 +426,7 @@
         <p class="author-method">На программе я показываю тот же путь, по которому создаю продукты сам: контекст → задача → прототип → проверка → публикация.</p>
 
         <section class="company-proof" aria-label="Компании, с которыми работал Михаил Ларькин">
-          <p>Работал с командами</p>
+          <p>Работаю с командами</p>
           <ul class="company-logo-wall">
             <li class="company-logo company-logo-sber"><img src="assets/company-logos/sber-white.svg" alt="Сбер" width="98" height="25" loading="lazy" decoding="async"></li>
             <li class="company-logo company-logo-sberuniversity"><img src="assets/company-logos-ai/sber-university.png" alt="СберУниверситет" width="1000" height="201" loading="lazy" decoding="async"></li>
@@ -540,7 +547,7 @@
       </div>
 
       <aside class="discount-banner" data-discount-banner hidden aria-label="Срок действия предложения">
-        <div class="discount-copy"><span class="discount-kicker">Ваше персональное предложение</span><h3>24 часа: цена ниже и бессрочный доступ</h3><ul class="discount-perks"><li>Сниженная цена. После таймера действуют полные.</li><li>Доступ к записям занятий и материалам остаётся бессрочно — на всё время работы платформы. При оплате позже он закрывается через 1,5 месяца после программы.</li></ul></div>
+        <div class="discount-copy"><span class="discount-kicker">Ваше персональное предложение</span><h3 data-discount-heading>24 часа: цена ниже и бессрочный доступ</h3><ul class="discount-perks"><li data-perk-price>Сниженная цена. После таймера действуют полные.</li><li>Доступ к записям занятий и материалам остаётся бессрочно, вместе с будущими обновлениями — на всё время работы платформы. При оплате позже он закрывается через 1,5 месяца после программы.</li></ul></div>
         <div class="countdown"><span class="countdown-label">До окончания предложения</span><div class="digits" role="timer" aria-live="off" aria-label="Оставшееся время"><span data-discount-digit>24</span><i>:</i><span data-discount-digit>00</span><i>:</i><span data-discount-digit>00</span></div><div class="units"><span>часов</span><span>минут</span><span>секунд</span></div></div>
       </aside>
 </div>      <div class="pricing-grid">
@@ -585,7 +592,7 @@
             <li>Всё из тарифа «Средний»</li>
             <li><strong>До старта: разбор проекта, ТЗ и целей</strong><small>Глубоко разбираем вашу задачу, определяем результат программы и собираем понятный маршрут работы.</small></li>
             <li><strong>В середине или конце: консультация и докрутка решения</strong><small>Вы приносите конкретную проблему, а мы вместе находим способ её решить и намечаем следующие шаги.</small></li>
-            <li><strong>Личная переписка с Михаилом на время программы</strong><small>Отдельный канал связи для вопросов по вашему проекту во время практики.</small></li>
+            <li><strong>Личная переписка с Михаилом на три недели сопровождения</strong><small>Отдельный канал связи для вопросов по вашему проекту, пока вы доводите его до рабочего состояния.</small></li>
           </ul>
           <a class="button button-block" href="https://t.me/LMS_Larkinmd7_bot?start=buy_3" target="_blank" rel="noopener" data-pay-link="pro">Оплатить</a>
         </article>
