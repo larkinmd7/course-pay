@@ -55,3 +55,35 @@ test('обещание обновлений материалов подкреп�
   assert.match(pdfText, /предоставляются\s+обновления\s+Материалов/i);
   assert.match(pdfText, /без\s+дополнительной\s+оплаты/i);
 });
+
+/* Цена на сайте и цена в договоре разошлись молча: бот списывал 109 900 ₽
+   за «Продвинутый» день-в-день, а в таблице пункта 5.1 оферты стояло 99 900 ₽.
+   Человек вправе требовать опубликованную цену, так что расхождение здесь —
+   это не опечатка, а деньги. Тест сверяет обе стороны по одному источнику. */
+test('цены тарифов на сайте совпадают с таблицей пункта 5.1 оферты', () => {
+  const pdfText = execFileSync('pdftotext', ['-layout', offerPdfPath, '-'], { encoding: 'utf8' });
+  const timer = readFileSync(
+    fileURLToPath(new URL('../assets/discount-timer.mjs', import.meta.url)), 'utf8');
+
+  const prices = [...timer.matchAll(
+    /full:\s*'([\d\s\u00a0]+)₽',\s*discounted:\s*'([\d\s\u00a0]+)₽'/g)]
+    .map(([, full, discounted]) => [full.trim(), discounted.trim()]);
+  assert.equal(prices.length, 3, 'в discount-timer.mjs должно остаться три тарифа');
+
+  // В PDF пробел внутри суммы может прийти неразрывным — сравниваем по цифрам.
+  const digits = (s) => s.replace(/\D/g, '');
+  const pdfDigits = digits(pdfText);
+
+  for (const [full, discounted] of prices) {
+    for (const price of [full, discounted]) {
+      assert.ok(pdfDigits.includes(digits(price)),
+        `цена ${price} есть на сайте, но её нет в оферте — договор и сайт разошлись`);
+    }
+  }
+
+  // Старая цена «Продвинутого» не должна вернуться ни с одной стороны.
+  assert.doesNotMatch(timer, /99[\s\u00a0]900/,
+    'на сайте снова 99 900 ₽ — это цена, которой больше нет в оферте');
+  assert.ok(!pdfDigits.includes('99900') || pdfDigits.includes('109900'),
+    'в оферте снова 99 900 ₽');
+});

@@ -675,7 +675,7 @@ test('опубликована новая оферта от 3 октября 202
   const page = readFileSync(offerPagePath, 'utf8');
   const pdfText = execFileSync('pdftotext', [offerPdfPath, '-'], { encoding: 'utf8' });
   assert.match(page, /3&nbsp;октября 2026/);
-  assert.match(page, /public-offer\.pdf\?v=20261021/);
+  assert.match(page, /public-offer\.pdf\?v=20261027/);
   assert.match(pdfText, /Редакция от 3 октября 2026 года/);
   assert.match(pdfText, /Севастьянов Матвей Алексеевич/);
   assert.match(pdfText, /661305367793/);
