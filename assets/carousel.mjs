@@ -44,17 +44,27 @@ export function initCarousel(root) {
   // тянуться до самой длинной — иначе под текстом висит пустое поле.
   let heights = [];
   const measure = () => {
-    if (!track.hasAttribute('data-carousel-fit')) return;
+    if (!track.hasAttribute('data-carousel-fit') || !narrow.matches) return;
     const keep = track.style.height;
     track.style.height = 'auto';
     heights = cards.map((card) => card.getBoundingClientRect().height);
     track.style.height = keep;
   };
 
+  // Карусель включается только там же, где её включает CSS. На десктопе
+  // и в альбомной ориентации секция остаётся сеткой, и трогать её нельзя.
+  const narrow = globalThis.matchMedia('(max-width: 900px) and (orientation: portrait)');
+
   // Подгонка высоты — только там, где карточки намеренно разной длины.
   const fits = track.hasAttribute('data-carousel-fit');
 
+  const release = () => {
+    track.classList.remove('is-fitted');
+    track.style.height = '';
+  };
+
   const fitHeight = () => {
+    if (!narrow.matches) { release(); return; }
     if (!fits || !heights.length) return;
     const { width, gap } = metrics();
     const perView = visibleCardCount(track.clientWidth, width, gap);
@@ -139,6 +149,9 @@ export function initCarousel(root) {
   globalThis.ResizeObserver
     ? new ResizeObserver(onResize).observe(track)
     : globalThis.addEventListener('resize', onResize);
+
+  // Поворот экрана и переход через брейкпоинт: вернуть сетку или собрать трек.
+  narrow.addEventListener('change', () => { lastWidth = 0; remeasure(); });
 
   // Шрифты и ленивые картинки меняют высоту уже после первого замера.
   document.fonts?.ready.then(remeasure).catch(() => {});

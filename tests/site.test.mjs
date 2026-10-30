@@ -863,13 +863,19 @@ test('до 900px навигация уходит в бургер-меню', () =
     assert.ok(html.includes(`<a href="${anchor}">`), `в меню должен быть якорь ${anchor}`);
   }
   assert.match(css, /\.nav-burger\s*\{\s*display:\s*none/);
-  assert.match(css, /\.topbar\s+\.nav-panel\[hidden\]\s*\{\s*display:\s*none/);
+  // Панель — тоже <nav>, а правило по элементу сильнее атрибута hidden:
+  // без явного гашения она разворачивалась под шапкой на десктопе.
+  assert.match(css, /\.nav-panel,\s*\.nav-panel\[hidden\]\s*\{\s*display:\s*none/);
 });
 
 test('кейсы и форматы собраны в карусели', () => {
   const html = readFileSync(pagePath, 'utf8');
+  const css = readFileSync(cssPath, 'utf8');
 
   assert.equal((html.match(/data-carousel(?=[\s>])/g) ?? []).length, 2);
+  // Карусель включается только на узком экране в портретной ориентации:
+  // на десктопе и в альбомной обе секции остаются сеткой.
+  assert.match(css, /@media \(max-width: 900px\) and \(orientation: portrait\)/);
   assert.match(html, /<div class="cases-grid" data-carousel-track data-carousel-fit/);
   assert.match(html, /<div class="format-grid" data-carousel-track/);
   // Подгонка высоты — только у кейсов: отзывы разной длины. Плашки форматов
