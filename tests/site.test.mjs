@@ -297,15 +297,13 @@ test('первый экран выделяет ключевой результа
   assert.match(hero, /<span class="hero-accent-underline">автоматизации задач и роста дохода<\/span>/);
 });
 
-test('блок «Что изменится» повторяет левую композицию программы', () => {
+// Секция «Что изменится» убрана 30.10.2026: голая перебивка на три строки
+// между первым экраном и кейсами только удлиняла страницу.
+test('секция-перебивка «Что изменится» не вернулась', () => {
   const html = readFileSync(pagePath, 'utf8');
-  // класс секции может нести модификатор темы, поэтому ищем по началу атрибута
-  const introStart = html.indexOf('<section class="section intro');
-  const introEnd = html.indexOf('</section>', introStart);
-  const intro = html.slice(introStart, introEnd);
 
-  assert.match(intro, /<div class="section-head intro-head">/);
-  assert.match(intro, /<p class="eyebrow section-label">Что изменится<\/p>[\s\S]*<h2 class="section-subtitle">От отдельных чатов — к рабочей системе<\/h2>/);
+  assert.doesNotMatch(html, /<section class="section intro/);
+  assert.doesNotMatch(html, /От отдельных чатов — к рабочей системе/);
 });
 
 test('программа подробно раскрывает каждый из шести модулей', () => {
@@ -316,9 +314,6 @@ test('программа подробно раскрывает каждый из
   assert.equal((html.match(/class="module-topics"/g) ?? []).length, 6);
   assert.equal((html.match(/class="module-practice"/g) ?? []).length, 6);
   assert.equal((html.match(/class="module-result"/g) ?? []).length, 6);
-  assert.match(html, /До старта/);
-  assert.match(html, /Программировать не нужно/);
-  assert.match(html, /личная AI-(?:операционная )?система/i);
   assert.match(html, /собственный AI-инструмент/i);
   assert.match(html, /сайты, презентации, креативы и интерфейсы/i);
   assert.match(html, /публичный продукт для пользователей/i);
@@ -330,7 +325,7 @@ test('программа ведёт от контекста до собстве�
   const html = readFileSync(pagePath, 'utf8');
   const css = readFileSync(cssPath, 'utf8');
 
-  assert.match(html, /От контекста до своего продукта/);
+  assert.match(html, /Из чего состоит программа/);
   assert.match(css, /\.module-topics\s*\{[^}]*flex:\s*1/s);
   assert.match(css, /\.module-result\s*\{[^}]*margin:\s*2[0-9]px\s+0\s+0/s);
 });
@@ -369,7 +364,8 @@ test('результаты объясняют переход от чат-бот�
   // Схема уровней использования AI со ссылкой на LinkedIn убрана по решению от 06.10.2026:
   // блок должен держаться на обещании результата, а не на чужой инфографике.
   // Файл assets/ai-adoption-visual.jpg остаётся в репозитории на случай возврата.
-  assert.match(html, /созданию собственных продуктов/i);
+  // Блок «Что будет на выходе» убран 30.10.2026 вместе со схемой уровней AI.
+  assert.doesNotMatch(html, /class="program-outcomes"/);
   assert.doesNotMatch(html, /ai-adoption-visual\.jpg/);
 });
 
@@ -377,7 +373,7 @@ test('у каждой секции есть метка и заголовок, о
   const html = readFileSync(pagePath, 'utf8');
   const css = readFileSync(cssPath, 'utf8');
 
-  for (const label of ['Что изменится', 'Программа', 'Что будет на выходе', 'Как устроена программа', 'Примеры результатов', 'Практический опыт', 'Тарифы']) {
+  for (const label of ['Кейсы первого потока', 'Шесть модулей', 'Куда приводит этот маршрут', 'Как устроена программа', 'Тарифы']) {
     assert.match(html, new RegExp(`<p class="eyebrow section-label">${label}</p>`));
   }
   // иерархия изменена осознанно: метка стала мелкой метой, главным стал заголовок
@@ -385,43 +381,25 @@ test('у каждой секции есть метка и заголовок, о
   assert.match(css, /\.section-subtitle\s*\{[^}]*font-size:\s*clamp\(/s);
 });
 
-test('результаты программы раскрывают личную AI-систему через рабочий сценарий', () => {
-  const html = readFileSync(pagePath, 'utf8');
-  const start = html.indexOf('class="program-outcomes"');
-  const end = html.indexOf('</section>', start);
-  const outcomes = html.slice(start, end);
-
-  assert.match(outcomes, /звонки и переписки/);
-  assert.match(outcomes, /коммерческое предложение/);
-  assert.match(outcomes, /брендбук/);
-  assert.match(outcomes, /Работающий AI-продукт/);
-  assert.doesNotMatch(outcomes, /не учебн/i);
-});
-
-test('заголовочный блок программы выровнен по левому краю', () => {
+test('блок «Программа» открывается сразу модулями', () => {
   const html = readFileSync(pagePath, 'utf8');
   const programStart = html.indexOf('<section class="section program" id="program">');
-  const firstModule = html.indexOf('<aside class="prep-card">', programStart);
-  const programIntro = html.slice(programStart, firstModule);
+  const modulesStart = html.indexOf('<div class="modules-head">', programStart);
+  const programIntro = html.slice(programStart, modulesStart);
 
-  assert.match(programIntro, /<div class="section-head">/);
-  assert.doesNotMatch(programIntro, /section-head-right/);
+  // Шапка секции и карточка «До старта» убраны 30.10.2026.
+  assert.doesNotMatch(programIntro, /<div class="section-head">/);
+  assert.doesNotMatch(html, /<aside class="prep-card">/);
+  assert.match(html, /<h2 class="modules-title">Из чего состоит программа<\/h2>/);
 });
 
-test('страница показывает примеры инструментов под разные профессии', () => {
+// Секция «Примеры результатов» убрана 30.10.2026: шесть карточек профессий
+// дублировали кейсы первого потока и растягивали страницу.
+test('секция примеров по профессиям не вернулась', () => {
   const html = readFileSync(pagePath, 'utf8');
 
-  assert.match(html, /id="examples"/);
-  assert.ok((html.match(/class="example-card/g) ?? []).length >= 6);
-  // ниши взяты из реальных продающих звонков: HR и преподаватели среди лидов не встречались
-  for (const value of ['Эксперт', 'Консультант', 'Маркетолог', 'Предприниматель', 'Отдел продаж', 'Операции и закупки']) {
-    assert.match(html, new RegExp(value));
-  }
-  for (const value of ['Контент-конвейер целиком', 'Утренний пульт управления', 'От списка позиций до счёта']) {
-    assert.match(html, new RegExp(value));
-  }
-  // секция «Границы программы» и вопрос про состав тарифов убраны по решению владельца:
-  // условия остаются только в публичной оферте
+  assert.doesNotMatch(html, /id="examples"/);
+  assert.doesNotMatch(html, /class="example-card/);
 });
 
 test('блок автора содержит фото и подтверждённые факты', () => {
@@ -430,50 +408,38 @@ test('блок автора содержит фото и подтверждён�
   assert.equal(existsSync(authorPhotoPath), true, 'должно быть локальное фото Михаила');
   assert.match(html, /src="assets\/mikhail-larkin\.jpg"/);
   assert.match(html, /alt="Михаил Ларькин"/);
-  assert.match(html, /35\+ подтверждённых проектов/);
+  // Цифры и три продукта свёрнуты в одну строку 30.10.2026.
+  assert.match(html, /class="author-numbers-line"/);
+  assert.match(html, /35\+ проектов/);
   assert.doesNotMatch(html, /120 компаний/);
-  assert.match(html, /2 000\+ участников/);
+  assert.match(html, /2 000 участников/);
   assert.match(html, /ВШЭ/);
   assert.match(html, /РАНХиГС/);
-  assert.match(html, /VocalAI/);
-  assert.match(html, /1 200\+ менеджеров/);
-  assert.match(html, /5 000\+[\s\S]{0,100}звонков в день/);
-  assert.match(html, /НейроКонсультант/);
-  assert.match(html, /10 000\+ пользователей/);
-  assert.match(html, /200 млн ₽[\s\S]{0,100}дополнительной выручки в год/);
-  assert.match(html, /SynergyGPT/);
-  assert.match(html, /1–2 дня[\s\S]{0,100}вместо 2–3 недель/);
+  assert.match(html, /5 000\+ звонков в день/);
+  assert.match(html, /200 млн ₽ дополнительной выручки в год/);
 
   for (const company of ['Сбер', 'СберУниверситет', 'Газпром нефть', 'ВТБ', 'S7', 'Авито', 'Магнит', 'Ростелеком', 'Ozon', 'СИБУР', 'GOOD WOOD', 'Деловая среда']) {
     assert.match(html, new RegExp(company));
   }
 
-  assert.match(html, /Речевая аналитика для контроля качества продаж/);
-  assert.match(html, /AI-консультант на сайте для повышения конверсии/);
-  assert.match(html, /Внутренняя low-code платформа/);
   assert.match(html, /Благодарственное письмо Сбера Михаилу Ларькину/);
   assert.match(html, /Подтверждение проведения занятий для S7 Group/);
   assert.match(html, /Благодарственное письмо СКБ Контур Михаилу Ларькину/);
   assert.doesNotMatch(html, /Альфа-Банк/);
   assert.ok((html.match(/class="company-logo/g) ?? []).length >= 10, 'компании должны показываться визуальными логотипами');
   assert.equal((html.match(/class="testimonial-logo/g) ?? []).length, 8, 'каждая благодарность должна начинаться с логотипа компании');
-  assert.equal((html.match(/class="product-metric"/g) ?? []).length, 3, 'каждый продукт должен иметь отдельную колонку с результатом');
-
-  const productsPosition = html.indexOf('class="product-proof"');
+  const numbersPosition = html.indexOf('class="author-numbers-line"');
   const educationPosition = html.indexOf('class="author-education"');
-  assert.ok(productsPosition > -1 && educationPosition > productsPosition, 'практические кейсы должны идти раньше преподавательского опыта');
+  assert.ok(numbersPosition > -1 && educationPosition > numbersPosition, 'строка с опытом должна идти раньше преподавательского блока');
 });
 
-test('кейсы продуктов поясняют роль Михаила как руководителя AI-проектов в корпорации', () => {
+// Карточки продуктов убраны 30.10.2026: три блока с метриками свёрнуты
+// в одну строку, ключевые цифры сохранены в ней.
+test('роль в корпорации осталась в строке опыта', () => {
   const html = readFileSync(pagePath, 'utf8');
-  const css = readFileSync(cssPath, 'utf8');
-  const blockStart = html.indexOf('<div class="product-proof"');
-  const blockEnd = html.indexOf('</div>\n\n        <p class="author-method"', blockStart);
-  const block = html.slice(blockStart, blockEnd);
 
-  assert.match(block, /class="product-proof-context"/);
-  assert.match(block, /Эти продукты я создал как руководитель AI-проектов в корпорации/);
-  assert.match(css, /\.product-proof-context\s*\{[^}]*font-size:\s*\d+px/s);
+  assert.doesNotMatch(html, /class="product-proof"/);
+  assert.match(html, /Как руководитель AI-проектов в корпорации/);
 });
 
 test('блок компаний показывает двенадцать локальных логотипов без сломанных ассетов', () => {
@@ -882,4 +848,73 @@ test('суточное предложение обещает бессрочны�
   // Оговорку про более позднюю оплату с сайта убирать нельзя: без неё
   // «бессрочно» читается как безусловное обещание всем подряд.
   assert.match(banner[0], /1,5\s*месяца/);
+});
+
+// ── Правки 30.10.2026: бургер, карусели, шестое занятие, шрифт ─────────────
+
+test('до 900px навигация уходит в бургер-меню', () => {
+  const html = readFileSync(pagePath, 'utf8');
+  const css = readFileSync(cssPath, 'utf8');
+
+  assert.match(html, /<button class="nav-burger"[^>]*data-nav-toggle/);
+  assert.match(html, /aria-controls="nav-panel"/);
+  assert.match(html, /<nav class="nav-panel" id="nav-panel" data-nav-panel/);
+  for (const anchor of ['#program', '#cases', '#format', '#author', '#pricing', '#faq']) {
+    assert.ok(html.includes(`<a href="${anchor}">`), `в меню должен быть якорь ${anchor}`);
+  }
+  assert.match(css, /\.nav-burger\s*\{\s*display:\s*none/);
+  assert.match(css, /\.topbar\s+\.nav-panel\[hidden\]\s*\{\s*display:\s*none/);
+});
+
+test('кейсы и форматы собраны в карусели', () => {
+  const html = readFileSync(pagePath, 'utf8');
+
+  assert.equal((html.match(/data-carousel(?=[\s>])/g) ?? []).length, 2);
+  assert.match(html, /<div class="cases-grid" data-carousel-track data-carousel-fit/);
+  assert.match(html, /<div class="format-grid" data-carousel-track/);
+  // Подгонка высоты — только у кейсов: отзывы разной длины. Плашки форматов
+  // держат общую высоту, иначе кромка трека прыгает на каждом свайпе.
+  assert.doesNotMatch(html, /<div class="format-grid"[^>]*data-carousel-fit/);
+});
+
+test('шестое занятие обещает опубликованный и работающий продукт', () => {
+  const html = readFileSync(pagePath, 'utf8');
+
+  assert.match(html, /опубликован на GitHub и работает на сервере/);
+  // Демо с утренней сводкой из CRM убрано: модуль про публикацию, а не про сценарий.
+  assert.doesNotMatch(html, /crm-digest/);
+  assert.doesNotMatch(html, /class="module-demo"/);
+});
+
+test('обычный текст набран Montserrat', () => {
+  const html = readFileSync(pagePath, 'utf8');
+  const css = readFileSync(cssPath, 'utf8');
+
+  assert.match(css, /font-family:\s*"Montserrat",\s*"Geologica"/);
+  // Шрифты раздаются только локально: внешних подключений на странице нет.
+  assert.doesNotMatch(html, /fonts\.googleapis\.com|fonts\.gstatic\.com/);
+  for (const weight of [400, 500, 600, 700]) {
+    for (const subset of ['cyrillic', 'latin', 'latin-ext']) {
+      const file = `montserrat-${subset}-${weight}-normal.woff2`;
+      assert.equal(existsSync(`assets/fonts/${file}`), true, `нужен файл ${file}`);
+      assert.ok(css.includes(`url("fonts/${file}")`), `${file} должен быть подключён`);
+    }
+  }
+  // Знак рубля U+20BD лежит в latin-ext: без этого подмножества цены
+  // отрисовываются запасным шрифтом и выпадают из набора.
+  assert.match(css, /U\+20AD-20C0/);
+});
+
+test('первый экран обещает обгон конкурентов, а не базовый чатгпт', () => {
+  const html = readFileSync(pagePath, 'utf8');
+
+  assert.match(html, /обгонять конкурентов/);
+  assert.doesNotMatch(html, /юзать как гугл или игрушку/);
+});
+
+test('подписчиков в контент-фабрике — 19 000', () => {
+  const html = readFileSync(pagePath, 'utf8');
+
+  assert.match(html, /с 900 до 19 000/);
+  assert.doesNotMatch(html, /с 900 до 17 000/);
 });

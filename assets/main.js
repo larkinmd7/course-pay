@@ -6,8 +6,12 @@ import { initMetrikaForPage } from './metrika.mjs';
 import { initStickyCta } from './sticky-cta.mjs?v=20261014-payment';
 import { initMotion, initDemoVideos } from './motion.mjs';
 import { initThemeToggle } from './theme.mjs';
+import { initNavMenu } from './nav-menu.mjs';
+import { initCarousels } from './carousel.mjs';
 
 initThemeToggle(document);
+initNavMenu(document);
+initCarousels(document);
 improveVisibleTypography();
 initTestimonialCarousel(document.querySelector('[data-testimonial-carousel]'));
 
