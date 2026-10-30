@@ -37,7 +37,7 @@ export function initCarousel(root) {
   let appliedHeight = -1;
 
   const release = () => {
-    track.classList.remove('is-fitted');
+    track.classList.remove('is-fitted', 'is-easing');
     track.style.height = '';
     appliedHeight = -1;
   };
@@ -82,30 +82,48 @@ export function initCarousel(root) {
     return Math.max(...cache.heights.slice(from, to));
   };
 
-  const fitHeight = (left) => {
-    if (!narrow.matches) { release(); return; }
-    if (!fits || !cache.heights.length || !cache.step) return;
-
-    let value;
-    if (left >= cache.maxScroll - 2) {
-      // В крайнем правом положении скролл упирается в край и перестаёт быть
-      // кратным шагу: считаем по последнему окну, иначе под карточкой
-      // оставалось пустое поле, а сама она обрезалась.
-      value = windowHeight(cards.length - cache.perView);
-    } else {
-      const offsets = cache.offsets;
-      let index = 0;
-      while (index < offsets.length - 1 && offsets[index + 1] <= left + 1) index += 1;
-      const span = (offsets[index + 1] ?? offsets[index]) - offsets[index];
-      const progress = span > 0 ? Math.min(1, Math.max(0, (left - offsets[index]) / span)) : 0;
-      value = windowHeight(index) + (windowHeight(index + 1) - windowHeight(index)) * progress;
-    }
-
+  // Высота трека НЕ пересчитывается во время свайпа. Запись height перекладывает
+  // всю страницу ниже, и на каждом кадре жеста это главный источник рывков.
+  // Поэтому: на старте жеста один раз разжимаем трек до самой высокой карточки,
+  // а когда скролл остановился — плавно сжимаем до той, что осталась в кадре.
+  const setHeight = (value, animate) => {
     const next = Math.ceil(value);
     if (next <= 0 || next === appliedHeight) return;
     appliedHeight = next;
     track.classList.add('is-fitted');
+    track.classList.toggle('is-easing', Boolean(animate));
     track.style.height = `${next}px`;
+  };
+
+  const expand = () => {
+    if (!fits || !narrow.matches || !cache.heights.length || !cache.step) return;
+    // Разжимаем до пары, между которыми сейчас идёт скролл, а не до самой
+    // высокой карточки в наборе: иначе трек подскакивает на пару сотен
+    // пикселей в момент касания. scrollLeft читать дёшево — раскладка
+    // от этого не пересчитывается, в отличие от записи height.
+    const index = Math.floor(track.scrollLeft / cache.step);
+    const pair = Math.max(windowHeight(index), windowHeight(index + 1));
+    // Без анимации: пока высота едет, карточка выше текущей обрезается
+    // и в кадре виден срезанный низ.
+    if (pair > appliedHeight) setHeight(pair, false);
+  };
+
+  const settle = () => {
+    if (!narrow.matches) { release(); return; }
+    if (!fits || !cache.heights.length || !cache.step) return;
+
+    const left = track.scrollLeft;
+    let index;
+    if (left >= cache.maxScroll - 2) {
+      // В крайнем правом положении скролл упирается в край и перестаёт быть
+      // кратным шагу: берём последнее окно, иначе высота промахивается.
+      index = cards.length - cache.perView;
+    } else {
+      const offsets = cache.offsets;
+      index = 0;
+      while (index < offsets.length - 1 && offsets[index + 1] <= left + cache.step / 2) index += 1;
+    }
+    setHeight(windowHeight(index), true);
   };
 
   const paint = () => {
@@ -127,7 +145,6 @@ export function initCarousel(root) {
     });
 
     root.classList.toggle('is-static', cards.length <= cache.perView && cache.maxScroll < 2);
-    fitHeight(left);
   };
 
   // Один кадр — одна отрисовка. Без этого обработчик скролла срабатывает
@@ -144,9 +161,17 @@ export function initCarousel(root) {
 
   prev?.addEventListener('click', () => move(-1));
   next?.addEventListener('click', () => move(1));
-  track.addEventListener('scroll', schedule, { passive: true });
+  // Пока палец ведёт — только стрелки и точки, ни одной записи в геометрию.
+  // Конец жеста ловим таймером: scrollend есть не везде.
+  let settleTimer = 0;
+  track.addEventListener('scroll', () => {
+    expand();
+    schedule();
+    clearTimeout(settleTimer);
+    settleTimer = setTimeout(settle, 140);
+  }, { passive: true });
 
-  const remeasure = () => { measure(); paint(); };
+  const remeasure = () => { measure(); paint(); settle(); };
 
   // Наблюдаем только ширину: высоту трека меняем сами, и реакция на неё
   // уводила бы наблюдатель в бесконечный цикл.

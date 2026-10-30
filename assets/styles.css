@@ -1185,6 +1185,12 @@ footer > div:first-child { display: grid; gap: 5px; }
      пустое поле под коротким отзывом, ради которого высота и подгоняется. */
   .carousel .case-card { height: auto; }
   .carousel [data-carousel-track].is-fitted { overflow-y: hidden; }
+  /* Сжатие после жеста — единственная анимация высоты. Во время свайпа высота
+     не трогается вовсе, иначе страница перекладывается на каждом кадре. */
+  .carousel [data-carousel-track].is-easing { transition: height .42s cubic-bezier(.33, 1, .68, 1); }
+  @media (prefers-reduced-motion: reduce) {
+    .carousel [data-carousel-track].is-easing { transition: none; }
+  }
   /* Плашки форматов, наоборот, держат общую высоту: они сопоставимы по смыслу
      и читаются как ряд, а прыгающая кромка трека раздражает на каждом свайпе. */
   .carousel .format-grid { align-items: stretch; }
