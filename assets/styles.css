@@ -135,7 +135,9 @@ h1 { max-width: 1000px; margin-bottom: 28px; font-size: clamp(32px, 4.9vw, 76px)
 .facts div { min-width: 0; padding: 24px 22px; border-left: 1px solid var(--ink); display: flex; flex-direction: column; }
 /* «+3 недели» — самая длинная из шести строк; при фиксированных 34px она
    упиралась в разделитель колонки. */
-.facts strong { font-size: clamp(25px, 2.2vw, 34px); line-height: 1.05; }
+/* Каждый факт — одна строка: перенос «+3 недели» рвал ряд по высоте.
+   Кегль подобран так, чтобы самая длинная пара влезала в колонку целиком. */
+.facts strong { font-size: clamp(18px, 2.1vw, 29px); line-height: 1.05; white-space: nowrap; }
 .facts span { margin-top: 9px; color: var(--muted); font-size: 13px; }
 /* Уточнение по тарифам: сопровождение внедрения оплачено только в «Среднем»
    и «Продвинутом» (структура цены, п. 12.6 оферты). Без этой строки факт
@@ -593,7 +595,11 @@ footer > div:first-child { display: grid; gap: 5px; }
    Карточки не растягиваем по высоте ряда: у кейсов разный объём, и при
    выравнивании снизу у короткой карточки открывается пустая плашка в треть
    высоты. Пусть каждая заканчивается там, где заканчивается её содержимое. */
-.cases-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; align-items: start; }
+/* Карточки кейсов тянутся до общей высоты: разная длина отзывов рвала ряд
+   и нижние кромки соседей не совпадали. В карусели, наоборот, высота своя —
+   см. мобильный медиазапрос. */
+.cases-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; align-items: stretch; }
+.case-card { height: 100%; }
 .case-card { display: flex; flex-direction: column; gap: 14px; padding: 40px; border: 0; border-radius: var(--radius); background: var(--inv-fill-2); }
 .case-role { margin: 0; color: var(--signal); font-family: "IBM Plex Mono", monospace; font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }
 .case-card h3 { margin: 0; font-size: 22px; line-height: 1.2; }
@@ -1175,6 +1181,9 @@ footer > div:first-child { display: grid; gap: 5px; }
   /* Кейсы: карточки своей высоты, трек подгоняет carousel.mjs под ту, что в кадре.
      Выравнивание по самой длинной оставляло под коротким отзывом пустое поле. */
   .carousel .cases-grid { align-items: start; }
+  /* Растяжка до общей высоты — приём десктопной сетки. В карусели она вернула бы
+     пустое поле под коротким отзывом, ради которого высота и подгоняется. */
+  .carousel .case-card { height: auto; }
   .carousel [data-carousel-track].is-fitted { overflow-y: hidden; }
   /* Плашки форматов, наоборот, держат общую высоту: они сопоставимы по смыслу
      и читаются как ряд, а прыгающая кромка трека раздражает на каждом свайпе. */
@@ -1190,6 +1199,5 @@ footer > div:first-child { display: grid; gap: 5px; }
    почти треть колонки. Режем отступы и нижнюю границу кегля — ряд остаётся
    шестиколоночным до 900px, где он и так перестраивается в две колонки. */
 @media (max-width: 1150px) {
-  .facts div { padding: 22px 14px; }
-  .facts strong { font-size: clamp(20px, 2.4vw, 34px); }
+  .facts div { padding: 22px 12px; }
 }
