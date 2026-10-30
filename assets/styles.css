@@ -1201,3 +1201,11 @@ footer > div:first-child { display: grid; gap: 5px; }
 @media (max-width: 1150px) {
   .facts div { padding: 22px 12px; }
 }
+
+/* Шапка контент-фабрики центрирована — на узком экране центрированный абзац
+   упирается в оба поля и читается плохо. На мобильном выравниваем по левому
+   краю и добавляем воздуха по бокам. */
+@media (max-width: 760px) {
+  .factory .section-head, .factory .section-head p:not(.section-label) { text-align: left; }
+  .section > .section-head { padding-inline: 4px; }
+}
