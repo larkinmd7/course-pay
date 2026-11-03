@@ -9,6 +9,7 @@ COPY personal-data-consent /usr/share/nginx/html/personal-data-consent
 COPY success /usr/share/nginx/html/success
 COPY brandbook /usr/share/nginx/html/brandbook
 COPY error /usr/share/nginx/html/error
+COPY eu /usr/share/nginx/html/eu
 
 EXPOSE 80
 
