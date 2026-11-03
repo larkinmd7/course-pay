@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Prime для экспертов</title>
+<style>
+@font-face{font-family:"SV Text";font-weight:400;font-display:swap;src:url(/assets/fonts/montserrat-cyrillic-400-normal.woff2) format("woff2");unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;}
+@font-face{font-family:"SV Text";font-weight:400;font-display:swap;src:url(/assets/fonts/montserrat-latin-400-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:"SV Text";font-weight:400;font-display:swap;src:url(/assets/fonts/montserrat-latin-ext-400-normal.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+@font-face{font-family:"SV Text";font-weight:600;font-display:swap;src:url(/assets/fonts/montserrat-cyrillic-600-normal.woff2) format("woff2");unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;}
+@font-face{font-family:"SV Text";font-weight:600;font-display:swap;src:url(/assets/fonts/montserrat-latin-600-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:"SV Text";font-weight:600;font-display:swap;src:url(/assets/fonts/montserrat-latin-ext-600-normal.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+@font-face{font-family:"SV Display";font-weight:800;font-display:swap;src:url(/assets/fonts/inter-tight-cyrillic-800-normal.woff2) format("woff2");unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;}
+@font-face{font-family:"SV Display";font-weight:800;font-display:swap;src:url(/assets/fonts/inter-tight-latin-800-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD,U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+
+/* Layout idea: five A4 sheets, navy and periwinkle bands carry the brand, white sheets carry the reading. */
+:root{
+  --navy:#00051A;
+  --peri:#A2B7FF;
+  --paper:#FFFFFF;
+  --mist:#EEF2FF;
+  --line:#D3DBF5;
+  --muted:#46507A;
+  --font-text:"SV Text","Inter","Helvetica Neue",Arial,sans-serif;
+  --font-display:"SV Display","Inter","Helvetica Neue",Arial,sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;background:#DDE3F7}
+body{background:#DDE3F7;color:var(--navy);font-family:var(--font-text);font-size:1rem;line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+h1,h2,h3{font-family:var(--font-display);font-weight:800;line-height:1.1;text-wrap:balance;letter-spacing:-0.01em}
+.sheet{max-width:880px;margin:20px auto;background:var(--paper);padding:48px 48px 40px;position:relative;overflow:hidden}
+.sheet.dark{background:var(--navy);color:#fff}
+.brandbar{display:flex;justify-content:space-between;align-items:baseline;font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;font-weight:600;margin-bottom:36px}
+.brandbar b{font-family:var(--font-display);font-weight:800;letter-spacing:.02em;text-transform:none;font-size:1.25rem}
+.dark .brandbar span{color:var(--peri)}
+.eyebrow{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--muted);margin-bottom:10px}
+.dark .eyebrow{color:var(--peri)}
+h1{font-size:3.1rem;margin-bottom:18px}
+h2{font-size:1.9rem;margin-bottom:8px}
+h3{font-size:1.08rem;margin-bottom:6px;letter-spacing:0}
+.lead{font-size:1.1rem;max-width:36em;color:#DCE3FF;margin-bottom:28px}
+.sub{color:var(--muted);max-width:40em;margin-bottom:22px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:30px}
+.stat{border:1px solid rgba(162,183,255,.45);border-radius:12px;padding:14px 14px 12px}
+.stat b{display:block;font-family:var(--font-display);font-weight:800;font-size:1.7rem;color:var(--peri);line-height:1.1}
+.stat span{font-size:.85rem;color:#DCE3FF}
+.panel{background:var(--mist);border-radius:14px;padding:22px 22px 20px}
+.dark .panel{background:rgba(162,183,255,.1)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.card{border:1px solid var(--line);border-radius:12px;padding:16px 16px 14px;background:var(--paper)}
+.card p{font-size:.93rem;color:var(--muted)}
+.dark .card{background:rgba(162,183,255,.08);border-color:rgba(162,183,255,.35)}
+.dark .card p{color:#DCE3FF}
+.note{font-size:.88rem;color:var(--muted);margin-top:14px}
+.dark .note{color:#DCE3FF}
+.rows{border-top:1px solid var(--line);margin-bottom:18px}
+.row{display:grid;grid-template-columns:200px 1fr;gap:18px;padding:12px 0;border-bottom:1px solid var(--line)}
+.row b{font-family:var(--font-display);font-weight:800;font-size:1rem;line-height:1.25}
+.row span{font-size:.95rem;color:var(--muted)}
+.mod{display:flex;gap:12px}
+.mod i{font-style:normal;font-family:var(--font-display);font-weight:800;font-size:1.5rem;color:var(--peri);background:var(--navy);border-radius:10px;min-width:40px;height:40px;display:grid;place-items:center;font-size:1.1rem}
+.mod p{font-size:.9rem;color:var(--muted);line-height:1.4}
+.mod h3{font-size:.98rem;margin-bottom:2px}
+.steps{display:grid;grid-template-columns:1fr 1fr;gap:12px 14px;margin-bottom:22px}
+.step{display:flex;gap:12px;border:1px solid var(--line);border-radius:12px;padding:13px 14px}
+.step i{font-style:normal;font-family:var(--font-display);font-weight:800;color:var(--navy);background:var(--peri);border-radius:50%;min-width:30px;height:30px;display:grid;place-items:center;font-size:.95rem}
+.step h3{font-size:.98rem;margin-bottom:2px}
+.step p{font-size:.88rem;color:var(--muted);line-height:1.4}
+.faq h3{font-size:.98rem;margin-bottom:2px}
+.faq p{font-size:.9rem;color:var(--muted);margin-bottom:10px;line-height:1.45}
+.case h3{margin-bottom:2px}
+.case .who{font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;font-weight:600;color:var(--muted);margin-bottom:6px}
+.case a{font-size:.85rem;font-weight:600;display:inline-block;margin-top:6px;margin-right:12px;text-decoration:underline;text-decoration-color:var(--peri);text-underline-offset:3px}
+.band{background:var(--navy);color:#fff;border-radius:16px;padding:24px 26px 22px}
+.bio{display:grid;grid-template-columns:1.05fr 1fr;gap:26px;align-items:start}
+.bio ul{list-style:none;display:grid;gap:10px}
+.bio li{padding-left:18px;position:relative;font-size:.95rem;color:#E6EBFF}
+.bio li::before{content:"";position:absolute;left:0;top:.6em;width:8px;height:8px;border-radius:2px;background:var(--peri)}
+.plans{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+.plan{border:1.5px solid var(--navy);border-radius:16px;padding:20px 20px 16px;display:flex;flex-direction:column}
+.plan.top{background:var(--navy);color:#fff;border-color:var(--navy)}
+.plan h3{font-size:1.35rem;margin-bottom:2px}
+.plan .what{font-size:.88rem;color:var(--muted);margin-bottom:12px}
+.plan.top .what{color:var(--peri)}
+.price{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.price b{font-family:var(--font-display);font-weight:800;font-size:2.7rem;line-height:1}
+.price s{font-size:1.15rem;color:var(--muted)}
+.plan.top .price s{color:#B8C5F5}
+.price-note{font-size:.82rem;color:var(--muted);margin:4px 0 14px}
+.plan.top .price-note{color:#B8C5F5}
+.plan ul{list-style:none;display:grid;gap:7px;font-size:.9rem}
+.plan li{padding-left:20px;position:relative;line-height:1.4}
+.plan li::before{content:"";position:absolute;left:0;top:.42em;width:9px;height:9px;border-radius:50%;background:var(--peri)}
+.plan:not(.top) li::before{background:var(--navy)}
+.plan li.plus{font-weight:600}
+.cta{background:var(--peri);color:var(--navy);border-radius:16px;padding:22px 24px;display:grid;grid-template-columns:1.2fr 1fr;gap:22px;align-items:center}
+.cta h2{font-size:1.5rem;margin-bottom:6px}
+.cta p{font-size:.93rem;line-height:1.45}
+.cta .tg{display:block;background:var(--navy);color:#fff;text-decoration:none;text-align:center;border-radius:12px;padding:16px 12px;font-family:var(--font-display);font-weight:800;font-size:1.25rem}
+.cta .tg small{display:block;font-family:var(--font-text);font-weight:400;font-size:.78rem;color:var(--peri);margin-top:4px}
+.fine{font-size:.76rem;color:var(--muted);margin-top:16px;line-height:1.45}
+a:focus-visible{outline:3px solid var(--navy);outline-offset:3px}
+
+@media (max-width:680px){
+  .sheet{padding:28px 18px 28px;margin:10px auto}
+  h1{font-size:2.2rem}
+  h2{font-size:1.5rem}
+  .stats{grid-template-columns:1fr 1fr}
+  .grid2,.grid3,.steps,.plans,.bio,.cta{grid-template-columns:1fr}
+  .row{grid-template-columns:1fr;gap:4px}
+}
+
+@page{size:A4;margin:0}
+@media print{
+  html{font-size:15px;background:#fff}
+  body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .sheet{width:210mm;height:297mm;max-width:none;margin:0;padding:13mm 14mm 11mm;break-after:page;page-break-after:always}
+  .sheet:last-of-type{break-after:auto;page-break-after:auto}
+}
+</style>
+</head>
+<body>
+
+<!-- Лист 1: главный экран и для кого -->
+<section class="sheet dark">
+  <div class="brandbar"><b>Seevasta</b><span>Практикум AI Prime</span></div>
+  <p class="eyebrow">ИИ для экспертов с Михаилом Ларькиным</p>
+  <h1>Свой AI-помощник, собранный за 3 недели</h1>
+  <p class="lead">Вы берёте реальную задачу из своей работы и вместе с Михаилом собираете для неё рабочую систему на базе AI-агента. Без программирования и без опыта с нейросетями.</p>
+  <div class="stats">
+    <div class="stat"><b>3 недели</b><span>практики на своей задаче</span></div>
+    <div class="stat"><b>+3 недели</b><span>сопровождения после программы</span></div>
+    <div class="stat"><b>30+</b><span>человек уже прошли программу</span></div>
+    <div class="stat"><b>Навсегда</b><span>доступ к материалам и их обновлениям</span></div>
+  </div>
+  <div class="panel">
+    <h2 style="font-size:1.45rem;margin-bottom:14px">Для кого эта программа</h2>
+    <div class="grid2">
+      <div class="card"><h3>Эксперты и консультанты</h3><p>Клиенты, переписка, документы и контент съедают день. Агент берёт рутину на себя, а вы занимаетесь тем, что приносит деньги.</p></div>
+      <div class="card"><h3>Предприниматели</h3><p>Хотите встроить AI в маркетинг, продажи и операционку, не нанимая команду разработчиков.</p></div>
+      <div class="card"><h3>Самозанятые и фрилансеры</h3><p>Хотите тянуть больше клиентов и проектов в одиночку, не теряя в качестве.</p></div>
+      <div class="card"><h3>Новички в AI</h3><p>Часть выпускников приходила почти с нуля: на компьютере даже не был установлен AI-агент. Сегодня они сами собирают инструменты.</p></div>
+    </div>
+    <p class="note">Это не услуга «сделаем за вас». Вы собираете систему сами, а мы показываем маршрут, помогаем и проверяем результат.</p>
+  </div>
+</section>
+
+<!-- Лист 2: задачи и программа -->
+<section class="sheet">
+  <p class="eyebrow">Что вы получите</p>
+  <h2>Какие задачи можно закрыть и что будет на выходе</h2>
+  <p class="sub">Результат зависит от вашего запроса. В начале вы вместе с нами выбираете один процесс, который действительно стоит автоматизировать, и три недели строите решение именно под него.</p>
+  <div class="rows">
+    <div class="row"><b>Маркетинг и контент</b><span>Контент-система: анализ конкурентов, идеи, сценарии, публикации по расписанию и отчёты.</span></div>
+    <div class="row"><b>Продажи и клиенты</b><span>Помощник для работы с клиентами: подготовка к созвонам, ответы, связка с CRM и таблицами.</span></div>
+    <div class="row"><b>Операционка</b><span>Повторяющиеся процессы, которые запускаются одной командой: документы, внутренняя панель, регулярные задачи.</span></div>
+    <div class="row"><b>Бухгалтерия и отчётность</b><span>Агент собирает данные из таблиц и почты и готовит отчёты и документы.</span></div>
+    <div class="row"><b>Свой сайт или сервис</b><span>Сайт, презентации и креативы в вашем стиле, опубликованные на вашем сервере и домене.</span></div>
+  </div>
+
+  <p class="eyebrow" style="margin-top:6px">Как устроена программа</p>
+  <h2 style="font-size:1.5rem;margin-bottom:14px">6 модулей, примерно по 2,5 часа каждый</h2>
+  <div class="grid2" style="gap:14px 18px">
+    <div class="mod"><i>1</i><div><h3>Личный AI-агент</h3><p>Агент, который знает ваших клиентов, документы и манеру работы.</p></div></div>
+    <div class="mod"><i>2</i><div><h3>Подключения</h3><p>Агент работает с мессенджерами, CRM, таблицами, почтой и календарём.</p></div></div>
+    <div class="mod"><i>3</i><div><h3>Навыки и процессы</h3><p>Повторяющиеся задачи, например полный цикл контента, запускаются одной командой.</p></div></div>
+    <div class="mod"><i>4</i><div><h3>Свой AI-инструмент</h3><p>От описания задачи до рабочей версии, без ручного программирования.</p></div></div>
+    <div class="mod"><i>5</i><div><h3>Оформление</h3><p>Сайты, презентации и креативы в едином стиле вашего бренда.</p></div></div>
+    <div class="mod"><i>6</i><div><h3>Запуск</h3><p>Публикация проекта на сервере, свой домен, обновления.</p></div></div>
+  </div>
+  <p class="note">Модули вы проходите на платформе в своём темпе. Плюс 4 групповые консультации по понедельникам в 18:00 по Москве, где разбираем ваши вопросы и проекты.</p>
+</section>
+
+<!-- Лист 3: как проходит -->
+<section class="sheet">
+  <p class="eyebrow">Ваш путь</p>
+  <h2>Что будет происходить шаг за шагом</h2>
+  <p class="sub">Потоков с расписанием нет. Вы стартуете сразу после оплаты.</p>
+  <div class="steps">
+    <div class="step"><i>1</i><div><h3>Короткий разговор</h3><p>Вы пишете Матвею в Telegram и рассказываете о своей задаче. Вместе выбираем процесс, который стоит автоматизировать.</p></div></div>
+    <div class="step"><i>2</i><div><h3>Оплата и доступ</h3><p>После оплаты сразу открывается платформа с материалами.</p></div></div>
+    <div class="step"><i>3</i><div><h3>Бесплатный технический старт</h3><p>Созвон со специалистом: установка программ, настройка VPN, оплата AI-сервисов.</p></div></div>
+    <div class="step"><i>4</i><div><h3>3 недели практики</h3><p>6 модулей в своём темпе, консультации по понедельникам, работа над своим проектом.</p></div></div>
+    <div class="step"><i>5</i><div><h3>3 недели сопровождения</h3><p>Обратная связь, проверка результатов и общий чат, пока вы доводите проект до конца.</p></div></div>
+    <div class="step"><i>6</i><div><h3>Дальше сами</h3><p>Материалы и их ежемесячные обновления остаются у вас навсегда. Вы умеете собирать новые инструменты без нас.</p></div></div>
+  </div>
+
+  <div class="panel faq">
+    <h2 style="font-size:1.35rem;margin-bottom:12px">Частые вопросы</h2>
+    <h3>Нужно ли уметь программировать?</h3>
+    <p>Нет. Вы описываете задачу словами, а агент пишет код. Этот подход называется вайб-кодинг.</p>
+    <h3>Что оплачивается отдельно?</h3>
+    <p>Личная подписка на AI-сервис (Claude или ChatGPT), а также сервер и домен, если они нужны вашему проекту. На техническом старте подскажем, что выбрать.</p>
+    <h3>Я не смогу быть на консультациях. Что тогда?</h3>
+    <p>Вопросы можно прислать заранее, а записи консультаций остаются у вас.</p>
+    <h3>Можно ли вернуть деньги?</h3>
+    <p>Да. В первые 3 дня после оплаты возвращаем полную сумму без объяснения причин. Позже действуют условия публичной оферты.</p>
+    <h3 style="margin-top:2px">Гарантируете ли вы рост дохода?</h3>
+    <p style="margin-bottom:0">Нет. Мы гарантируем программу и сопровождение. Результат зависит от вашей задачи и вашей работы.</p>
+  </div>
+</section>
+
+<!-- Лист 4: кейсы и Михаил -->
+<section class="sheet">
+  <p class="eyebrow">Первый поток</p>
+  <h2>Что уже собрали выпускники</h2>
+  <p class="sub">Больше 30 человек уже прошли программу. Многие стартовали почти с нуля, а теперь сами собирают инструменты вместе со своими агентами и решают задачи в маркетинге, продажах, операционке, бухгалтерии и отчётности.</p>
+  <div class="grid2" style="margin-bottom:22px">
+    <div class="card case"><p class="who">Предприниматель</p><h3>Алексей</h3><p>Пришёл без опыта работы с Claude и Codex. Автоматизировал контент и собрал приложение для клиентов. По его словам, освободилось 20–30 часов в неделю.</p></div>
+    <div class="card case"><p class="who">Эксперт, продаёт услуги</p><h3>Павел</h3><p>Собрал продающий сайт за 3 дня. Агент разбирает креативы конкурентов, отбирает лучшие, делает свои и запускает рекламу.</p><a href="https://deshkovich.com/kurs">Сайт Павла</a></div>
+    <div class="card case"><p class="who">Психолог</p><h3>Наталья</h3><p>Запустила магазин методических материалов без комиссии площадки, сервис социометрии с автоматическими отчётами и экспертный сайт. Юридическую рутину отдала агенту.</p><a href="https://pedpsy.store">Магазин</a><a href="https://sociometry.pedpsy.store">Социометрия</a></div>
+    <div class="card case"><p class="who">Автор онлайн-курса</p><h3>Мария</h3><p>Собрала сайт курса с тарифами в двух валютах и приёмом оплат из России и из-за рубежа. Агент помог со страницей и настройкой платежей.</p><a href="https://svoja-webinar-site-production.up.railway.app">Сайт курса</a></div>
+  </div>
+  <p class="note" style="margin-top:-4px;margin-bottom:22px">Это результаты отдельных участников. Они показывают, что возможно, и не гарантируют такой же итог каждому.</p>
+
+  <div class="band dark">
+    <p class="eyebrow">Кто ведёт</p>
+    <h2 style="font-size:1.6rem;margin-bottom:16px">Михаил Ларькин</h2>
+    <div class="bio">
+      <ul>
+        <li>35+ проектов для компаний и команд</li>
+        <li>2000+ участников программ</li>
+        <li>Работал со Сбером, ВТБ, Авито и другими компаниями</li>
+        <li>Преподаёт AI в маркетинге на MBA в РАНХиГС и разработал курс по AI для магистратуры ВШЭ</li>
+      </ul>
+      <div class="panel">
+        <h3 style="color:var(--peri)">Система, которую он учит собирать, работает у него самого</h3>
+        <p style="font-size:.93rem;color:#E6EBFF">С помощью собственной контент-фабрики его Instagram, по его словам, вырос с 900 до 19 000 подписчиков за два месяца. Анализ конкурентов, сценарии, публикации и отчёты ведёт AI-система, а человек утверждает результат.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Лист 5: тарифы и запись -->
+<section class="sheet">
+  <p class="eyebrow">Стоимость</p>
+  <h2>Два формата участия</h2>
+  <p class="sub">Спеццена действует, если вы оплачиваете в течение 24 часов после первого сообщения Матвею.</p>
+  <div class="plans">
+    <div class="plan">
+      <h3>Средний</h3>
+      <p class="what">Живое участие и проверка ваших работ</p>
+      <div class="price"><b>600 €</b><s>700 €</s></div>
+      <p class="price-note">600 € при оплате в течение 24 часов. Обычная цена 700 €.</p>
+      <ul>
+        <li>6 модулей на платформе</li>
+        <li>4 живые групповые консультации и их записи</li>
+        <li>Проверка ваших работ, описания инструмента, дизайна и публикации</li>
+        <li>Приоритетная техническая поддержка</li>
+        <li>3 недели сопровождения и общий чат</li>
+        <li>Бесплатный технический старт</li>
+        <li>Бонус: видео о подключении агента к WhatsApp и Telegram</li>
+        <li>Материалы и ежемесячные обновления навсегда</li>
+      </ul>
+    </div>
+    <div class="plan top">
+      <h3>Продвинутый</h3>
+      <p class="what">Всё из Среднего и личная работа с Михаилом</p>
+      <div class="price"><b>1100 €</b><s>1300 €</s></div>
+      <p class="price-note">1100 € при оплате в течение 24 часов. Обычная цена 1300 €.</p>
+      <ul>
+        <li class="plus">Всё, что входит в Средний</li>
+        <li class="plus">Личная встреча с Михаилом до старта: разбор вашего проекта и технического задания</li>
+        <li class="plus">Вторая личная встреча в середине или в конце программы</li>
+        <li class="plus">Личная переписка с Михаилом на время сопровождения</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="cta">
+    <div>
+      <h2>Как записаться</h2>
+      <p>Напишите Матвею в Telegram, скажите, что вы от Ангелики из Испании, и коротко расскажите о своей задаче. Он подскажет, какой формат подойдёт, и ответит на вопросы. Сутки на спеццену считаются с вашего первого сообщения.</p>
+    </div>
+    <a class="tg" href="https://t.me/starsevast">@starsevast<small>t.me/starsevast</small></a>
+  </div>
+</section>
+
+</body>
+</html>
