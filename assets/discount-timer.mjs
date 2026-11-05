@@ -8,6 +8,16 @@ export const TARIFF_PRICES = {
   pro: { name: 'Продвинутый', full: '139 900 ₽', discounted: '109 900 ₽', fullUrl: 'https://t.me/LMS_Larkinmd7_bot?start=buy_3', discountedUrl: 'https://t.me/LMS_Larkinmd7_bot?start=buy_6' },
 };
 
+export const INSTALLMENT_MONTHS = 12;
+
+/* Ежемесячный платёж при оплате частями: цена тарифа / 12, округление вверх
+   до рубля — показанная сумма не может оказаться меньше реального платежа. */
+export function getMonthlyPayment(price, months = INSTALLMENT_MONTHS) {
+  const rub = Number(String(price).replace(/\D/g, ''));
+  if (!rub) return '';
+  return `${Math.ceil(rub / months).toLocaleString('ru-RU').replace(/\s/g, ' ')} ₽`;
+}
+
 export function getDiscountDeadline(storage, now = Date.now()) {
   try {
     const stored = storage.getItem(DISCOUNT_KEY);
@@ -48,6 +58,8 @@ export function initDiscountTimer(root = document, pathname = globalThis.locatio
         card.querySelector('.price-before').hidden = !active;
         card.querySelector('.price-current').textContent = price;
         card.querySelector('.price-condition').textContent = active ? 'цена по вашему предложению' : 'полная стоимость';
+        const installment = card.querySelector('[data-installment-amount]');
+        if (installment) installment.textContent = `по ${getMonthlyPayment(price)}`;
         button.href = active ? tariff.discountedUrl : tariff.fullUrl;
       });
       previousActive = active;
