@@ -1217,11 +1217,11 @@ footer > div:first-child { display: grid; gap: 5px; }
 }
 
 /* Оплата частями: ежемесячный платёж под ценой тарифа (цена / 12). */
-.price-bottom { margin: auto 0 16px; }
-.price-installment { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 6px; row-gap: 2px; margin: 16px 0 0; padding: 12px 14px; border-radius: var(--radius-sm); background: var(--paper); color: var(--ink); font-size: 15px; font-weight: 500; line-height: 1.35; letter-spacing: normal; }
+.price-bottom { margin: auto 0 22px; }
+.price-installment { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 6px; row-gap: 2px; margin: 14px 0 0; padding: 0; color: var(--ink); font-size: 15px; font-weight: 500; line-height: 1.35; letter-spacing: normal; }
 .price-installment b { color: var(--royal); font-size: 20px; font-weight: 700; letter-spacing: -.02em; white-space: nowrap; }
 .price-installment-note { flex-basis: 100%; color: var(--muted); font-size: 13px; font-weight: 400; }
-.price-card-featured .price-installment { background: var(--inv-fill); color: var(--inv-ink); }
+.price-card-featured .price-installment { color: var(--inv-ink); }
 .price-card-featured .price-installment b { color: var(--inv-accent); }
 .price-card-featured .price-installment-note { color: var(--inv-dim); }
 .price-bottom + .button-block { margin-top: 0; }
