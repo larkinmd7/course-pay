@@ -48,7 +48,7 @@ export function initTelegramSalesMode(root = document, pathname = globalThis.loc
   if (!isTelegramSalesPath(pathname)) return false;
 
   root.documentElement?.classList.add('telegram-sales-mode');
-  root.querySelectorAll('.price, .price-installment').forEach((price) => price.remove());
+  root.querySelectorAll('.price, .price-installment, .price-bottom').forEach((price) => price.remove());
 
   root.querySelectorAll('[data-pay-link]').forEach((button) => {
     const tariff = button.dataset.payLink;
