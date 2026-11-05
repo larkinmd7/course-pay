@@ -14,6 +14,14 @@ export const METRIKA_PAY_GOALS = Object.freeze({
   pro: 'pay_tariff_advanced_click',
 });
 
+// Клики по строке «или по N ₽ в месяц» под ценой: ведут в личку @starsevast
+// с подставленным сообщением про рассрочку. Цели нужно завести в Метрике.
+export const METRIKA_INSTALLMENT_GOALS = Object.freeze({
+  base: 'installment_tariff_start_click',
+  middle: 'installment_tariff_middle_click',
+  pro: 'installment_tariff_advanced_click',
+});
+
 // Счётчик работает на всех страницах домена, включая главную и правовые
 // документы. На /tg считаются клики «Узнать стоимость», на остальных
 // страницах – клики «Оплатить».
@@ -86,6 +94,8 @@ function bindTariffGoals(root, runtime) {
 
 function bindPayGoals(root, runtime) {
   bindClickGoals(root, runtime, '[data-pay-link]', (link) => link.dataset.payLink, getMetrikaGoalForPayLink);
+  bindClickGoals(root, runtime, '[data-installment-link]', (link) => link.dataset.installmentLink,
+    (tariff) => METRIKA_INSTALLMENT_GOALS[tariff] ?? null);
 }
 
 export function initMetrikaForPage(

@@ -1,7 +1,7 @@
-import { initDiscountTimer } from './discount-timer.mjs?v=20261014-payment';
+import { initDiscountTimer } from './discount-timer.mjs?v=20261105-installment';
 import { improveVisibleTypography } from './typography.mjs';
 import { initTestimonialCarousel } from './testimonial-carousel.mjs';
-import { initTelegramSalesMode } from './telegram-sales.mjs?v=20261020-term';
+import { initTelegramSalesMode } from './telegram-sales.mjs?v=20261105-installment';
 import { initMetrikaForPage } from './metrika.mjs';
 import { initStickyCta } from './sticky-cta.mjs?v=20261014-payment';
 import { initMotion, initDemoVideos } from './motion.mjs';

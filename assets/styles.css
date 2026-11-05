@@ -1218,10 +1218,13 @@ footer > div:first-child { display: grid; gap: 5px; }
 
 /* Оплата частями: ежемесячный платёж под ценой тарифа (цена / 12). */
 .price-bottom { margin: auto 0 22px; }
-.price-installment { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 6px; row-gap: 2px; margin: 14px 0 0; padding: 0; color: var(--ink); font-size: 15px; font-weight: 500; line-height: 1.35; letter-spacing: normal; }
+.price-installment { text-decoration: none; display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 6px; row-gap: 2px; margin: 14px 0 0; padding: 0; color: var(--ink); font-size: 15px; font-weight: 500; line-height: 1.35; letter-spacing: normal; }
 .price-installment b { color: var(--royal); font-size: 20px; font-weight: 700; letter-spacing: -.02em; white-space: nowrap; }
 .price-installment-note { flex-basis: 100%; color: var(--muted); font-size: 13px; font-weight: 400; }
 .price-card-featured .price-installment { color: var(--inv-ink); }
 .price-card-featured .price-installment b { color: var(--inv-accent); }
 .price-card-featured .price-installment-note { color: var(--inv-dim); }
 .price-bottom + .button-block { margin-top: 0; }
+.price-installment-cta { flex-basis: 100%; margin-top: 6px; color: var(--royal); font-size: 14px; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+.price-installment:hover .price-installment-cta, .price-installment:focus-visible .price-installment-cta { text-decoration-thickness: 2px; }
+.price-card-featured .price-installment-cta { color: var(--inv-accent); }
