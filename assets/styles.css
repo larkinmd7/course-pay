@@ -1319,6 +1319,15 @@ footer > div:first-child { display: grid; gap: 5px; }
     font: inherit; font-weight: 600; cursor: pointer; -webkit-tap-highlight-color: transparent;
   }
   body.cases-compact .carousel .cases-grid .case-more::after { font-weight: 400; content: "→"; }
+
+  /* Карточки ленты одной высоты. Карусель держит их по своей высоте ради
+     длинных отзывов — под коротким оставалось пустое поле. В сжатом виде
+     этого больше нет: внутри только роль, заголовок, цифра и подпись,
+     и разница между карточками — одна-две строки заголовка. Кнопка
+     прижата к низу, поэтому нижняя кромка у всех совпадает. */
+  body.cases-compact .carousel .cases-grid { align-items: stretch; }
+  body.cases-compact .carousel .cases-grid .case-card { height: 100%; }
+  body.cases-compact .carousel .cases-grid .case-more { margin-top: auto; }
 }
 
 .case-dialog {
