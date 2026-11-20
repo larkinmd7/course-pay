@@ -604,8 +604,11 @@ footer > div:first-child { display: grid; gap: 5px; }
 .case-role { margin: 0; color: var(--signal); font-family: "IBM Plex Mono", monospace; font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }
 .case-card h3 { margin: 0; font-size: 22px; line-height: 1.2; }
 .case-before { margin: 0; color: var(--on-dark-dim); font-size: 15px; }
-.case-metric { display: flex; flex-direction: column; gap: 2px; margin: 4px 0; padding: 16px 18px; border-radius: var(--radius-sm); background: var(--inv-tint); }
-.case-metric strong { font-family: "Inter Tight", sans-serif; font-weight: 800; font-size: 26px; line-height: 1.1; color: var(--signal); }
+/* Было: залитая коробка со скруглением и цветной цифрой внутри — тот самый
+   шаблонный вид, который выдаёт лендинг, собранный по образцу. Теперь цифра
+   отбита волосяными линиями: акцент тот же, но типографикой, а не плашкой. */
+.case-metric { display: flex; flex-direction: column; gap: 3px; margin: 10px 0 4px; padding: 15px 0; border-top: 1px solid var(--inv-line); border-bottom: 1px solid var(--inv-line); border-radius: 0; background: none; }
+.case-metric strong { font-family: "Inter Tight", sans-serif; font-weight: 700; font-size: 30px; line-height: 1.05; letter-spacing: -.02em; color: var(--inv-ink); }
 .case-metric span { color: var(--on-dark-dim); font-size: 13px; }
 .case-list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 11px; }
 .case-list li { position: relative; padding-left: 18px; color: var(--on-dark); font-size: 15px; line-height: 1.45; }
@@ -1226,3 +1229,123 @@ footer > div:first-child { display: grid; gap: 5px; }
 .price-card-featured .price-installment { color: var(--inv-ink); text-decoration-color: var(--inv-line); }
 .price-card-featured .price-installment b, .price-card-featured .price-installment-arrow { color: var(--inv-accent); }
 .price-bottom + .button-block { margin-top: 0; min-height: 64px; font-size: 18px; }
+
+/* Подпись участника встречается и вне цитаты: у новых кейсов прямой речи нет,
+   придумывать отзыв нельзя. Без этого <cite> снаружи цитаты рисуется курсивом. */
+.case-author cite { color: var(--signal); font-style: normal; font-weight: 600; }
+
+/* Восьмая плашка — приглашение, а не кейс. Пунктир и приглушённый тон держат
+   её отдельно от настоящих историй: прочитать её как ещё один отзыв нельзя.
+   Заодно карточек становится восемь и сетка сходится в четыре ровных ряда. */
+.case-invite { border: 1px dashed var(--inv-line); background: none; }
+.case-invite .case-metric strong { color: var(--signal); }
+.case-invite .case-list li::before { background: var(--inv-line); }
+.case-invite cite { color: var(--on-dark-dim); }
+.case-avatar-empty { border-style: dashed; background: none; color: var(--on-dark-dim); }
+
+/* Кнопка под кейсами: по ширине равна сетке карточек, выше обычной и с мягким
+   свечением того же синего — размытый дубль кнопки под ней. Состояния задаём
+   сами, иначе после клика браузер дорисовывает своё светлое кольцо. */
+.cases-cta { position: relative; margin-top: 30px; }
+.cases-cta::before {
+  position: absolute; inset: 14px 6% -6px; z-index: 0;
+  border-radius: var(--radius); background: var(--btn-bg);
+  filter: blur(42px); opacity: .5; content: "";
+}
+.cases-cta .button {
+  position: relative; z-index: 1;
+  width: 100%; min-height: 74px; border-radius: var(--radius);
+  font-size: 19px; letter-spacing: -.01em;
+}
+.cases-cta .button:hover,
+.cases-cta .button:active { background: #3E64FF; border-color: #3E64FF; }
+.cases-cta .button:active { transform: none; }
+.cases-cta .button:focus { outline: none; }
+.cases-cta .button:focus-visible { outline: 3px solid #A9C2FF; outline-offset: 3px; }
+@media (max-width: 820px) {
+  .cases-cta { margin-top: 22px; }
+  .cases-cta .button { min-height: 62px; font-size: 17px; }
+  .cases-cta::before { inset: 10px 10% -4px; filter: blur(30px); }
+}
+
+/* ─── Подписи без капса и моноширинного шрифта ────────────────────────────
+   Моно + CAPS + разрядка над каждым блоком — самый узнаваемый признак
+   лендинга, собранного по шаблону. Подпись остаётся подписью за счёт
+   размера, веса и цвета; читается при этом заметно легче. */
+.eyebrow, .section-kicker, .tariff-label, .note-index, .section-label,
+.prep-index, .case-role, .schedule-kicker, .schedule-prep p,
+.example-card > span, .module-number, .module-stage, .module-topics h4,
+.module-result strong, .format-label, .author-photo figcaption,
+.author-education-heading span, .author-proof-heading > span,
+.company-proof > p, .product-type, .testimonial-copy > span,
+.product-proof-context, .product-metric em, .popular-tag,
+.bonus-item span, .discount-kicker, .payment-title span, .result-tariff,
+.schedule-days, .schedule-week > p, .countdown-label {
+  font-family: inherit;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.eyebrow, .section-kicker, .tariff-label, .note-index, .prep-index,
+.case-role, .schedule-kicker, .example-card > span,
+.author-education-heading span, .author-proof-heading > span,
+.company-proof > p, .product-type, .testimonial-copy > span,
+.bonus-item span, .discount-kicker, .module-result strong, .module-topics h4 {
+  font-size: 14px;
+  font-weight: 600;
+}
+.section-label { font-size: clamp(14px, 1.15vw, 16px); font-weight: 600; }
+.case-role { margin-bottom: 2px; }
+.popular-tag { font-size: 13px; font-weight: 600; }
+.result-tariff { font-size: 14px; font-weight: 600; }
+.schedule-days, .schedule-week > p { font-size: 12px; font-weight: 600; }
+.countdown-label { font-size: 12px; }
+.author-photo figcaption { font-size: 13px; }
+.product-metric em { font-size: 12px; }
+.product-proof-context { font-size: 13px; font-weight: 600; }
+.format-label { font-size: 16px; font-weight: 600; }
+
+/* ─── Сжатая карточка кейса и поп-ап ──────────────────────────────────────
+   Работает только внутри карусели и только на узком экране. Класс вешает
+   case-details.mjs: без скрипта карточка остаётся целой, человек ничего
+   не теряет. Видно главное — роль, заголовок, цифру, лицо и имя. */
+.case-more { display: none; }
+
+@media (max-width: 900px) and (orientation: portrait) {
+  body.cases-compact .carousel .cases-grid .case-card > :is(.case-before, .case-list, .case-links, .case-quote, .case-outcome) { display: none; }
+  body.cases-compact .carousel .cases-grid .case-card > .case-author { margin-top: 4px; }
+  body.cases-compact .carousel .cases-grid .case-more {
+    display: inline-flex; align-items: center; gap: 8px; margin-top: 14px;
+    padding: 0; border: 0; background: none; color: var(--signal);
+    font: inherit; font-weight: 600; cursor: pointer; -webkit-tap-highlight-color: transparent;
+  }
+  body.cases-compact .carousel .cases-grid .case-more::after { font-weight: 400; content: "→"; }
+}
+
+.case-dialog {
+  /* Лист снизу во всю ширину. Фон плотный: --inv-fill-2 полупрозрачный,
+     сквозь него просвечивала бы страница. */
+  position: fixed; inset: auto 0 0 0; margin: 0;
+  width: 100%; max-width: none; max-height: 88vh;
+  padding: 0; border: 0; border-radius: var(--radius) var(--radius) 0 0;
+  background: var(--navy); color: var(--on-dark); overflow: hidden;
+  box-shadow: 0 -24px 60px -30px rgba(0, 0, 0, .9);
+}
+.case-dialog::backdrop { background: rgba(4, 8, 24, .66); }
+.case-dialog-head {
+  position: sticky; top: 0; z-index: 2; display: flex; align-items: center;
+  justify-content: space-between; gap: 14px; padding: 16px 20px;
+  border-bottom: 1px solid var(--inv-line); background: inherit;
+}
+.case-dialog-head strong { font-size: 15px; font-weight: 600; }
+.case-dialog-close {
+  width: 34px; height: 34px; flex: none; display: grid; place-items: center;
+  border: 1px solid var(--inv-line); border-radius: 50%; background: none;
+  color: var(--on-dark); font-size: 17px; line-height: 1; cursor: pointer;
+}
+.case-dialog-body { padding: 20px; display: flex; flex-direction: column; gap: 14px; overflow-y: auto; max-height: calc(88vh - 67px); }
+.case-dialog-body > :is(.case-role, h3) { display: none; }
+.case-dialog-body > .case-metric { margin-top: 0; }
+@media (prefers-reduced-motion: no-preference) {
+  .case-dialog[open] { animation: case-sheet-up .22s cubic-bezier(.2, .7, .3, 1); }
+}
+@keyframes case-sheet-up { from { transform: translateY(14px); opacity: 0; } to { transform: none; opacity: 1; } }

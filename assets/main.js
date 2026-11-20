@@ -8,9 +8,11 @@ import { initMotion, initDemoVideos } from './motion.mjs';
 import { initThemeToggle } from './theme.mjs';
 import { initNavMenu } from './nav-menu.mjs';
 import { initCarousels } from './carousel.mjs';
+import { initCaseDetails } from './case-details.mjs?v=20261120-cases';
 
 initThemeToggle(document);
 initNavMenu(document);
+initCaseDetails(document);
 initCarousels(document);
 improveVisibleTypography();
 initTestimonialCarousel(document.querySelector('[data-testimonial-carousel]'));

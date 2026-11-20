@@ -373,7 +373,8 @@ test('у каждой секции есть метка и заголовок, о
   const html = readFileSync(pagePath, 'utf8');
   const css = readFileSync(cssPath, 'utf8');
 
-  for (const label of ['Кейсы первого потока', 'Шесть модулей', 'Куда приводит этот маршрут', 'Как устроена программа', 'Тарифы']) {
+  // Участники теперь с разных потоков, подпись блока больше не про первый.
+  for (const label of ['Кейсы участников', 'Шесть модулей', 'Куда приводит этот маршрут', 'Как устроена программа', 'Тарифы']) {
     assert.match(html, new RegExp(`<p class="eyebrow section-label">${label}</p>`));
   }
   // иерархия изменена осознанно: метка стала мелкой метой, главным стал заголовок
@@ -583,6 +584,8 @@ test('бонус указан только в первом тарифе и на�
   assert.doesNotMatch(cards[2], /class="bonus-item"/);
   assert.match(pricing, /До старта: разбор проекта, ТЗ и целей/);
   assert.match(pricing, /В середине или конце: консультация и докрутка решения/);
+  assert.match(cards[2], /2 персональные встречи с Михаилом в Zoom/);
+  assert.match(cards[2], /Поддержка в личном чате с Михаилом/);
 });
 
 test('типограф связывает короткие слова и не разрывает составные слова', async () => {
@@ -769,12 +772,15 @@ test('ссылки на проекты участников открываютс
 
 test('каждая цитата участника подписана именем', () => {
   const html = readFileSync(pagePath, 'utf8');
-  const quotes = [...html.matchAll(/<blockquote class="case-quote">(.*?)<\/blockquote>/gs)].map((m) => m[1]);
+  // Подпись вынесена из blockquote наружу: в сжатой карточке на телефоне
+  // цитата скрыта, а лицо и имя остаются — безликий кейс не продаёт.
+  // Проверяем не вложенность, а то, что за каждой цитатой сразу идёт подпись.
+  const quotes = [...html.matchAll(/<blockquote class="case-quote">.*?<\/blockquote>\s*(.{0,400}?)(?=<\/article>)/gs)];
 
   assert.ok(quotes.length >= 4, `ожидали минимум четыре цитаты, нашли ${quotes.length}`);
-  // Цитата без подписи читается как выдуманная и обесценивает остальные.
-  for (const quote of quotes) {
-    assert.match(quote, /<cite>[^<]{3,}<\/cite>/, `цитата без имени: ${quote.slice(0, 60)}`);
+  for (const [, after] of quotes) {
+    assert.match(after, /<div class="case-author">/, `после цитаты нет подписи: ${after.slice(0, 60)}`);
+    assert.match(after, /<cite>[^<]{3,}<\/cite>/, `цитата без имени: ${after.slice(0, 60)}`);
   }
 });
 
