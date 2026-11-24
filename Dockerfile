@@ -1,3 +1,10 @@
+FROM node:22-alpine AS case-map
+WORKDIR /build
+COPY cases/package.json cases/package-lock.json ./
+RUN npm ci --no-audit --no-fund
+COPY cases/ ./
+RUN npm run build
+
 FROM nginx:1.29-alpine
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
@@ -10,6 +17,7 @@ COPY success /usr/share/nginx/html/success
 COPY brandbook /usr/share/nginx/html/brandbook
 COPY error /usr/share/nginx/html/error
 COPY eu /usr/share/nginx/html/eu
+COPY --from=case-map /build/dist /usr/share/nginx/html/cases
 
 EXPOSE 80
 

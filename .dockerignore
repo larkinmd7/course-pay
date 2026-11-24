@@ -3,3 +3,7 @@
 tests
 README.md
 AGENTS.md
+cases/node_modules
+cases/dist
+cases/public/ai-prime.excalidraw
+cases/public/map-targets.json

@@ -1,0 +1,16 @@
+{
+  "name": "ai-prime-case-map",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build-scene.mjs && vite build --base=./ && mkdir -p dist/excalidraw-assets && cp -R node_modules/@excalidraw/excalidraw/dist/prod/fonts dist/excalidraw-assets/"
+  },
+  "dependencies": {
+    "@excalidraw/excalidraw": "0.18.1",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "vite": "7.3.8"
+  }
+}
